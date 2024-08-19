@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\ELearning_Platform.API.props" />
+</Project>

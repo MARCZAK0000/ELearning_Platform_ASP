@@ -1,0 +1,15 @@
+C:\Users\jjmar\Desktop\Projects\E-Learning_Platform\Backend\ELearning_Platform.Application\bin\Debug\net8.0\ELearning_Platform.Application.deps.json
+C:\Users\jjmar\Desktop\Projects\E-Learning_Platform\Backend\ELearning_Platform.Application\bin\Debug\net8.0\ELearning_Platform.Application.dll
+C:\Users\jjmar\Desktop\Projects\E-Learning_Platform\Backend\ELearning_Platform.Application\bin\Debug\net8.0\ELearning_Platform.Application.pdb
+C:\Users\jjmar\Desktop\Projects\E-Learning_Platform\Backend\ELearning_Platform.Application\bin\Debug\net8.0\ELearning_Platform.Domain.dll
+C:\Users\jjmar\Desktop\Projects\E-Learning_Platform\Backend\ELearning_Platform.Application\bin\Debug\net8.0\ELearning_Platform.Domain.pdb
+C:\Users\jjmar\Desktop\Projects\E-Learning_Platform\Backend\ELearning_Platform.Application\obj\Debug\net8.0\ELearning_Platform.Application.csproj.AssemblyReference.cache
+C:\Users\jjmar\Desktop\Projects\E-Learning_Platform\Backend\ELearning_Platform.Application\obj\Debug\net8.0\ELearning_Platform.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jjmar\Desktop\Projects\E-Learning_Platform\Backend\ELearning_Platform.Application\obj\Debug\net8.0\ELearning_Platform.Application.AssemblyInfoInputs.cache
+C:\Users\jjmar\Desktop\Projects\E-Learning_Platform\Backend\ELearning_Platform.Application\obj\Debug\net8.0\ELearning_Platform.Application.AssemblyInfo.cs
+C:\Users\jjmar\Desktop\Projects\E-Learning_Platform\Backend\ELearning_Platform.Application\obj\Debug\net8.0\ELearning_Platform.Application.csproj.CoreCompileInputs.cache
+C:\Users\jjmar\Desktop\Projects\E-Learning_Platform\Backend\ELearning_Platform.Application\obj\Debug\net8.0\ELearnin.97399CC7.Up2Date
+C:\Users\jjmar\Desktop\Projects\E-Learning_Platform\Backend\ELearning_Platform.Application\obj\Debug\net8.0\ELearning_Platform.Application.dll
+C:\Users\jjmar\Desktop\Projects\E-Learning_Platform\Backend\ELearning_Platform.Application\obj\Debug\net8.0\refint\ELearning_Platform.Application.dll
+C:\Users\jjmar\Desktop\Projects\E-Learning_Platform\Backend\ELearning_Platform.Application\obj\Debug\net8.0\ELearning_Platform.Application.pdb
+C:\Users\jjmar\Desktop\Projects\E-Learning_Platform\Backend\ELearning_Platform.Application\obj\Debug\net8.0\ref\ELearning_Platform.Application.dll
