@@ -4,13 +4,14 @@ using ELearning_Platform.Application.Extensions;
 using ELearning_Platform.Domain.Enitities;
 using ELearning_Platform.Infrastructure.Database;
 using ELearning_Platform.Infrastructure.Services;
+using ELearning_Platform.Infrastructure.StorageAccount;
 using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddDataProtection();
-builder.Services.AddInfrastructure(builder.Configuration); //for database and repository registration 
+builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.IsDevelopment()); //for database and repository registration 
 builder.Services.AddIdentity<Account, Roles>(setup =>
 {
     setup.User.RequireUniqueEmail = true;
@@ -32,10 +33,15 @@ builder.Services.AddCors(pr => pr.AddPolicy("corsPolicy", options =>
     .AllowCredentials();
 }));
 builder.Services.AddScoped<SeederDb>();
+builder.Services.AddSingleton<BlobStorageTable>();
 var app = builder.Build();
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<SeederDb>();
 await seeder.GenerateRolesAsync();
+
+var blobStorage = app.Services.GetRequiredService<BlobStorageTable>();
+await blobStorage.CreateTable();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
