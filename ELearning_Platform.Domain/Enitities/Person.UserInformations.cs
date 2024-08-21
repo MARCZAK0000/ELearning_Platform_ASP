@@ -20,5 +20,13 @@
 
         public virtual UserAddress Address { get; set; }
 
+        public virtual List<Subject> Subjects { get; set; }
+
+        public Guid? ClassID {  get; set; }
+        
+        public virtual ELearningClass? Class { get; set; }
+
+        public virtual List<Lesson> Lessons { get; set; }
+
     }
 }

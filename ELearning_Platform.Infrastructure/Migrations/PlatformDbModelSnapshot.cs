@@ -90,6 +90,84 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.ELearningClass", b =>
+                {
+                    b.Property<Guid>("ELearningClassID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("YearOfBeggining")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("YearOfEnded")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("ELearningClassID");
+
+                    b.ToTable("Class", "School");
+                });
+
+            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Lesson", b =>
+                {
+                    b.Property<Guid>("LessonID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ClassID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateOnly>("LessonDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("LessonDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LessonTopic")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TeacherID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LessonID");
+
+                    b.HasIndex("ClassID");
+
+                    b.HasIndex("TeacherID");
+
+                    b.ToTable("Lessons", "Lesson");
+                });
+
+            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.LessonMaterials", b =>
+                {
+                    b.Property<Guid>("LessonMaterialID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LessonID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LessonMaterialID");
+
+                    b.HasIndex("LessonID");
+
+                    b.ToTable("Materials", "Lesson");
+                });
+
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Roles", b =>
                 {
                     b.Property<string>("Id")
@@ -115,6 +193,44 @@ namespace ELearning_Platform.Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Subject", b =>
+                {
+                    b.Property<Guid>("SubjectId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ClassID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TeacherID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TeacherName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TeacherSurname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SubjectId");
+
+                    b.HasIndex("ClassID");
+
+                    b.HasIndex("TeacherID");
+
+                    b.ToTable("Subject", "School");
                 });
 
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.UserAddress", b =>
@@ -154,6 +270,9 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.Property<string>("AccountID")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<Guid?>("ClassID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -178,6 +297,8 @@ namespace ELearning_Platform.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AccountID");
+
+                    b.HasIndex("ClassID");
 
                     b.ToTable("Person", "Person");
                 });
@@ -299,6 +420,55 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Lesson", b =>
+                {
+                    b.HasOne("ELearning_Platform.Domain.Enitities.ELearningClass", "Class")
+                        .WithMany("Lessons")
+                        .HasForeignKey("ClassID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ELearning_Platform.Domain.Enitities.UserInformations", "Teacher")
+                        .WithMany("Lessons")
+                        .HasForeignKey("TeacherID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Class");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.LessonMaterials", b =>
+                {
+                    b.HasOne("ELearning_Platform.Domain.Enitities.Lesson", "Lesson")
+                        .WithMany("LessonMaterials")
+                        .HasForeignKey("LessonID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lesson");
+                });
+
+            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Subject", b =>
+                {
+                    b.HasOne("ELearning_Platform.Domain.Enitities.ELearningClass", "Class")
+                        .WithMany("Subjects")
+                        .HasForeignKey("ClassID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ELearning_Platform.Domain.Enitities.UserInformations", "Teacher")
+                        .WithMany("Subjects")
+                        .HasForeignKey("TeacherID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Class");
+
+                    b.Navigation("Teacher");
+                });
+
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.UserInformations", b =>
                 {
                     b.HasOne("ELearning_Platform.Domain.Enitities.UserAddress", "Address")
@@ -307,7 +477,13 @@ namespace ELearning_Platform.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("ELearning_Platform.Domain.Enitities.ELearningClass", "Class")
+                        .WithMany("Students")
+                        .HasForeignKey("ClassID");
+
                     b.Navigation("Address");
+
+                    b.Navigation("Class");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -361,6 +537,20 @@ namespace ELearning_Platform.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.ELearningClass", b =>
+                {
+                    b.Navigation("Lessons");
+
+                    b.Navigation("Students");
+
+                    b.Navigation("Subjects");
+                });
+
+            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Lesson", b =>
+                {
+                    b.Navigation("LessonMaterials");
+                });
+
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.UserAddress", b =>
                 {
                     b.Navigation("User")
@@ -371,6 +561,10 @@ namespace ELearning_Platform.Infrastructure.Migrations
                 {
                     b.Navigation("Account")
                         .IsRequired();
+
+                    b.Navigation("Lessons");
+
+                    b.Navigation("Subjects");
                 });
 #pragma warning restore 612, 618
         }

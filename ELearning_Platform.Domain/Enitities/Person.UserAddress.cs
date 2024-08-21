@@ -22,7 +22,7 @@ namespace ELearning_Platform.Domain.Enitities
 
         public DateOnly ModifiedDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
-        public UserInformations User{ get; set; }
+        public virtual UserInformations User{ get; set; }
 
         
 
