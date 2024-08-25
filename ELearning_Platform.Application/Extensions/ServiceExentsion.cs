@@ -1,4 +1,5 @@
-﻿using ELearning_Platform.Application.Mapper;
+﻿using ELearning_Platform.Application.Authorization;
+using ELearning_Platform.Application.Mapper;
 using ELearning_Platform.Application.Services.AccountServices.Command.Register;
 using ELearning_Platform.Application.Services.AccountServices.Command.SignIn;
 using FluentValidation;
@@ -19,6 +20,8 @@ namespace ELearning_Platform.Application.Extensions
 
             services.AddScoped<IValidator<RegisterAccountAsyncCommand>, RegisterAccountAsyncCommandValidator>();
             services.AddScoped<IValidator<SignInAsyncCommand>, SignInAsyncCommandValidator>();
+
+            services.AddScoped<IUserContext,  UserContext>();
         }
     }
 }
