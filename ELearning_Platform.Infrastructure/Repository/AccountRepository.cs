@@ -141,7 +141,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                 expires: expireDays,
                 credentails);
 
-            return Task.FromResult(token.ToString());
+            return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
         } 
     }
 }

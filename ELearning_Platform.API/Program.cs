@@ -27,10 +27,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddCors(pr => pr.AddPolicy("corsPolicy", options =>
 {
-    options.
-     AllowAnyHeader()
-    .AllowAnyMethod()
-    .AllowCredentials();
+    options.WithOrigins("http://localhost:5173")
+         .AllowCredentials()
+         .AllowAnyMethod()
+         .AllowAnyHeader()
+         .AllowAnyMethod();
 }));
 builder.Services.AddScoped<SeederDb>();
 builder.Services.AddSingleton<BlobStorageTable>();
@@ -48,10 +49,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseMiddleware<ErrorHandlingMiddleware>();
-app.UseHttpsRedirection();
 app.UseCors("corsPolicy");
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.MapHub<Notification>("hub/notifications");
+app.UseHttpsRedirection();
 app.UseAuthorization(); //Add to Avoid problem with Identity  
 app.UseAuthentication();
 app.MapControllers();

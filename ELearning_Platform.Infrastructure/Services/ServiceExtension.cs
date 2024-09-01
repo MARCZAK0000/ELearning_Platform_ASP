@@ -25,7 +25,8 @@ namespace ELearning_Platform.Infrastructure.Services
             }
 
             services.AddScoped<IAccountRepository, AccountRepository>();
-
+            services.AddScoped<IUserRepository , UserRepository>();
+            services.AddScoped<ISchoolRepository, SchoolRepository>();
             //binding
             var authSetings = new AuthenticationSettings();
             configuration.GetSection("AuthSetting").Bind(authSetings);
