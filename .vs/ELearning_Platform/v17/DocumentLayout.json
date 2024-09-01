@@ -15,10 +15,6 @@
       "RelativeMoniker": "D:0:0:{F2FD080C-D29E-4530-B99C-999D9C537241}|ELearning_Platform.Application\\ELearning_Platform.Application.csproj|solutionrelative:elearning_platform.application\\mapper\\platformdbmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{875B652E-2EBA-4E89-A11E-0BE57383A2A6}|ELearning_Platform.Domain\\ELearning_Platform.Domain.csproj|c:\\users\\jjmar\\desktop\\projects\\e-learning_platform\\backend\\elearning_platform.domain\\enitities\\person.userinformations.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{875B652E-2EBA-4E89-A11E-0BE57383A2A6}|ELearning_Platform.Domain\\ELearning_Platform.Domain.csproj|solutionrelative:elearning_platform.domain\\enitities\\person.userinformations.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{407D69B1-4792-438C-9EE4-4C0D7500E761}|ELearning_Platform.API\\ELearning_Platform.API.csproj|c:\\users\\jjmar\\desktop\\projects\\e-learning_platform\\backend\\elearning_platform.api\\controller\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{407D69B1-4792-438C-9EE4-4C0D7500E761}|ELearning_Platform.API\\ELearning_Platform.API.csproj|solutionrelative:elearning_platform.api\\controller\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -68,14 +64,14 @@
               "RelativeDocumentMoniker": "ELearning_Platform.Infrastructure\\Migrations\\20240901114852_secondName.cs",
               "ToolTip": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\ELearning_Platform.Infrastructure\\Migrations\\20240901114852_secondName.cs",
               "RelativeToolTip": "ELearning_Platform.Infrastructure\\Migrations\\20240901114852_secondName.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAkAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABIAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-01T11:48:53.088Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 5,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\ELearning_Platform.API\\appsettings.json",
               "RelativeDocumentMoniker": "ELearning_Platform.API\\appsettings.json",
@@ -88,7 +84,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 6,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\ELearning_Platform.API\\appsettings.Development.json",
               "RelativeDocumentMoniker": "ELearning_Platform.API\\appsettings.Development.json",
@@ -101,7 +97,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
               "Title": "AccountController.cs",
               "DocumentMoniker": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\ELearning_Platform.API\\Controller\\AccountController.cs",
               "RelativeDocumentMoniker": "ELearning_Platform.API\\Controller\\AccountController.cs",
@@ -114,7 +110,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "UserController.cs",
               "DocumentMoniker": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\ELearning_Platform.API\\Controller\\UserController.cs",
               "RelativeDocumentMoniker": "ELearning_Platform.API\\Controller\\UserController.cs",
@@ -160,40 +156,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Orientation": 0,
-      "VerticalTabListWidth": 256,
-      "FloatingWindowState": {
-        "Id": "e7355a4b-29f5-4f89-bba5-ddb27b65ec32",
-        "Display": 0,
-        "X": 494,
-        "Y": 141,
-        "Width": 1522,
-        "Height": 749,
-        "WindowState": 2
-      },
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Person.UserInformations.cs",
-              "DocumentMoniker": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\ELearning_Platform.Domain\\Enitities\\Person.UserInformations.cs",
-              "RelativeDocumentMoniker": "ELearning_Platform.Domain\\Enitities\\Person.UserInformations.cs",
-              "ToolTip": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\ELearning_Platform.Domain\\Enitities\\Person.UserInformations.cs",
-              "RelativeToolTip": "ELearning_Platform.Domain\\Enitities\\Person.UserInformations.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-01T10:27:55.033Z",
-              "EditorCaption": ""
             }
           ]
         }
