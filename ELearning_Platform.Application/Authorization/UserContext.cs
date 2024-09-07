@@ -14,7 +14,7 @@ namespace ELearning_Platform.Application.Authorization
 
             if (user == null || !user.Identity!.IsAuthenticated) 
             {
-                throw new NotAuthorizedException("Authorized");
+                throw new UnAuthorizedException("Authorized");
             }
 
             var userID = user.FindFirst(pr=>pr.Type == ClaimTypes.NameIdentifier)!.Value;

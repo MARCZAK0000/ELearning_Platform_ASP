@@ -1,5 +1,7 @@
-﻿using ELearning_Platform.Domain.Enitities;
+﻿using ELearning_Platform.Application.Authorization;
+using ELearning_Platform.Domain.Enitities;
 using ELearning_Platform.Domain.Exceptions;
+using ELearning_Platform.Domain.Helper;
 using ELearning_Platform.Domain.Models.AccountModel;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Domain.Response.Account;
@@ -11,24 +13,18 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 
 namespace ELearning_Platform.Infrastructure.Repository
 {
-    public class AccountRepository : IAccountRepository
+    public class AccountRepository(SignInManager<Account> signInManager, PlatformDb platformDb,
+        UserManager<Account> userManager, AuthenticationSettings authenticationSettings, IUserContext userContext) : IAccountRepository
     {
-        private readonly SignInManager<Account> _signInManager;
-        private readonly UserManager<Account> _userManager;
-        private readonly PlatformDb _platformDb;
-        private readonly AuthenticationSettings _authenticationSettings;
-        
-        public AccountRepository(SignInManager<Account> signInManager, PlatformDb platformDb, 
-            UserManager<Account> userManager, AuthenticationSettings authenticationSettings)
-        {
-            _signInManager = signInManager;
-            _platformDb = platformDb;
-            _userManager = userManager;
-            _authenticationSettings = authenticationSettings;
-        }
+        private readonly SignInManager<Account> _signInManager = signInManager;
+        private readonly UserManager<Account> _userManager = userManager;
+        private readonly PlatformDb _platformDb = platformDb;
+        private readonly AuthenticationSettings _authenticationSettings = authenticationSettings;
+        private readonly IUserContext _userContext = userContext;
 
         public async Task RegisterAccountAsync(RegisterModelDto registerModelDto, CancellationToken cancellationToken)
         {
@@ -101,12 +97,14 @@ namespace ELearning_Platform.Infrastructure.Repository
             var roles = await _userManager.GetRolesAsync(user: account);
             var token = await GenerateTokenAsync(tokenInformations: tokenInformations, roles: roles);
 
+            account.RefreshToken = await GenerateRefreshToken.GenerateToken();
 
+            await _platformDb.SaveChangesAsync(cancellationToken: cancellationToken);
             return new LoginResponse()
             {
                 Email = loginModelDto.EmailAddress,
                 Token = token,
-                RefreshToken = ""
+                RefreshToken = account.RefreshToken,
             };
 
         }
@@ -143,5 +141,45 @@ namespace ELearning_Platform.Infrastructure.Repository
 
             return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
         } 
+
+        public async Task<LoginResponse> RefreshTokenAsync(RefreshTokenModelDto refreshToken, CancellationToken cancellationToken)
+        {
+            var currentUser = _userContext.GetCurrentUser();
+            var account = await _userManager.FindByIdAsync(currentUser.UserID);
+            if(account!.RefreshToken != refreshToken.RefreshToken)
+            {
+                throw new InvalidRefreshTokenException("Invalid Refresh Token");
+            }
+
+
+            var tokenInformations = await _platformDb
+               .UserInformations
+               .Include(pr => pr.Address)
+               .Where(pr => pr.AccountID == account.Id)
+               .Select(pr => new ClaimsInformations()
+               {
+                   AccountId = pr.AccountID,
+                   Email = pr.EmailAddress,
+                   PhoneNumber = pr.PhoneNumber,
+                   Surname = pr.Surname,
+                   City = pr.Address.City,
+                   Country = pr.Address.Country
+               })
+               .FirstOrDefaultAsync(cancellationToken: cancellationToken) ??
+               throw new InternalServerErrorException(message: "There was a problem on server side");
+
+            var roles = await _userManager.GetRolesAsync(user: account);
+            var token = await GenerateTokenAsync(tokenInformations: tokenInformations, roles: roles);
+
+            account.RefreshToken = await GenerateRefreshToken.GenerateToken();
+
+            await _platformDb.SaveChangesAsync(cancellationToken: cancellationToken);
+            return new LoginResponse()
+            {
+                Email = account.Email!,
+                Token = token,
+                RefreshToken = account.RefreshToken,
+            };
+        }
     }
 }

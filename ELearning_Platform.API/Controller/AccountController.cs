@@ -1,4 +1,4 @@
-﻿using Azure.Core;
+﻿using ELearning_Platform.Application.Services.AccountServices.Command.RefreshToken;
 using ELearning_Platform.Application.Services.AccountServices.Command.Register;
 using ELearning_Platform.Application.Services.AccountServices.Command.SignIn;
 using MediatR;
@@ -8,14 +8,9 @@ namespace ELearning_Platform.API.Controller
 {
     [ApiController]
     [Route("api/account")]
-    public class AccountController : ControllerBase
+    public class AccountController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public AccountController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        private readonly IMediator _mediator = mediator;
 
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync(RegisterAccountAsyncCommand register, CancellationToken token)
@@ -26,9 +21,10 @@ namespace ELearning_Platform.API.Controller
         }
         [HttpPost("signin")]
         public async Task<IActionResult> SignInAsync(SignInAsyncCommand signInAsyncCommand, CancellationToken token)
-        {
-            return Ok(await _mediator.Send(request: signInAsyncCommand, cancellationToken: token)); 
-        }
+            => Ok(await _mediator.Send(request: signInAsyncCommand, cancellationToken: token));
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken(RefreshTokenAsyncCommand refreshToken, CancellationToken cancellationToken)
+            => Ok(await _mediator.Send(request: refreshToken, cancellationToken: cancellationToken));
 
     }
 }

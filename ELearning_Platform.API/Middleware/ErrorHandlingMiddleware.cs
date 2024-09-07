@@ -42,7 +42,50 @@ namespace ELearning_Platform.API.Middleware
                 var json = JsonSerializer.Serialize(problemDetails);
                 await context.Response.WriteAsync(json);
             }
-			catch (Exception err)
+            catch(InvalidRefreshTokenException err)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                context.Response.ContentType = "application/json";
+                var problemDetails = new ProblemDetails()
+                {
+                    Title = "Invalid Refresh Token",
+                    Type = "Authorization Error",
+                    Status = (int)HttpStatusCode.Unauthorized,
+                    Detail = err.Message
+                };
+                var json = JsonSerializer.Serialize(problemDetails);
+                await context.Response.WriteAsync(json);
+            }
+
+            catch (UnAuthorizedException err)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                context.Response.ContentType = "application/json";
+                var problemDetails = new ProblemDetails()
+                {
+                    Title = "Unauthorized",
+                    Type = "Authorization Error",
+                    Status = (int)HttpStatusCode.Unauthorized,
+                    Detail = err.Message
+                };
+                var json = JsonSerializer.Serialize(problemDetails);
+                await context.Response.WriteAsync(json);
+            }
+            catch (ForbidenException err)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                context.Response.ContentType = "application/json";
+                var problemDetails = new ProblemDetails()
+                {
+                    Title = "Forbiden request",
+                    Type = "Authorization Error",
+                    Status = (int)HttpStatusCode.Forbidden,
+                    Detail = err.Message
+                };
+                var json = JsonSerializer.Serialize(problemDetails);
+                await context.Response.WriteAsync(json);
+            }
+            catch (Exception err)
 			{
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/json";

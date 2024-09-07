@@ -1,17 +1,15 @@
 ﻿using ELearning_Platform.Domain.Enitities;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace ELearning_Platform.Infrastructure.Database
 {
     public class PlatformDb(DbContextOptions options) : IdentityDbContext<Account, Roles, string>(options)
-    {   
+    {
         //Person
-        public DbSet<UserAddress> UserAddresses { get; set; }   
+        public DbSet<UserAddress> UserAddresses { get; set; }
 
-        public DbSet<UserInformations> UserInformations {  get; set; }  
+        public DbSet<UserInformations> UserInformations { get; set; }
 
         //School
         public DbSet<Subject> Subjects { get; set; }
@@ -71,9 +69,9 @@ namespace ELearning_Platform.Infrastructure.Database
             {
                 options.ToTable("Class", "School");
 
-                options.HasMany(pr=>pr.Students)
-                .WithOne(pr=>pr.Class)
-                .HasForeignKey(pr=>pr.ClassID);
+                options.HasMany(pr => pr.Students)
+                .WithOne(pr => pr.Class)
+                .HasForeignKey(pr => pr.ClassID);
             });
 
             builder.Entity<Lesson>(options =>
@@ -95,7 +93,7 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.ToTable("Materials", "Lesson");
 
 
-                options.HasKey(pr=>pr.LessonMaterialID);
+                options.HasKey(pr => pr.LessonMaterialID);
                 options.HasOne(pr => pr.Lesson)
                 .WithMany(pr => pr.LessonMaterials)
                 .HasForeignKey(pr => pr.LessonID);
