@@ -51,11 +51,11 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors("corsPolicy");
 app.UseMiddleware<ErrorHandlingMiddleware>();
-app.MapHub<Notification>("hub/notifications");
 app.UseHttpsRedirection();
 app.UseAuthorization(); //Add to Avoid problem with Identity  
 app.UseAuthentication();
 app.MapControllers();
+app.MapHub<Notification>("/hub/notifications");
 app.Run();
 
 

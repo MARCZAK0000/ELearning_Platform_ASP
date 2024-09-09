@@ -4,9 +4,9 @@ namespace ELearning_Platform.API.Hubs
 {
     public class Notification:Hub
     {
-        public override Task OnConnectedAsync()
+        public async Task HelloWorld()
         {
-            return base.OnConnectedAsync();
+            await Clients.All.SendAsync("ReciveMessage", "Hello");
         }
     }
 }
