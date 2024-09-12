@@ -25,5 +25,12 @@ namespace ELearning_Platform.Infrastructure.Repository
 
             return informations;
         }
+
+        public async Task<List<UserInformations>> GetAllUsersAsync(CancellationToken token)
+        {
+            _ = _userContext.GetCurrentUser();
+            return await _platformDb.UserInformations.ToListAsync(cancellationToken: token);
+        }
+
     }
 }

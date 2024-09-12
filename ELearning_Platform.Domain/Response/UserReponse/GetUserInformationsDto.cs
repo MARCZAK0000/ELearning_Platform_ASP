@@ -4,6 +4,8 @@ namespace ELearning_Platform.Domain.Response.UserReponse
 {
     public class GetUserInformationsDto
     {
+        public string AccountID {  get; set; }
+
         public string FirstName { get; set; }
 
         public string? SecondName { get; set; }

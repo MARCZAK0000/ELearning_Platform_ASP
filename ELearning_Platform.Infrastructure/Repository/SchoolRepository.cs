@@ -5,6 +5,7 @@ using ELearning_Platform.Domain.Models.SchoolModel;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Domain.Response.ClassResponse;
 using ELearning_Platform.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace ELearning_Platform.Infrastructure.Repository
 {
@@ -28,7 +29,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             var newClass = new ELearningClass()
             {
                 Name = createClass.Name,
-                YearOfBeggining = createClass.YearOfBegging,
+                YearOfBeggining = createClass.YearOfBegining,
                 YearOfEnded = createClass.YearOfEnd,
             };
 
@@ -40,6 +41,36 @@ namespace ELearning_Platform.Infrastructure.Repository
                 IsCreated = true,
                 Name = createClass.Name,
             };
+        }
+
+        public async Task<AddStudentToClassResponse> AddStudentToClassAsync(AddStudentToClassDto addToClass, CancellationToken token)
+        {
+            var currentUser = _userContext.GetCurrentUser();
+            if (currentUser.Roles.Any(pr => pr.Contains(value: "student")))
+            {
+                throw new ForbidenException("You don't have permission for that request");
+            }
+
+            var eClass = await _platformDb
+                .ELearningClasses
+                .Where(pr => pr.ELearningClassID == addToClass.ClassID)
+                .FirstOrDefaultAsync(cancellationToken: token)
+                ?? throw new NotFoundException("Class not found");
+
+            foreach (var item in addToClass.UsersToAdd)
+            {
+                eClass.Students!.Add
+                    (await _platformDb.UserInformations.Where(pr => pr.AccountID == item)
+                    .FirstOrDefaultAsync(cancellationToken: token) ?? throw new NotFoundException("Student not found"));
+            }
+
+            return new AddStudentToClassResponse()
+            {
+                AddedUsers = addToClass.UsersToAdd,
+                ClassName = eClass.Name,
+                IsSuccess = true,
+            };
+
         }
     }
 }

@@ -4,7 +4,7 @@
     {
         public string Name { get; set; }    
 
-        public int YearOfBegging { get; set; }
+        public int YearOfBegining { get; set; }
 
         public int YearOfEnd { get; set; }
     }

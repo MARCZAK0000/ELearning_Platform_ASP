@@ -15,5 +15,9 @@
         public virtual List<UserInformations>? Students { get; set; }
 
         public virtual List<Lesson>? Lessons { get; set; }
+
+        public virtual List<UserInformations>? Teachers { get; set; }
+
+        public DateOnly ModifiedDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
     }
 }

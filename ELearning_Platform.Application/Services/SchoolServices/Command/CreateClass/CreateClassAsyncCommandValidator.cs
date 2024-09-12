@@ -9,7 +9,7 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateC
             RuleFor(pr=>pr.Name)
                 .NotEmpty().WithMessage("Name cannot be null or whitespaces");
 
-            RuleFor(pr => pr.YearOfBegging)
+            RuleFor(pr => pr.YearOfBegining)
                 .GreaterThanOrEqualTo(2020)
                 .LessThanOrEqualTo(pr => pr.YearOfEnd)
                 .Custom((value, context) =>
@@ -20,7 +20,7 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateC
                     }
                 });
 
-            RuleFor(pr => pr.YearOfBegging)
+            RuleFor(pr => pr.YearOfBegining)
                 .LessThanOrEqualTo(pr => pr.YearOfEnd + 5).WithMessage("Invalid message");
                 
         }

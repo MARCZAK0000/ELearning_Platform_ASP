@@ -72,6 +72,10 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.HasMany(pr => pr.Students)
                 .WithOne(pr => pr.Class)
                 .HasForeignKey(pr => pr.ClassID);
+
+                options.HasMany(pr => pr.Teachers)
+                .WithMany(pr => pr.ListOfTeachingClasses);
+                
             });
 
             builder.Entity<Lesson>(options =>

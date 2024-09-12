@@ -28,5 +28,7 @@
 
         public virtual List<Lesson>? Lessons { get; set; }
 
+        public virtual List<ELearningClass>? ListOfTeachingClasses { get; set; }
+
     }
 }
