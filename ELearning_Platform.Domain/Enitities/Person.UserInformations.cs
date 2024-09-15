@@ -16,7 +16,7 @@
 
         public string PhoneNumber { get; set; }
 
-        public DateOnly ModifidedDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateTime ModifiedDate { get; set; } = DateTime.Now;
 
         public virtual UserAddress Address { get; set; }
 

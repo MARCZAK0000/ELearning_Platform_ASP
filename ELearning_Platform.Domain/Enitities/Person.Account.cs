@@ -8,6 +8,6 @@ namespace ELearning_Platform.Domain.Enitities
 
         public string? RefreshToken { get; set; }
 
-        public DateOnly ModifidedDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateTime ModifiedDate { get; set; } = DateTime.Now;
     }
 }

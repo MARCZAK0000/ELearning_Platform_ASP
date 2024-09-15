@@ -75,7 +75,6 @@ namespace ELearning_Platform.Infrastructure.Database
 
                 options.HasMany(pr => pr.Teachers)
                 .WithMany(pr => pr.ListOfTeachingClasses);
-                
             });
 
             builder.Entity<Lesson>(options =>

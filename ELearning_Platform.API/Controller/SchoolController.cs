@@ -12,10 +12,8 @@ namespace ELearning_Platform.API.Controller
         private readonly IMediator _mediator = mediator;
         [HttpPost("class/create")]
         public async Task<IActionResult> CreateClass(CreateClassAsyncCommand command, CancellationToken cancellationToken)
-        {
-            var result = await _mediator.Send(request: command, cancellationToken: cancellationToken);
-            return Created(string.Empty, value: (IsCreated: result.IsCreated, Name: result.Name));
-        }
+            => Ok(value: await _mediator.Send(request: command, cancellationToken: cancellationToken));
+        
 
         [HttpPost("class/students/add")]
         public async Task<IActionResult> AddStudentToClass(AddToClassAsyncCommand command, CancellationToken token) 

@@ -6,9 +6,9 @@
 
         public string Name { get; set; }    
 
-        public decimal YearOfBeggining { get; set; }
+        public int YearOfBeggining { get; set; }
 
-        public decimal YearOfEnded { get; set; }
+        public int YearOfEnding { get; set; }
 
         public virtual List<Subject>? Subjects { get; set; }
 
@@ -18,6 +18,6 @@
 
         public virtual List<UserInformations>? Teachers { get; set; }
 
-        public DateOnly ModifiedDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateTime ModifiedDate { get; set; } = DateTime.Now;
     }
 }

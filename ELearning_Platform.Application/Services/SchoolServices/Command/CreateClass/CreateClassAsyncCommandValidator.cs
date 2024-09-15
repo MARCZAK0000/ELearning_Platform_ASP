@@ -11,7 +11,7 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateC
 
             RuleFor(pr => pr.YearOfBegining)
                 .GreaterThanOrEqualTo(2020)
-                .LessThanOrEqualTo(pr => pr.YearOfEnd)
+                .LessThanOrEqualTo(pr => pr.YearOfEnding)
                 .Custom((value, context) =>
                 {
                     if (value < DateTime.Now.Year)
@@ -21,7 +21,7 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateC
                 });
 
             RuleFor(pr => pr.YearOfBegining)
-                .LessThanOrEqualTo(pr => pr.YearOfEnd + 5).WithMessage("Invalid message");
+                .LessThanOrEqualTo(pr => pr.YearOfEnding + 5).WithMessage("Invalid message");
                 
         }
     }

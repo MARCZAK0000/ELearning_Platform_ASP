@@ -6,6 +6,6 @@
 
         public int YearOfBegining { get; set; }
 
-        public int YearOfEnd { get; set; }
+        public int YearOfEnding { get; set; }
     }
 }

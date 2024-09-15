@@ -20,7 +20,7 @@ namespace ELearning_Platform.Domain.Enitities
 
         public string StreetName {  get; set; }
 
-        public DateOnly ModifiedDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateTime ModifiedDate { get; set; } = DateTime.Now;
 
         public virtual UserInformations User{ get; set; }
 

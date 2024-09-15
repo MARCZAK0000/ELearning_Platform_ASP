@@ -30,7 +30,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             {
                 Name = createClass.Name,
                 YearOfBeggining = createClass.YearOfBegining,
-                YearOfEnded = createClass.YearOfEnd,
+                YearOfEnding = createClass.YearOfEnding,
             };
 
             await _platformDb.ELearningClasses.AddAsync(entity: newClass, cancellationToken: token);

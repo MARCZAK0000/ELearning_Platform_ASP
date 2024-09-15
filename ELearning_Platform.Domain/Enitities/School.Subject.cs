@@ -19,5 +19,7 @@
         public UserInformations Teacher {  get; set; }
 
         public ELearningClass Class { get; set; }
+
+        public DateTime ModifiedDate { get; set; } = DateTime.Now;
     }
 }
