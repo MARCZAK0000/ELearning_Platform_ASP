@@ -12,19 +12,12 @@ namespace ELearning_Platform.API.Controller
     {
         private readonly IMediator _mediator = mediator;
 
-        [HttpPost("register")]
+        [HttpPost("registration")]
         public async Task<IActionResult> RegisterAsync(RegisterAccountAsyncCommand register, CancellationToken token)
         {
             await _mediator.Send(request: register, cancellationToken: token);
 
             return Created(string.Empty, new { Email = register.AddressEmail, Message = $"Your account have been created: {register.FirstName} {register.Surname}" });
         }
-        [HttpPost("signin")]
-        public async Task<IActionResult> SignInAsync(SignInAsyncCommand signInAsyncCommand, CancellationToken token)
-            => Ok(await _mediator.Send(request: signInAsyncCommand, cancellationToken: token));
-        [HttpPost("refresh")]
-        public async Task<IActionResult> RefreshToken(RefreshTokenAsyncCommand refreshToken, CancellationToken cancellationToken)
-            => Ok(await _mediator.Send(request: refreshToken, cancellationToken: cancellationToken));
-
     }
 }

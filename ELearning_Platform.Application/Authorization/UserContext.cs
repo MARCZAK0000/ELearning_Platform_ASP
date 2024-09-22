@@ -21,9 +21,7 @@ namespace ELearning_Platform.Application.Authorization
 
             var email = user.FindFirst(pr => pr.Type == ClaimTypes.Email)!.Value;
 
-            var roles = user.FindAll(pr=>pr.Type == ClaimTypes.Role).Select(pr=>pr.ToString()).ToList();
-
-            return new CurrentUser(userID, email, roles);   
+            return new CurrentUser(userID, email);   
         }
     }
 }

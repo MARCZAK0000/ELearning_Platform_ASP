@@ -1,6 +1,5 @@
 ﻿using Azure.Storage.Blobs;
 using ELearning_Platform.Domain.Repository;
-using ELearning_Platform.Infrastructure.Authentications;
 using ELearning_Platform.Infrastructure.Database;
 using ELearning_Platform.Infrastructure.Repository;
 using ELearning_Platform.Infrastructure.StorageAccount;
@@ -24,19 +23,15 @@ namespace ELearning_Platform.Infrastructure.Services
                     new BlobClientOptions(version: BlobClientOptions.ServiceVersion.V2019_02_02)));
             }
 
-            services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped<IUserRepository , UserRepository>();
-            services.AddScoped<ISchoolRepository, SchoolRepository>();
+          
             //binding
-            var authSetings = new AuthenticationSettings();
-            configuration.GetSection("AuthSetting").Bind(authSetings);
-            services.AddSingleton(authSetings);
-
-
             var blobNames = new BlobStorageTablesNames();
             configuration.GetSection("BlobStorageTablesNames").Bind(blobNames);
             services.AddSingleton(blobNames);
 
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ISchoolRepository, SchoolRepository>();
 
         }
     }

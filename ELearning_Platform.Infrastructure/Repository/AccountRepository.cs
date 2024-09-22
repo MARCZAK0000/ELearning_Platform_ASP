@@ -102,7 +102,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             await _platformDb.SaveChangesAsync(cancellationToken: cancellationToken);
             return new LoginResponse()
             {
-                Email = loginModelDto.EmailAddress,
+                AddressEmail = loginModelDto.EmailAddress,
                 Token = token,
                 RefreshToken = account.RefreshToken,
             };
@@ -176,7 +176,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             await _platformDb.SaveChangesAsync(cancellationToken: cancellationToken);
             return new LoginResponse()
             {
-                Email = account.Email!,
+                AddressEmail = account.Email!,
                 Token = token,
                 RefreshToken = account.RefreshToken,
             };

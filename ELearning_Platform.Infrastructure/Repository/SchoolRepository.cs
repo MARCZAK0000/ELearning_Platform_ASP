@@ -19,13 +19,7 @@ namespace ELearning_Platform.Infrastructure.Repository
         public async Task<CreateClassResponse> CreateClassAsync
             (CreateClassDto createClass, CancellationToken token)
         {
-            var currentUser = _userContext.GetCurrentUser();
-
-            if (currentUser.Roles.Any(pr => pr.Contains("student")))
-            {
-                throw new ForbidenException("Forbiden");
-            }
-
+          
             var newClass = new ELearningClass()
             {
                 Name = createClass.Name,
@@ -45,12 +39,6 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         public async Task<AddStudentToClassResponse> AddStudentToClassAsync(AddStudentToClassDto addToClass, CancellationToken token)
         {
-            var currentUser = _userContext.GetCurrentUser();
-            if (currentUser.Roles.Any(pr => pr.Contains(value: "student")))
-            {
-                throw new ForbidenException("You don't have permission for that request");
-            }
-
             var eClass = await _platformDb
                 .ELearningClasses
                 .Where(pr => pr.ELearningClassID == addToClass.ClassID)
