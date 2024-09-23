@@ -29,15 +29,13 @@ namespace ELearning_Platform.API.Overrides
             var emailSender = endpoints.ServiceProvider.GetRequiredService<IEmailSender<TUser>>();
             var linkGenerator = endpoints.ServiceProvider.GetRequiredService<LinkGenerator>();
 
-            // We'll figure out a unique endpoint name based on the final route pattern during endpoint generation.
             string? confirmEmailEndpointName = null;
 
             var routeGroup = endpoints.MapGroup("/api/account");
 
             if (configureOptions.ExcludeRegisterPost)
             {
-                // NOTE: We cannot inject UserManager<TUser> directly because the TUser generic parameter is currently unsupported by RDG.
-                // https://github.com/dotnet/aspnetcore/issues/47338
+                
                 routeGroup.MapPost("/register", async Task<Results<Ok, ValidationProblem>>
                     ([FromBody] RegisterRequest registration, HttpContext context, [FromServices] IServiceProvider sp) =>
                 {
@@ -102,7 +100,6 @@ namespace ELearning_Platform.API.Overrides
                         return TypedResults.Problem(result.ToString(), statusCode: StatusCodes.Status401Unauthorized);
                     }
 
-                    // The signInManager already produced the needed response in the form of a cookie or bearer token.
                     return TypedResults.Empty;
                 });
             }
@@ -116,7 +113,6 @@ namespace ELearning_Platform.API.Overrides
                     var refreshTokenProtector = bearerTokenOptions.Get(IdentityConstants.BearerScheme).RefreshTokenProtector;
                     var refreshTicket = refreshTokenProtector.Unprotect(refreshRequest.RefreshToken);
 
-                    // Reject the /refresh attempt with a 401 if the token expired or the security stamp validation fails
                     if (refreshTicket?.Properties?.ExpiresUtc is not { } expiresUtc ||
                         timeProvider.GetUtcNow() >= expiresUtc ||
                         await signInManager.ValidateSecurityStampAsync(refreshTicket.Principal) is not TUser user)
@@ -138,7 +134,6 @@ namespace ELearning_Platform.API.Overrides
                     var userManager = sp.GetRequiredService<UserManager<TUser>>();
                     if (await userManager.FindByIdAsync(userId) is not { } user)
                     {
-                        // We could respond with a 404 instead of a 401 like Identity UI, but that feels like unnecessary information.
                         return TypedResults.Unauthorized();
                     }
 
@@ -159,8 +154,7 @@ namespace ELearning_Platform.API.Overrides
                     }
                     else
                     {
-                        // As with Identity UI, email and user name are one and the same. So when we update the email,
-                        // we need to update the user name.
+                       
                         result = await userManager.ChangeEmailAsync(user, changedEmail, code);
 
                         if (result.Succeeded)
@@ -216,8 +210,7 @@ namespace ELearning_Platform.API.Overrides
                         await emailSender.SendPasswordResetCodeAsync(user, resetRequest.Email, HtmlEncoder.Default.Encode(code));
                     }
 
-                    // Don't reveal that the user does not exist or is not confirmed, so don't return a 200 if we would have
-                    // returned a 400 for an invalid code given a valid user email.
+                  
                     return TypedResults.Ok();
                 });
             }
@@ -233,8 +226,7 @@ namespace ELearning_Platform.API.Overrides
 
                     if (user is null || !await userManager.IsEmailConfirmedAsync(user))
                     {
-                        // Don't reveal that the user does not exist or is not confirmed, so don't return a 200 if we would have
-                        // returned a 400 for an invalid code given a valid user email.
+                       
                         return CreateValidationProblem(IdentityResult.Failed(userManager.ErrorDescriber.InvalidToken()));
                     }
 
@@ -442,8 +434,7 @@ namespace ELearning_Platform.API.Overrides
 
         private static ValidationProblem CreateValidationProblem(IdentityResult result)
         {
-            // We expect a single error code and description in the normal case.
-            // This could be golfed with GroupBy and ToDictionary, but perf! :P
+           
             Debug.Assert(!result.Succeeded);
             var errorDictionary = new Dictionary<string, string[]>(1);
 
@@ -478,7 +469,7 @@ namespace ELearning_Platform.API.Overrides
             };
         }
 
-        // Wrap RouteGroupBuilder with a non-public type to avoid a potential future behavioral breaking change.
+        
         private sealed class IdentityEndpointsConventionBuilder(RouteGroupBuilder inner) : IEndpointConventionBuilder
         {
             private IEndpointConventionBuilder InnerAsConventionBuilder => inner;

@@ -1,6 +1,4 @@
-﻿using ELearning_Platform.Application.Services.AccountServices.Command.RefreshToken;
-using ELearning_Platform.Application.Services.AccountServices.Command.Register;
-using ELearning_Platform.Application.Services.AccountServices.Command.SignIn;
+﻿using ELearning_Platform.Application.Services.AccountServices.Command.Register;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
