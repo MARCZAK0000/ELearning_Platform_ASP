@@ -1,4 +1,5 @@
-﻿using ELearning_Platform.Application.Services.AccountServices.Command.Register;
+﻿using ELearning_Platform.Application.Services.AccountServices.Command.SignIn;
+using ELearning_Platform.Infrastructure.Services.AccountServices.Command.Register;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,5 +18,8 @@ namespace ELearning_Platform.API.Controller
 
             return Created(string.Empty, new { Email = register.AddressEmail, Message = $"Your account have been created: {register.FirstName} {register.Surname}" });
         }
+        [HttpPost("signin")]
+        public async Task<IActionResult> SignInAsync(SignInAsyncCommand signInAsyncCommand, CancellationToken token)
+           => Ok(await _mediator.Send(request: signInAsyncCommand, cancellationToken: token));
     }
 }

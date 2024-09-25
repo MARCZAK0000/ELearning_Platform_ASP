@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateClass
+namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.CreateClass
 {
     public class CreateClassAsyncCommandValidator:AbstractValidator<CreateClassAsyncCommand>
     {

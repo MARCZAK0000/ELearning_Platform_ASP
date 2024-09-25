@@ -1,12 +1,12 @@
-﻿using ELearning_Platform.Application.Authorization;
-using ELearning_Platform.Application.Mapper;
-using ELearning_Platform.Application.Services.AccountServices.Command.Register;
-using ELearning_Platform.Application.Services.SchoolServices.Command.CreateClass;
+﻿using ELearning_Platform.Infrastructure.Authorization;
+using ELearning_Platform.Infrastructure.Mapper;
+using ELearning_Platform.Infrastructure.Services.AccountServices.Command.Register;
+using ELearning_Platform.Infrastructure.Services.SchoolServices.Command.CreateClass;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ELearning_Platform.Application.Extensions
+namespace ELearning_Platform.Infrastructure.Extensions
 {
     public static class ServiceExentsion
     {

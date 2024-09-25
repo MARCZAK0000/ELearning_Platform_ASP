@@ -1,4 +1,4 @@
-﻿using ELearning_Platform.Application.Authorization;
+﻿using ELearning_Platform.Infrastructure.Authorization;
 using ELearning_Platform.Domain.Enitities;
 using ELearning_Platform.Domain.Exceptions;
 using ELearning_Platform.Domain.Repository;

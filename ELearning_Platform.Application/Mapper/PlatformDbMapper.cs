@@ -3,7 +3,7 @@ using ELearning_Platform.Domain.Enitities;
 using ELearning_Platform.Domain.Models.UserAddress;
 using ELearning_Platform.Domain.Response.UserReponse;
 
-namespace ELearning_Platform.Application.Mapper
+namespace ELearning_Platform.Infrastructure.Mapper
 {
     public class PlatformDbMapper : Profile
     {

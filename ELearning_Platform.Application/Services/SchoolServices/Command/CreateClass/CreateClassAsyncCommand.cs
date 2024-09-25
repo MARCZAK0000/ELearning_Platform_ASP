@@ -2,7 +2,7 @@
 using ELearning_Platform.Domain.Response.ClassResponse;
 using MediatR;
 
-namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateClass
+namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.CreateClass
 {
     public class CreateClassAsyncCommand : CreateClassDto, IRequest<CreateClassResponse>
     {

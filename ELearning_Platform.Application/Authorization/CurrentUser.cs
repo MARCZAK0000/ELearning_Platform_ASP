@@ -1,4 +1,4 @@
-﻿namespace ELearning_Platform.Application.Authorization
+﻿namespace ELearning_Platform.Infrastructure.Authorization
 {
     public class CurrentUser(string userID, string Email)
     {

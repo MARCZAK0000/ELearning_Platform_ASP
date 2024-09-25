@@ -3,7 +3,7 @@ using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Domain.Response.UserReponse;
 using MediatR;
 
-namespace ELearning_Platform.Application.Services.UserServices.Queries.AllUserInformations
+namespace ELearning_Platform.Infrastructure.Services.UserServices.Queries.AllUserInformations
 {
     public class GetInfromationsAboutAllUsersAsyncQueryHandler(IMapper mapper, IUserRepository userRepository) : IRequestHandler<GetInfromationsAboutAllUsersAsyncQuery, List<GetUserInformationsDto>>
     {

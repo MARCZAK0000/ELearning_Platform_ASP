@@ -3597,7 +3597,8 @@
           "AutoMapper": "13.0.1",
           "ELearning_Platform.Domain": "1.0.0",
           "FluentValidation.AspNetCore": "11.3.0",
-          "MediatR": "12.4.0"
+          "MediatR": "12.4.0",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.8"
         },
         "compile": {
           "bin/placeholder/ELearning_Platform.Application.dll": {}

@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using ELearning_Platform.Infrastructure.AuthPolicy;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace ELearning_Platform.Application.AuthPolicy
+namespace ELearning_Platform.Infrastructure.Identity
 {
-    public static class AuthorizationContainer
+    public static class AddCustomAuthorization
     {
         public static void AddAuthorizationPolicy(this IServiceCollection services)
         {

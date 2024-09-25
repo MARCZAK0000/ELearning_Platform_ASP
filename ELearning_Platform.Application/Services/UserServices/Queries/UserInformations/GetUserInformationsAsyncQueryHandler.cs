@@ -4,7 +4,7 @@ using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Domain.Response.UserReponse;
 using MediatR;
 
-namespace ELearning_Platform.Application.Services.UserServices.Queries.Informations
+namespace ELearning_Platform.Infrastructure.Services.UserServices.Queries.Informations
 {
     public class GetUserInformationsAsyncQueryHandler
         (IMapper mapper, IUserRepository userRepository) : IRequestHandler<GetUserInformationsAsyncQuery, GetUserInformationsDto>

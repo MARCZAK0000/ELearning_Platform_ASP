@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace ELearning_Platform.Application.Authorization
+namespace ELearning_Platform.Infrastructure.Authorization
 {
     public class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContext
     {

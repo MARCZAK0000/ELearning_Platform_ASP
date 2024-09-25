@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace ELearning_Platform.Application.AuthPolicy
+namespace ELearning_Platform.Infrastructure.AuthPolicy
 {
     public static class PolicyConstant
     {
@@ -21,35 +21,35 @@ namespace ELearning_Platform.Application.AuthPolicy
         {
             
             return new AuthorizationPolicyBuilder()
-                .RequireRole(Enum.GetNames(typeof(AuthorizationRole)).Take((int)AuthorizationRole.Admin))
+                .RequireRole(Enum.GetNames(typeof(AuthorizationRole)).Take((int)AuthorizationRole.admin))
                 .Build();
         }
 
         public static AuthorizationPolicy RequireModerator()
         {
             return new AuthorizationPolicyBuilder()
-                .RequireRole(Enum.GetNames(typeof(AuthorizationRole)).ToList().Take((int)AuthorizationRole.Moderator))
+                .RequireRole(Enum.GetNames(typeof(AuthorizationRole)).ToList().Take((int)AuthorizationRole.moderator))
                 .Build();
         }
 
         public static AuthorizationPolicy RequireHeadTeacher()
         {
             return new AuthorizationPolicyBuilder()
-                .RequireRole(Enum.GetNames(typeof(AuthorizationRole)).ToList().Take((int)AuthorizationRole.HeadTeacher))
+                .RequireRole(Enum.GetNames(typeof(AuthorizationRole)).ToList().Take((int)AuthorizationRole.headTeacher))
                 .Build();
         }
 
         public static AuthorizationPolicy ReqiureTeacher()
         {
             return new AuthorizationPolicyBuilder()
-                .RequireRole(Enum.GetNames(typeof(AuthorizationRole)).ToList().Take((int)AuthorizationRole.Teacher))
+                .RequireRole(Enum.GetNames(typeof(AuthorizationRole)).ToList().Take((int)AuthorizationRole.teacher))
                 .Build();
         }
 
         public static AuthorizationPolicy ReqiureStudent()
         {
             return new AuthorizationPolicyBuilder()
-               .RequireRole(Enum.GetNames(typeof(AuthorizationRole)).ToList().Take((int)AuthorizationRole.Admin))
+               .RequireRole(Enum.GetNames(typeof(AuthorizationRole)).ToList().Take((int)AuthorizationRole.student))
                .Build();
         }
     }

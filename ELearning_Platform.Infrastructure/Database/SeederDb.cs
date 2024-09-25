@@ -1,4 +1,5 @@
-﻿using ELearning_Platform.Domain.Enitities;
+﻿using ELearning_Platform.Infrastructure.AuthPolicy;
+using ELearning_Platform.Domain.Enitities;
 using Microsoft.AspNetCore.Identity;
 
 namespace ELearning_Platform.Infrastructure.Database
@@ -9,7 +10,7 @@ namespace ELearning_Platform.Infrastructure.Database
 
         private readonly PlatformDb _platformDb = platformDb;
 
-        private readonly string[] _roles = ["student", "teacher", "head-teacher", "moderator", "admin"];
+        private readonly string[] _roles = Enum.GetNames(typeof(AuthorizationRole));
         public async Task GenerateRolesAsync()
         {
             if(await _platformDb.Database.CanConnectAsync())

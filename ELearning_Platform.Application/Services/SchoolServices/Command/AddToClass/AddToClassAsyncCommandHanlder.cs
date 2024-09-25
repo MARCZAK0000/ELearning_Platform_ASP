@@ -1,9 +1,9 @@
-﻿using ELearning_Platform.Application.Authorization;
+﻿using ELearning_Platform.Infrastructure.Authorization;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Domain.Response.ClassResponse;
 using MediatR;
 
-namespace ELearning_Platform.Application.Services.SchoolServices.Command.AddToClass
+namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddToClass
 {
     public class AddToClassAsyncCommandHanlder(ISchoolRepository schoolRepository) 
         : IRequestHandler<AddToClassAsyncCommand, AddStudentToClassResponse>

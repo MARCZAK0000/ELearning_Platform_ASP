@@ -2,7 +2,7 @@
 using MediatR;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ELearning_Platform.Application.Services.AccountServices.Command.Register
+namespace ELearning_Platform.Infrastructure.Services.AccountServices.Command.Register
 {
     public class RegisterAccountAsyncCommandHandler(IAccountRepository accountRepository) 
         : IRequestHandler<RegisterAccountAsyncCommand>

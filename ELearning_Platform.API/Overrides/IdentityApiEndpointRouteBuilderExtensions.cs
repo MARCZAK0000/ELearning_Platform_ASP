@@ -35,7 +35,7 @@ namespace ELearning_Platform.API.Overrides
 
             if (configureOptions.ExcludeRegisterPost)
             {
-                
+
                 routeGroup.MapPost("/register", async Task<Results<Ok, ValidationProblem>>
                     ([FromBody] RegisterRequest registration, HttpContext context, [FromServices] IServiceProvider sp) =>
                 {
@@ -75,32 +75,10 @@ namespace ELearning_Platform.API.Overrides
                 routeGroup.MapPost("/login", async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>>
                 ([FromBody] LoginRequest login, [FromQuery] bool? useCookies, [FromQuery] bool? useSessionCookies, [FromServices] IServiceProvider sp) =>
                 {
+                    var httpContext = sp.GetService<HttpContext>();
                     var signInManager = sp.GetRequiredService<SignInManager<TUser>>();
-
-                    var useCookieScheme = useCookies == true || useSessionCookies == true;
-                    var isPersistent = useCookies == true && useSessionCookies != true;
-                    signInManager.AuthenticationScheme = useCookieScheme ? IdentityConstants.ApplicationScheme : IdentityConstants.BearerScheme;
-
-                    var result = await signInManager.PasswordSignInAsync(login.Email, login.Password, isPersistent, lockoutOnFailure: true);
-
-                    if (result.RequiresTwoFactor)
-                    {
-                        if (!string.IsNullOrEmpty(login.TwoFactorCode))
-                        {
-                            result = await signInManager.TwoFactorAuthenticatorSignInAsync(login.TwoFactorCode, isPersistent, rememberClient: isPersistent);
-                        }
-                        else if (!string.IsNullOrEmpty(login.TwoFactorRecoveryCode))
-                        {
-                            result = await signInManager.TwoFactorRecoveryCodeSignInAsync(login.TwoFactorRecoveryCode);
-                        }
-                    }
-
-                    if (!result.Succeeded)
-                    {
-                        return TypedResults.Problem(result.ToString(), statusCode: StatusCodes.Status401Unauthorized);
-                    }
-
-                    return TypedResults.Empty;
+                    var result = await SignInAsync<TUser>(signInManager, login, sp);
+                    return result;
                 });
             }
 
@@ -154,7 +132,7 @@ namespace ELearning_Platform.API.Overrides
                     }
                     else
                     {
-                       
+
                         result = await userManager.ChangeEmailAsync(user, changedEmail, code);
 
                         if (result.Succeeded)
@@ -210,7 +188,7 @@ namespace ELearning_Platform.API.Overrides
                         await emailSender.SendPasswordResetCodeAsync(user, resetRequest.Email, HtmlEncoder.Default.Encode(code));
                     }
 
-                  
+
                     return TypedResults.Ok();
                 });
             }
@@ -226,7 +204,7 @@ namespace ELearning_Platform.API.Overrides
 
                     if (user is null || !await userManager.IsEmailConfirmedAsync(user))
                     {
-                       
+
                         return CreateValidationProblem(IdentityResult.Failed(userManager.ErrorDescriber.InvalidToken()));
                     }
 
@@ -434,7 +412,7 @@ namespace ELearning_Platform.API.Overrides
 
         private static ValidationProblem CreateValidationProblem(IdentityResult result)
         {
-           
+
             Debug.Assert(!result.Succeeded);
             var errorDictionary = new Dictionary<string, string[]>(1);
 
@@ -469,7 +447,30 @@ namespace ELearning_Platform.API.Overrides
             };
         }
 
-        
+        private static async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>> SignInAsync<TUser>
+            (SignInManager<TUser> signInManager, LoginRequest login, IServiceProvider sp)
+            where TUser : class
+        {
+            signInManager.AuthenticationScheme = IdentityConstants.BearerScheme;
+            var user = await signInManager.UserManager.FindByEmailAsync(login.Email);
+            if (user == null)
+            {
+                return TypedResults.Problem("Invalid UserName or Password", statusCode: StatusCodes.Status401Unauthorized);
+            }
+            var result = await signInManager.PasswordSignInAsync(login.Email, login.Password, false, lockoutOnFailure: true);
+
+            if(!result.Succeeded)
+            {
+                if (!result.Succeeded)
+                {
+                    return TypedResults.Problem(result.ToString(), statusCode: StatusCodes.Status401Unauthorized);
+                }
+
+            }
+            
+            return TypedResults.Empty;
+        }
+
         private sealed class IdentityEndpointsConventionBuilder(RouteGroupBuilder inner) : IEndpointConventionBuilder
         {
             private IEndpointConventionBuilder InnerAsConventionBuilder => inner;
