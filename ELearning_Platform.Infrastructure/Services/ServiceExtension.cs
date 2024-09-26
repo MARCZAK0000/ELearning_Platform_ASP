@@ -47,6 +47,7 @@ namespace ELearning_Platform.Infrastructure.Services
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISchoolRepository, SchoolRepository>();
+            services.AddScoped<ITokenRepository, TokenRepository>();
 
         }
     }

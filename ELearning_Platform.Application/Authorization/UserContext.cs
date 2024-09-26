@@ -14,6 +14,7 @@ namespace ELearning_Platform.Infrastructure.Authorization
 
             if (user == null || !user.Identity!.IsAuthenticated) 
             {
+                
                 throw new UnAuthorizedException("Authorized");
             }
 

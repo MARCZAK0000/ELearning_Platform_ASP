@@ -1,15 +1,12 @@
-﻿namespace ELearning_Platform.Domain.Response.Account
+﻿using ELearning_Platform.Domain.Models.AccountModel;
+using Microsoft.AspNetCore.Identity;
+
+namespace ELearning_Platform.Domain.Response.AccountResponse
 {
     public class LoginResponse
     {
-        public string AddressEmail {  get; set; }
-        
-        public string Token { get; set; }
+        public SignInResult Success { get; set; }
 
-        public string RefreshToken { get; set; }    
-        
-        public DateTime SignInDate { get; set; } = DateTime.Now;
-
-        public DateTime TokenExpiredDate { get; set; } = DateTime.Now.AddMinutes(15);
+        public TokenModelDto? TokenModelDto { get; set; }
     }
 }

@@ -75,7 +75,6 @@ namespace ELearning_Platform.API.Overrides
                 routeGroup.MapPost("/login", async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>>
                 ([FromBody] LoginRequest login, [FromQuery] bool? useCookies, [FromQuery] bool? useSessionCookies, [FromServices] IServiceProvider sp) =>
                 {
-                    var httpContext = sp.GetService<HttpContext>();
                     var signInManager = sp.GetRequiredService<SignInManager<TUser>>();
                     var result = await SignInAsync<TUser>(signInManager, login, sp);
                     return result;

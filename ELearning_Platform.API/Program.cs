@@ -22,7 +22,7 @@ namespace ELearning_Platform.API
             builder.Services.AddScoped<ErrorHandlingMiddleware>();
             builder.Services.AddApplication(); //MediatR and Validations 
             builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.IsDevelopment()); //for database and repository registration 
-            builder.Services.AddIdentity<Account, Roles>()
+            builder.Services.AddIdentityApiEndpoints<Account>()
                 .AddRoles<Roles>()
                 .AddEntityFrameworkStores<PlatformDb>()
                 .AddSignInManager()
@@ -66,20 +66,20 @@ namespace ELearning_Platform.API
             app.UseAuthorization(); //Add to Avoid problem with Identity  
             app.MapControllers();
             app.MapHub<Notification>("/hub/notifications");
-            //app.MapIdentityApiFilterable<Account>(new IdentityApiEndpointRouteBuilderOptions
-            //{
-            //    ExcludeRegisterPost = false,
-            //    ExcludeLoginPost = true,
-            //    ExcludeRefreshPost = true,
-            //    ExcludeConfirmEmailGet = false,
-            //    ExcludeResendConfirmationEmailPost = false,
-            //    ExcludeForgotPasswordPost = true,
-            //    ExcludeResetPasswordPost = true,
-            //    ExcludeManageGroup = true,
-            //    Exclude2faPost = false,
-            //    ExcludegInfoGet = true,
-            //    ExcludeInfoPost = true,
-            //});
+            app.MapIdentityApiFilterable<Account>(new IdentityApiEndpointRouteBuilderOptions
+            {
+                ExcludeRegisterPost = false,
+                ExcludeLoginPost = true,
+                ExcludeRefreshPost = true,
+                ExcludeConfirmEmailGet = false,
+                ExcludeResendConfirmationEmailPost = false,
+                ExcludeForgotPasswordPost = true,
+                ExcludeResetPasswordPost = true,
+                ExcludeManageGroup = true,
+                Exclude2faPost = false,
+                ExcludegInfoGet = true,
+                ExcludeInfoPost = true,
+            });
             app.Run();
         }
     }

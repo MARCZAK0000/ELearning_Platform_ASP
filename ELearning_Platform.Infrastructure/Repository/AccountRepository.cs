@@ -1,9 +1,10 @@
-﻿using ELearning_Platform.Domain.Enitities;
+﻿using ELearning_Platform.Domain.Authentication;
+using ELearning_Platform.Domain.Enitities;
 using ELearning_Platform.Domain.Exceptions;
 using ELearning_Platform.Domain.Helper;
 using ELearning_Platform.Domain.Models.AccountModel;
 using ELearning_Platform.Domain.Repository;
-using ELearning_Platform.Domain.Response.Account;
+using ELearning_Platform.Domain.Response.AccountResponse;
 using ELearning_Platform.Infrastructure.Authentications;
 using ELearning_Platform.Infrastructure.Authorization;
 using ELearning_Platform.Infrastructure.Database;
@@ -17,13 +18,15 @@ using System.Text;
 namespace ELearning_Platform.Infrastructure.Repository
 {
     public class AccountRepository(SignInManager<Account> signInManager, PlatformDb platformDb,
-        UserManager<Account> userManager, IUserContext userContext, AuthenticationSettings authenticationSettings) : IAccountRepository
+        UserManager<Account> userManager, IUserContext userContext,
+        ITokenRepository tokenRepository) : IAccountRepository
     {
         private readonly SignInManager<Account> _signInManager = signInManager;
         private readonly UserManager<Account> _userManager = userManager;
         private readonly PlatformDb _platformDb = platformDb;
         private readonly IUserContext _userContext = userContext;
-        private readonly AuthenticationSettings _authenticationSettings = authenticationSettings;
+        
+        private readonly ITokenRepository _tokenRepository = tokenRepository;
 
         public async Task RegisterAccountAsync(RegisterModelDto registerModelDto, CancellationToken cancellationToken)
         {
@@ -74,7 +77,10 @@ namespace ELearning_Platform.Infrastructure.Repository
 
             if (!checkPassword.Succeeded)
             {
-                throw new InvalidEmailOrPasswordException(message: "Invalid Email or Password");
+                return new LoginResponse()
+                {
+                    Success = SignInResult.Failed
+                };
             }
 
             var tokenInformations = await _platformDb
@@ -94,52 +100,25 @@ namespace ELearning_Platform.Infrastructure.Repository
                 throw new InternalServerErrorException(message: "There was a problem on server side");
 
             var roles = await _userManager.GetRolesAsync(user: account);
-            var token = await GenerateTokenAsync(tokenInformations: tokenInformations, roles: roles);
+            var token = await _tokenRepository.GenerateTokenAsync(tokenInformations: tokenInformations, roles: roles);
 
             account.RefreshToken = await GenerateRefreshToken.GenerateToken();
 
             await _platformDb.SaveChangesAsync(cancellationToken: cancellationToken);
             return new LoginResponse()
             {
-                AddressEmail = loginModelDto.EmailAddress,
-                Token = token,
-                RefreshToken = account.RefreshToken,
+                
+                Success = SignInResult.Success,
+                TokenModelDto = new TokenModelDto()
+                {
+                    AccessToken = token,
+                    RefreshToken = account.RefreshToken,
+                }
             };
 
         }
 
-        public Task<string> GenerateTokenAsync(ClaimsInformations tokenInformations, IList<string> roles)
-        {
-            var claims = new List<Claim>()
-            {
-                new(type: ClaimTypes.NameIdentifier, value: tokenInformations.AccountId),
-                new(type: ClaimTypes.Email, value: tokenInformations.Email),
-                //new(type: ClaimTypes.HomePhone, value: tokenInformations.PhoneNumber),
-                //new(type: ClaimTypes.Surname, value: tokenInformations.Surname),
-                //new(type: ClaimTypes.Country, value: tokenInformations.Country),
-                //new(type: "City", value: tokenInformations.City),
-            };
-
-            foreach (var item in roles)
-            {
-                claims.Add(
-                    new Claim(type: ClaimTypes.Role, value: item));
-            }
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.Key));
-            var credentails = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expireDays = DateTime.UtcNow.AddHours(_authenticationSettings.ExpireMinutes);
-
-            var token = new JwtSecurityToken(
-                issuer: _authenticationSettings.Issure,
-                audience: _authenticationSettings.Key,
-                claims: claims,
-                notBefore: null,
-                expires: expireDays,
-                credentails);
-
-            return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
-        }
+        
 
         public async Task<LoginResponse> RefreshTokenAsync(RefreshTokenModelDto refreshToken, CancellationToken cancellationToken)
         {
@@ -168,16 +147,20 @@ namespace ELearning_Platform.Infrastructure.Repository
                throw new InternalServerErrorException(message: "There was a problem on server side");
 
             var roles = await _userManager.GetRolesAsync(user: account);
-            var token = await GenerateTokenAsync(tokenInformations: tokenInformations, roles: roles);
+            var token = await _tokenRepository.GenerateTokenAsync(tokenInformations: tokenInformations, roles: roles);
 
             account.RefreshToken = await GenerateRefreshToken.GenerateToken();
 
             await _platformDb.SaveChangesAsync(cancellationToken: cancellationToken);
             return new LoginResponse()
             {
-                AddressEmail = account.Email!,
-                Token = token,
-                RefreshToken = account.RefreshToken,
+
+                Success = SignInResult.Success,
+                TokenModelDto = new TokenModelDto()
+                {
+                    AccessToken = token,
+                    RefreshToken = account.RefreshToken,
+                }
             };
         }
 

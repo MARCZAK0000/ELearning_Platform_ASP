@@ -10,6 +10,7 @@ namespace ELearning_Platform.API.Controller
 {
     [ApiController]
     [Route("api/user")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController(IMediator mediator):ControllerBase
     {
         private readonly IMediator _mediator = mediator;

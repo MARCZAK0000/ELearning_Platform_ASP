@@ -2,12 +2,15 @@
 using ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddToClass;
 using ELearning_Platform.Infrastructure.Services.SchoolServices.Command.CreateClass;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ELearning_Platform.API.Controller
 {
+
     [ApiController]
+    [Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/school")]
     public class SchoolController(IMediator mediator):ControllerBase
     {

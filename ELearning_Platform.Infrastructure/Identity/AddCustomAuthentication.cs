@@ -11,9 +11,10 @@ namespace ELearning_Platform.Infrastructure.Identity
     {
         public static void AddJWTTokenAuthentication(this IServiceCollection services, AuthenticationSettings authenticationSettings)
         {
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication()
             .AddJwtBearer(options =>
             {
+                options.IncludeErrorDetails = true;
                 options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
                 options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
@@ -21,7 +22,7 @@ namespace ELearning_Platform.Infrastructure.Identity
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidIssuer = authenticationSettings.Issure,
-                    ValidAudience = authenticationSettings.Issure,
+                    ValidAudience = authenticationSettings.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.Key)),
 
                 };

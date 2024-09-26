@@ -1,5 +1,5 @@
 ﻿using ELearning_Platform.Domain.Models.AccountModel;
-using ELearning_Platform.Domain.Response.Account;
+using ELearning_Platform.Domain.Response.AccountResponse;
 
 namespace ELearning_Platform.Domain.Repository
 {

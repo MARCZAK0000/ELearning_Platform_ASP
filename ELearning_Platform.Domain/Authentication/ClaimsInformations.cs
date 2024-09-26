@@ -1,4 +1,4 @@
-﻿namespace ELearning_Platform.Infrastructure.Authentications
+﻿namespace ELearning_Platform.Domain.Authentication
 {
     public class ClaimsInformations
     {
