@@ -14,6 +14,35 @@ namespace ELearning_Platform.API.Middleware
 			{
 				await next.Invoke(context);
 			}
+            catch (BadRequestException err)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                context.Response.ContentType = "application/json";
+                var problemDetails = new ProblemDetails()
+                {
+                    Title = "Bad Request",
+                    Type = "Client Error",
+                    Status = (int)HttpStatusCode.BadRequest,
+                    Detail = err.Message
+                };
+                var json = JsonSerializer.Serialize(problemDetails);
+                await context.Response.WriteAsync(json);
+            }
+
+            catch (CredentialsAreInUsedException err)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                context.Response.ContentType = "application/json";
+                var problemDetails = new ProblemDetails()
+                {
+                    Title = "Invalid Credentials",
+                    Type = "Client Error",
+                    Status = (int)HttpStatusCode.BadRequest,
+                    Detail = err.Message
+                };
+                var json = JsonSerializer.Serialize(problemDetails);
+                await context.Response.WriteAsync(json);
+            }
             catch (InvalidEmailOrPasswordException err)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;

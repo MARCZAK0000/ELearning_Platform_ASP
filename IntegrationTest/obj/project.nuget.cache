@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "842hbCcLkbs=",
+  "dgSpecHash": "6vFltIWHyAg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\IntegrationTest\\IntegrationTest.csproj",
+  "projectFilePath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\IntegrationTest\\E_LearningPlatform.IntegrationTest.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jjmar\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\jjmar\\.nuget\\packages\\azure.core\\1.41.0\\azure.core.1.41.0.nupkg.sha512",

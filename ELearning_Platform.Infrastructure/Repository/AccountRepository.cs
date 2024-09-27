@@ -33,7 +33,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             var checkIfExists = await _userManager.FindByEmailAsync(registerModelDto.AddressEmail);
             if (checkIfExists != null)
             {
-                throw new InvalidEmailOrPasswordException("Email is in used");
+                throw new CredentialsAreInUsedException("Email is in used");
             }
 
             var account = new Account()
@@ -77,10 +77,7 @@ namespace ELearning_Platform.Infrastructure.Repository
 
             if (!checkPassword.Succeeded)
             {
-                return new LoginResponse()
-                {
-                    Success = SignInResult.Failed
-                };
+                throw new InvalidEmailOrPasswordException(message: "Invalid Email or Password");
             }
 
             var tokenInformations = await _platformDb
@@ -107,7 +104,6 @@ namespace ELearning_Platform.Infrastructure.Repository
             await _platformDb.SaveChangesAsync(cancellationToken: cancellationToken);
             return new LoginResponse()
             {
-                
                 Success = SignInResult.Success,
                 TokenModelDto = new TokenModelDto()
                 {

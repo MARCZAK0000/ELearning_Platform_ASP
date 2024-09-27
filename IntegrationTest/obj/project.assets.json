@@ -10484,9 +10484,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\IntegrationTest\\IntegrationTest.csproj",
-      "projectName": "IntegrationTest",
-      "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\IntegrationTest\\IntegrationTest.csproj",
+      "projectUniqueName": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\IntegrationTest\\E_LearningPlatform.IntegrationTest.csproj",
+      "projectName": "E_LearningPlatform.IntegrationTest",
+      "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\IntegrationTest\\E_LearningPlatform.IntegrationTest.csproj",
       "packagesPath": "C:\\Users\\jjmar\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\IntegrationTest\\obj\\",
       "projectStyle": "PackageReference",

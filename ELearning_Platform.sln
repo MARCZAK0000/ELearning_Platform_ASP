@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ELearning_Platform.Applicat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ELearning_Platform.API", "ELearning_Platform.API\ELearning_Platform.API.csproj", "{407D69B1-4792-438C-9EE4-4C0D7500E761}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTest", "IntegrationTest\IntegrationTest.csproj", "{05572C3E-D699-4D02-A276-D061FD5DAF03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E_LearningPlatform.IntegrationTest", "IntegrationTest\E_LearningPlatform.IntegrationTest.csproj", "{05572C3E-D699-4D02-A276-D061FD5DAF03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
