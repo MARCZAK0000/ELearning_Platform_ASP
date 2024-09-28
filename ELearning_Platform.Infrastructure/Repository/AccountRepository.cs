@@ -5,15 +5,10 @@ using ELearning_Platform.Domain.Helper;
 using ELearning_Platform.Domain.Models.AccountModel;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Domain.Response.AccountResponse;
-using ELearning_Platform.Infrastructure.Authentications;
 using ELearning_Platform.Infrastructure.Authorization;
 using ELearning_Platform.Infrastructure.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace ELearning_Platform.Infrastructure.Repository
 {
@@ -25,7 +20,7 @@ namespace ELearning_Platform.Infrastructure.Repository
         private readonly UserManager<Account> _userManager = userManager;
         private readonly PlatformDb _platformDb = platformDb;
         private readonly IUserContext _userContext = userContext;
-        
+
         private readonly ITokenRepository _tokenRepository = tokenRepository;
 
         public async Task RegisterAccountAsync(RegisterModelDto registerModelDto, CancellationToken cancellationToken)
@@ -114,7 +109,7 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         }
 
-        
+
 
         public async Task<LoginResponse> RefreshTokenAsync(RefreshTokenModelDto refreshToken, CancellationToken cancellationToken)
         {

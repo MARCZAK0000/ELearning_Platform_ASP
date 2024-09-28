@@ -57,6 +57,20 @@ namespace ELearning_Platform.API.Middleware
                 var json = JsonSerializer.Serialize(problemDetails);
                 await context.Response.WriteAsync(json);
             }
+            catch (NotFoundException err)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                context.Response.ContentType = "application/json";
+                var problemDetails = new ProblemDetails()
+                {
+                    Title = "Not Found",
+                    Type = "Client Error",
+                    Status = (int)HttpStatusCode.NotFound,
+                    Detail = err.Message
+                };
+                var json = JsonSerializer.Serialize(problemDetails);
+                await context.Response.WriteAsync(json);
+            }
             catch (InternalServerErrorException err) 
             {
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

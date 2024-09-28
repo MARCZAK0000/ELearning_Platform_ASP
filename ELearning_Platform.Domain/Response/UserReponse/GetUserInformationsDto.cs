@@ -18,6 +18,6 @@ namespace ELearning_Platform.Domain.Response.UserReponse
 
         public UserAddressDto Address { get; set; }
 
-        public string ClassName { get; set; }
+        public string? ClassName { get; set; }
     }
 }

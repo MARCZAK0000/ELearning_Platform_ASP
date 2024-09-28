@@ -23,9 +23,5 @@ namespace ELearning_Platform.Domain.Enitities
         public DateTime ModifiedDate { get; set; } = DateTime.Now;
 
         public virtual UserInformations User{ get; set; }
-
-        
-
-
     }
 }
