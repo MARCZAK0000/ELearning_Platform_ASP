@@ -21,6 +21,9 @@ namespace ELearning_Platform.Infrastructure.Database
 
         public DbSet<LessonMaterials> LessonMaterials { get; set; }
 
+        //Account
+        public DbSet<Notification> Notifications { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
@@ -100,6 +103,22 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.HasOne(pr => pr.Lesson)
                 .WithMany(pr => pr.LessonMaterials)
                 .HasForeignKey(pr => pr.LessonID);
+            });
+
+            builder.Entity<Notification>(options => 
+            {
+                options.ToTable("Notification", "Account");
+
+                options.HasKey(pr=>pr.NotficaitonID);
+                options.HasOne(pr=>pr.Sender)
+                .WithMany(pr=>pr.SentNotfications)
+                .HasForeignKey(pr=>pr.SenderID)
+                .OnDelete(DeleteBehavior.Restrict);
+                
+                options.HasOne(pr => pr.Recipient)
+                .WithMany(pr => pr.RecivedNotifications)
+                .HasForeignKey(pr => pr.RecipientID)
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
             base.OnModelCreating(builder);

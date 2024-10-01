@@ -46,7 +46,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                 SecondName= pr.SecondName,
                 Surname = pr.Surname,
                 PhoneNumber = pr.PhoneNumber,
-                ClassName = pr.Class.Name,
+                ClassName = pr.Class!.Name,
                 Address = new Domain.Models.UserAddress.UserAddressDto()
                 {
                     City = pr.Address.City,
@@ -68,6 +68,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                 .SetPageIndex(pageIndex: pagination.PageIndex)
                 .SetFirstIndex(pageSize: pagination.PageSize, pageIndex: pagination.PageIndex)
                 .SetLastIndex(pageSize: pagination.PageSize, pageIndex: pagination.PageIndex)
+                .SetTotalCount(count)
                 .Build(); 
             
         }

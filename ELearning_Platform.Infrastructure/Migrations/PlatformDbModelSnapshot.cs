@@ -189,6 +189,43 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.ToTable("Materials", "Lesson");
                 });
 
+            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Notification", b =>
+                {
+                    b.Property<Guid>("NotficaitonID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsUnread")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RecipientID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SenderID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("TimeSent")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("NotficaitonID");
+
+                    b.HasIndex("RecipientID");
+
+                    b.HasIndex("SenderID");
+
+                    b.ToTable("Notification", "Account");
+                });
+
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Roles", b =>
                 {
                     b.Property<string>("Id")
@@ -488,6 +525,25 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.Navigation("Lesson");
                 });
 
+            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Notification", b =>
+                {
+                    b.HasOne("ELearning_Platform.Domain.Enitities.UserInformations", "Recipient")
+                        .WithMany("RecivedNotifications")
+                        .HasForeignKey("RecipientID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ELearning_Platform.Domain.Enitities.UserInformations", "Sender")
+                        .WithMany("SentNotfications")
+                        .HasForeignKey("SenderID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Recipient");
+
+                    b.Navigation("Sender");
+                });
+
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Subject", b =>
                 {
                     b.HasOne("ELearning_Platform.Domain.Enitities.ELearningClass", "Class")
@@ -601,6 +657,10 @@ namespace ELearning_Platform.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Lessons");
+
+                    b.Navigation("RecivedNotifications");
+
+                    b.Navigation("SentNotfications");
 
                     b.Navigation("Subjects");
                 });

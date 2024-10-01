@@ -3,6 +3,7 @@ using ELearning_Platform.Domain.Enitities;
 using ELearning_Platform.Domain.Models.AccountModel;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Infrastructure.Authentications;
+using ELearning_Platform.Infrastructure.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,7 +12,7 @@ using System.Text;
 
 namespace ELearning_Platform.Infrastructure.Repository
 {
-    public class TokenRepository(IHttpContextAccessor httpContext, AuthenticationSettings authenticationSettings) : ITokenRepository
+    public class TokenRepository(IHttpContextAccessor httpContext, AuthenticationSettings authenticationSettings, Action<HttpOnlyCookieOptions> cookieOptions = null) : ITokenRepository
     {
         private readonly IHttpContextAccessor _httpContext = httpContext;
         private readonly AuthenticationSettings _authenticationSettings = authenticationSettings;
@@ -52,22 +53,23 @@ namespace ELearning_Platform.Infrastructure.Repository
         public void SetCookiesInsideResponse(TokenModelDto tokenModel)
         {
             var context = _httpContext.HttpContext!;
-
-            context.Response.Cookies.Append("accessToken", tokenModel.AccessToken,
+            var cfg = new HttpOnlyCookieOptions();
+            cookieOptions?.Invoke(cfg);
+            context.Response.Cookies.Append(cfg.AccessTokenName, tokenModel.AccessToken,
             new CookieOptions
             {
-                Expires = DateTimeOffset.UtcNow.AddMinutes(5),
-                HttpOnly = true,
+                Expires = cfg.AccessTokenExpireTime,
+                HttpOnly = cfg.IsHttpOnly,
                 IsEssential = true,
                 Secure = true,
                 SameSite = SameSiteMode.None
             });
 
-            context.Response.Cookies.Append("refreshToken", tokenModel.RefreshToken,
+            context.Response.Cookies.Append(cfg.RefreshTokenName, tokenModel.RefreshToken,
             new CookieOptions
             {
-                Expires = DateTimeOffset.UtcNow.AddDays(7),
-                HttpOnly = true,
+                Expires = cfg.RefreshTokenExpireTime,
+                HttpOnly = cfg.IsHttpOnly,
                 IsEssential = true,
                 Secure = true,
                 SameSite = SameSiteMode.None

@@ -30,5 +30,9 @@
 
         public virtual List<ELearningClass>? ListOfTeachingClasses { get; set; }
 
+        public virtual List<Notification>? SentNotfications  { get; set; }
+
+        public virtual List<Notification>? RecivedNotifications { get; set; }
+
     }
 }

@@ -15,7 +15,7 @@
             _response.Items = items;
             return this;
         }
-        public PaginationBuilder<T> SetTotalsCount(int totalCount)
+        public PaginationBuilder<T> SetTotalCount(int totalCount)
         {
             _response.TotalCount = totalCount;
             return this;

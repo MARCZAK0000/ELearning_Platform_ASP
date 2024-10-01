@@ -1,16 +1,20 @@
 ﻿using ELearning_Platform.Infrastructure.Authentications;
-using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace ELearning_Platform.Infrastructure.Identity
 {
     public static class AddCustomAuthentication
     {
-        public static void AddJWTTokenAuthentication(this IServiceCollection services, AuthenticationSettings authenticationSettings)
+        private readonly static bool UseHttpCookie;
+        public static void AddJWTTokenAuthentication(this IServiceCollection services, AuthenticationSettings authenticationSettings
+            , Action<HttpOnlyCookieOptions>? cookieOptions = null)
         {
+            var cfg = new HttpOnlyCookieOptions();
+            cookieOptions?.Invoke(cfg);
             services.AddAuthentication()
             .AddJwtBearer(options =>
             {
@@ -26,22 +30,37 @@ namespace ELearning_Platform.Infrastructure.Identity
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.Key)),
 
                 };
-                options.Events = new JwtBearerEvents()
+
+                if (cfg.IsHttpOnly)
                 {
-                    OnMessageReceived = ctx =>
+                    options.Events = new JwtBearerEvents()
                     {
-                        ctx.Request.Cookies.TryGetValue("accessToken", out var accessToken);
-                        if (!string.IsNullOrEmpty(accessToken))
+                        OnMessageReceived = ctx =>
                         {
-                            ctx.Token = accessToken;
+                            ctx.Request.Cookies.TryGetValue("accessToken", out var accessToken);
+                            if (!string.IsNullOrEmpty(accessToken))
+                            {
+                                ctx.Token = accessToken;
+                            }
+                            return Task.CompletedTask;
+                        },
+                        OnAuthenticationFailed = context =>
+                        {
+                            return Task.CompletedTask;
                         }
-                        return Task.CompletedTask;
-                    },
-                    OnAuthenticationFailed = context =>
+                    };
+                }
+                else
+                {
+                    options.Events = new JwtBearerEvents()
                     {
-                        return Task.CompletedTask;
-                    }
-                };
+                        OnAuthenticationFailed = context =>
+                        {
+                            return Task.CompletedTask;
+                        }
+                    };
+                }
+                
             });
         }
     }

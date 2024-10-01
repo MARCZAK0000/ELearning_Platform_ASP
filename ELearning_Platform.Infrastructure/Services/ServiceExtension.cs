@@ -5,6 +5,7 @@ using ELearning_Platform.Infrastructure.Database;
 using ELearning_Platform.Infrastructure.Identity;
 using ELearning_Platform.Infrastructure.Repository;
 using ELearning_Platform.Infrastructure.StorageAccount;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +39,10 @@ namespace ELearning_Platform.Infrastructure.Services
             //Authorization and Authentication
             
             services.AddAuthorizationPolicy();
-            services.AddJWTTokenAuthentication(authSettings);
+            services.AddJWTTokenAuthentication(authSettings, options => 
+            { 
+                options.IsHttpOnly = true;
+            });
             //binding
             var blobNames = new BlobStorageTablesNames();
             configuration.GetSection("BlobStorageTablesNames").Bind(blobNames);
@@ -47,7 +51,21 @@ namespace ELearning_Platform.Infrastructure.Services
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISchoolRepository, SchoolRepository>();
-            services.AddScoped<ITokenRepository, TokenRepository>();
+            services.AddScoped<ITokenRepository, TokenRepository>(serviceProvider =>
+            {
+                return 
+                new TokenRepository(
+                        httpContext: serviceProvider.GetRequiredService<IHttpContextAccessor>(),
+                        authenticationSettings: serviceProvider.GetRequiredService<AuthenticationSettings>(),
+                        cookieOptions: options =>
+                        {
+                            options.IsHttpOnly = true;
+                            options.AccessTokenExpireTime = DateTimeOffset.Now.AddMinutes(20);
+                            options.RefreshTokenExpireTime = DateTimeOffset.Now.AddHours(2);
+                        }
+                    );
+            });
+            services.AddScoped<INotificaitonRepository, NotificationReposiotry>();
 
         }
     }

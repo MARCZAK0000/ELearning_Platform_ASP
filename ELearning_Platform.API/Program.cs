@@ -65,7 +65,7 @@ namespace ELearning_Platform.API
             app.UseAuthentication();
             app.UseAuthorization(); //Add to Avoid problem with Identity  
             app.MapControllers();
-            app.MapHub<Notification>("/hub/notifications");
+            app.MapHub<NotificationHub>("/hub/notifications");
             app.MapIdentityApiFilterable<Account>(new IdentityApiEndpointRouteBuilderOptions
             {
                 ExcludeRegisterPost = false,
