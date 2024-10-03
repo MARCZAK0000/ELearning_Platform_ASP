@@ -1,5 +1,6 @@
-﻿using ELearning_Platform.Application.Services.NotificationServices.Command;
-using ELearning_Platform.Application.Services.NotificationServices.Query;
+﻿using ELearning_Platform.Application.Services.NotificationServices.Command.CreateNotification;
+using ELearning_Platform.Application.Services.NotificationServices.Query.GetNotification;
+using ELearning_Platform.Domain.Models.Notification;
 using ELearning_Platform.Infrastructure.AuthPolicy;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -26,5 +27,10 @@ namespace ELearning_Platform.API.Controller
         public async Task<IActionResult> GetNotifications([FromQuery] GetNotificationsAsyncQuery request,  
             CancellationToken cancellationToken)
             => Ok(await _mediator.Send(request, cancellationToken));
+
+        [HttpPut]
+        [Authorize(Policy =PolicyConstant.RequireStudent)]
+        public async Task<IActionResult> ReadNotification([FromQuery] ReadNotificationDto request, CancellationToken token)
+            => Ok(await _mediator.Send(request, token));
     }
 }

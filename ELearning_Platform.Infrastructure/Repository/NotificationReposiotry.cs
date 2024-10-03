@@ -34,15 +34,25 @@ namespace ELearning_Platform.Infrastructure.Repository
             return true;
         }
 
-     
+        public async Task<bool> ReadNotificationAsync(ReadNotificationDto readNotification, CancellationToken token)
+        {
+            var user = _userContext.GetCurrentUser();
+            var findNotification = await
+                _platformDb
+                .Notifications
+                .Where(pr => pr.NotficaitonID == readNotification.NotificationID && pr.RecipientID == user.UserID)
+                .ExecuteUpdateAsync((s => s.SetProperty(pr => pr.IsUnread, false)),token);
 
+            return true;
+        }
+
+
+        /// <summary>
+        /// For the purpose of this method <see cref="PaginationBuilder{T}.SetTotalCount(int)"/> is used for unread notifications
+        /// </summary>
         public async Task<Pagination<GetNotificationModelDto>> ShowNotificationsAsync(PaginationModelDto pagination, CancellationToken token)
         {
-            if(pagination.PageIndex <= 0)
-            {
-                throw new BadRequestException("Invalid NotificationIndex");
-            }
-
+          
             var paginationBuilder = new PaginationBuilder<GetNotificationModelDto>();
 
             var currentUser = _userContext.GetCurrentUser();
@@ -51,9 +61,10 @@ namespace ELearning_Platform.Infrastructure.Repository
                 _platformDb
                 .Notifications
                 .Include(pr => pr.Sender)
-                .Where(pr => pr.IsUnread == true && pr.RecipientID == currentUser.UserID)
+                .Where(pr=>pr.RecipientID == currentUser.UserID)
                 .Select(pr => new GetNotificationModelDto()
                 {
+                    NotificationID = pr.NotficaitonID,
                     Title = pr.Title,
                     Description = pr.Description,
                     Sender = new GetNotificationSenderDto()
@@ -63,16 +74,16 @@ namespace ELearning_Platform.Infrastructure.Repository
                         Surname = pr.Sender.Surname,
 
                     },
-                    IsUnRead = false,
+                    IsUnRead = pr.IsUnread,
                     TimeSent = pr.TimeSent,
-                });
-
-            var count = await findNotificationBase.CountAsync(cancellationToken: token);
+                }); 
+            var count = await findNotificationBase.Where(pr=>pr.IsUnRead==true).CountAsync(cancellationToken: token);
 
             var notifications = await findNotificationBase
                 .Skip((pagination.PageIndex-1)*pagination.PageSize)
                 .Take(pagination.PageSize)
-                .OrderBy(pr=>pr.TimeSent)
+                .OrderByDescending(pr=>pr.IsUnRead==true)
+                .ThenByDescending(pr=>pr.TimeSent)
                 .ToListAsync(cancellationToken: token);
 
             return paginationBuilder

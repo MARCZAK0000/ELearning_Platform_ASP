@@ -1,7 +1,7 @@
 ﻿using ELearning_Platform.Domain.Repository;
 using MediatR;
 
-namespace ELearning_Platform.Application.Services.NotificationServices.Command
+namespace ELearning_Platform.Application.Services.NotificationServices.Command.CreateNotification
 {
     public class CreateNotificationAsyncCommandHandler(INotificaitonRepository notificaitonRepository)
         : IRequestHandler<CreateNotificationAsyncCommand, bool>

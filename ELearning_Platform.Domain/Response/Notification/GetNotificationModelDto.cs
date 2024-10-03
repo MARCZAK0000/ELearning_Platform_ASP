@@ -4,6 +4,8 @@ namespace ELearning_Platform.Domain.Response.Notification
 {
     public class GetNotificationModelDto
     {
+        public Guid NotificationID { get; set; }
+
         public string Title { get; set; }
 
         public string Description { get; set; }

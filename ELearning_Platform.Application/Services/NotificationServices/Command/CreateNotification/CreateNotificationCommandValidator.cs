@@ -2,7 +2,7 @@
 using FluentValidation;
 using System.Security.Cryptography.X509Certificates;
 
-namespace ELearning_Platform.Application.Services.NotificationServices.Command
+namespace ELearning_Platform.Application.Services.NotificationServices.Command.CreateNotification
 {
     public class CreateNotificationCommandValidator : AbstractValidator<CreateNotificationAsyncCommand>
     {

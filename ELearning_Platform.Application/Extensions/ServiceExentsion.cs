@@ -1,5 +1,5 @@
 ﻿using ELearning_Platform.Application.Services.AccountServices.Command.SignIn;
-using ELearning_Platform.Application.Services.NotificationServices.Command;
+using ELearning_Platform.Application.Services.NotificationServices.Command.CreateNotification;
 using ELearning_Platform.Application.Services.UserServices.Command.UpdateUserInformations;
 using ELearning_Platform.Application.Validation;
 using ELearning_Platform.Domain.Models.Pagination;
