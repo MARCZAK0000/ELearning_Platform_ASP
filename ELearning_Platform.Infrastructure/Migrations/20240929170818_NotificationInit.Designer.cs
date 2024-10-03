@@ -4,6 +4,7 @@ using ELearning_Platform.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ELearning_Platform.Infrastructure.Migrations
 {
     [DbContext(typeof(PlatformDb))]
-    partial class PlatformDbModelSnapshot : ModelSnapshot
+    [Migration("20240929170818_NotificationInit")]
+    partial class NotificationInit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -317,6 +320,9 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.Property<string>("StreetName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserAddressID")
+                        .HasColumnType("int");
 
                     b.HasKey("AccountID");
 

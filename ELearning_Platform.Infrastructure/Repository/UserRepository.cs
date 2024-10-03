@@ -8,14 +8,18 @@ using ELearning_Platform.Domain.Response.Pagination;
 using ELearning_Platform.Domain.Response.UserReponse;
 using ELearning_Platform.Domain.Models.Pagination;
 using ELearning_Platform.Domain.Models.UserAddress;
+using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Http;
+using Azure.Storage.Blobs.Models;
 
 namespace ELearning_Platform.Infrastructure.Repository
 {
-    public class UserRepository(PlatformDb platformDb, IUserContext userContext) : IUserRepository
+    public class UserRepository(PlatformDb platformDb, IUserContext userContext, BlobServiceClient blobServiceClient) : IUserRepository
     {
         private readonly PlatformDb _platformDb = platformDb;
         private readonly IUserContext _userContext = userContext;
-
+        private readonly BlobServiceClient _blobServiceClient = blobServiceClient;
+        private List<string> _extension = [".jpg", ".jpeg", ".png"];
         public async Task<UserInformations> GetUserInformationsAsync(CancellationToken token)
         {
             var currentUser = _userContext.GetCurrentUser();
@@ -85,6 +89,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                 .FirstOrDefaultAsync(cancellationToken: token) 
                 ?? throw new NotFoundException("Not Found");
 
+            
             findUser!.FirstName= updateUserInformations.FirstName;
             findUser.PhoneNumber = findUser.Account.PhoneNumber = updateUserInformations.PhoneNumber;
             findUser.Account.PhoneNumberConfirmed = false;
@@ -97,6 +102,33 @@ namespace ELearning_Platform.Infrastructure.Repository
             if(findUser.Surname != null)findUser.SecondName = updateUserInformations.Surname;
             
             await _platformDb.SaveChangesAsync(cancellationToken: token);
+
+            return true;
+        }
+
+        public async Task<bool> UpdateOrCreateImageProfile(IFormFile file, CancellationToken cancellationToken)
+        {
+            var currentUser = _userContext.GetCurrentUser();
+
+            if (!_extension.Contains(Path.GetExtension(file.FileName)))
+            {
+                throw new BadRequestException("Invalid image extension");
+            }
+
+            var container = _blobServiceClient.GetBlobContainerClient(blobContainerName: "platformdb-userimage");
+
+            await container.DeleteBlobIfExistsAsync(blobName: currentUser.UserID, DeleteSnapshotsOption.None, cancellationToken: cancellationToken);
+
+            var newBlob = container.GetBlobClient(blobName: currentUser.UserID);
+
+            var blobHeader = new BlobHttpHeaders()
+            {
+                ContentType = $"image/jpeg"
+            };
+
+            await newBlob.UploadAsync(content:file.OpenReadStream()
+                , options: new BlobUploadOptions { HttpHeaders = blobHeader }
+                , cancellationToken: cancellationToken);
 
             return true;
         }

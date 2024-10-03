@@ -1,4 +1,7 @@
-﻿using ELearning_Platform.Application.Services.UserServices.Command.UpdateUserInformations;
+﻿using ELearning_Platform.Application.Services.UserServices.Command;
+using ELearning_Platform.Application.Services.UserServices.Command.UpdateImage;
+using ELearning_Platform.Application.Services.UserServices.Command.UpdateUserInformations;
+using ELearning_Platform.Domain.Models.UserAddress;
 using ELearning_Platform.Infrastructure.Services.UserServices.Queries.AllUserInformations;
 using ELearning_Platform.Infrastructure.Services.UserServices.Queries.Informations;
 using MediatR;
@@ -29,5 +32,11 @@ namespace ELearning_Platform.API.Controller
         public async Task<IActionResult> UpdateInformtaions([FromBody] UpdateUserInformationsAsyncCommand request, CancellationToken token)=>
             Ok(await _mediator.Send(request, cancellationToken: token));
 
+        [HttpPost("image")]
+        public async Task<IActionResult> UpdateOrCreateImageProfile(IFormFile formFile, CancellationToken token)
+        {
+
+            return Ok(await _mediator.Send(new UpdateOrCreateImageProfileAsyncCommand() { Image = formFile}, cancellationToken: token));
+        }
     }
 }

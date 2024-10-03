@@ -8,8 +8,6 @@ namespace ELearning_Platform.Domain.Enitities
 {
     public class UserAddress
     {
-        public int UserAddressID { get; set; }
-
         public string AccountID { get; set; }  
 
         public string City { get; set; }    
