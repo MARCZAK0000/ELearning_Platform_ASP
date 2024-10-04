@@ -6,10 +6,10 @@ using ELearning_Platform.Domain.Response.Pagination;
 using FluentValidation;
 using MediatR;
 
-namespace ELearning_Platform.Application.Services.NotificationServices.Query
+namespace ELearning_Platform.Application.Services.NotificationServices.Query.GetNotification
 {
     public class GetNotificationAsyncQueryHandler(INotificaitonRepository notificaitonRepository
-        , IValidator<PaginationModelDto> validator) 
+        , IValidator<PaginationModelDto> validator)
             : IRequestHandler<GetNotificationsAsyncQuery, Pagination<GetNotificationModelDto>>
     {
         private readonly INotificaitonRepository _notificaitonRepository = notificaitonRepository;

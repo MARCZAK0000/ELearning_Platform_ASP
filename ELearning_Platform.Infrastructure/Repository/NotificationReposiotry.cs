@@ -37,13 +37,17 @@ namespace ELearning_Platform.Infrastructure.Repository
         public async Task<bool> ReadNotificationAsync(ReadNotificationDto readNotification, CancellationToken token)
         {
             var user = _userContext.GetCurrentUser();
+            if (!Guid.TryParse(readNotification.NotificationID, out var id))
+            {
+                return false;
+            }
             var findNotification = await
                 _platformDb
                 .Notifications
-                .Where(pr => pr.NotficaitonID == readNotification.NotificationID && pr.RecipientID == user.UserID)
+                .Where(pr => pr.NotficaitonID == id && pr.RecipientID == user.UserID)
                 .ExecuteUpdateAsync((s => s.SetProperty(pr => pr.IsUnread, false)),token);
 
-            return true;
+            return findNotification > 0;
         }
 
 

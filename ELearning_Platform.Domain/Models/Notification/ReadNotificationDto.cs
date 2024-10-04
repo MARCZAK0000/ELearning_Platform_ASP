@@ -1,7 +1,9 @@
-﻿namespace ELearning_Platform.Domain.Models.Notification
+﻿
+
+namespace ELearning_Platform.Domain.Models.Notification
 {
-    public class ReadNotification
+    public class ReadNotificationDto
     {
-        public Guid NotificationID { get; set; }
+        public string NotificationID { get; set; }
     }
 }

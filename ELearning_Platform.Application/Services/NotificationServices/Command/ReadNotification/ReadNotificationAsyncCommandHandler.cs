@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ELearning_Platform.Domain.Repository;
+using MediatR;
 
 namespace ELearning_Platform.Application.Services.NotificationServices.Command.ReadNotification
 {
-    internal class ReadNotificationAsyncCommandHandler
+    public class ReadNotificationAsyncCommandHandler(INotificaitonRepository notificaiton) : IRequestHandler<ReadNotificationAsyncCommand, bool>
     {
+        private readonly INotificaitonRepository _notificaiton = notificaiton;
+        public async Task<bool> Handle(ReadNotificationAsyncCommand request, CancellationToken cancellationToken)
+            => await _notificaiton.ReadNotificationAsync(request, cancellationToken);
     }
 }

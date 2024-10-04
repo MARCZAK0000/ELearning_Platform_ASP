@@ -1,4 +1,5 @@
 ﻿using ELearning_Platform.Application.Services.NotificationServices.Command.CreateNotification;
+using ELearning_Platform.Application.Services.NotificationServices.Command.ReadNotification;
 using ELearning_Platform.Application.Services.NotificationServices.Query.GetNotification;
 using ELearning_Platform.Domain.Models.Notification;
 using ELearning_Platform.Infrastructure.AuthPolicy;
@@ -30,7 +31,7 @@ namespace ELearning_Platform.API.Controller
 
         [HttpPut]
         [Authorize(Policy =PolicyConstant.RequireStudent)]
-        public async Task<IActionResult> ReadNotification([FromQuery] ReadNotificationDto request, CancellationToken token)
+        public async Task<IActionResult> ReadNotification([FromBody] ReadNotificationAsyncCommand request, CancellationToken token)
             => Ok(await _mediator.Send(request, token));
     }
 }
