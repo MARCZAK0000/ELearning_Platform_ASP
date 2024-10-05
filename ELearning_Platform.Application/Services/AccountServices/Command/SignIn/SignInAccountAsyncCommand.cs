@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace ELearning_Platform.Application.Services.AccountServices.Command.SignIn
 {
-    public class SignInAsyncCommand : LoginModelDto, IRequest<bool> 
+    public class SignInAsyncCommand : LoginModelDto, IRequest<LoginResponse> 
     {
 
     }

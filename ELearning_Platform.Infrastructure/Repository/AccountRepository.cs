@@ -99,7 +99,9 @@ namespace ELearning_Platform.Infrastructure.Repository
             await _platformDb.SaveChangesAsync(cancellationToken: cancellationToken);
             return new LoginResponse()
             {
-                Success = SignInResult.Success,
+                Success = SignInResult.Success.Succeeded,
+                Email = account.Email,
+                Role = roles.Count >= 1 ? roles[0]: roles[roles.Count-1],
                 TokenModelDto = new TokenModelDto()
                 {
                     AccessToken = token,
@@ -146,7 +148,9 @@ namespace ELearning_Platform.Infrastructure.Repository
             return new LoginResponse()
             {
 
-                Success = SignInResult.Success,
+                Success = SignInResult.Success.Succeeded,
+                Email = account.Email,
+                Role = roles.Count >= 1 ? roles[0] : roles[roles.Count - 1],
                 TokenModelDto = new TokenModelDto()
                 {
                     AccessToken = token,

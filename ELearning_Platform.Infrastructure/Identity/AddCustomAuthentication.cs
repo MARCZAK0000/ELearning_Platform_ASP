@@ -9,7 +9,7 @@ namespace ELearning_Platform.Infrastructure.Identity
 {
     public static class AddCustomAuthentication
     {
-        private readonly static bool UseHttpCookie;
+        
         public static void AddJWTTokenAuthentication(this IServiceCollection services, AuthenticationSettings authenticationSettings
             , Action<HttpOnlyCookieOptions>? cookieOptions = null)
         {
