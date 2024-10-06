@@ -18,7 +18,6 @@ namespace ELearning_Platform.API
         private static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddControllers();
             builder.Services.AddScoped<ErrorHandlingMiddleware>();
             builder.Services.AddApplication(); //MediatR and Validations 
             builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.IsDevelopment()); //for database and repository registration 
@@ -32,7 +31,9 @@ namespace ELearning_Platform.API
             builder.Services.AddScoped<SeederDb>();
             builder.Services.AddSingleton<BlobStorageTable>();
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddControllers();
             builder.Services.AddSwagger();
+           
             var app = builder.Build();
             var scope = app.Services.CreateScope();
             var seeder = scope.ServiceProvider.GetRequiredService<SeederDb>();
@@ -60,26 +61,13 @@ namespace ELearning_Platform.API
 
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseCors("corsPolicy");
             app.UseAuthentication();
             app.UseAuthorization(); //Add to Avoid problem with Identity  
             app.MapControllers();
             app.MapHub<NotificationHub>("/hub/notifications");
-            app.MapIdentityApiFilterable<Account>(new IdentityApiEndpointRouteBuilderOptions
-            {
-                ExcludeRegisterPost = false,
-                ExcludeLoginPost = true,
-                ExcludeRefreshPost = true,
-                ExcludeConfirmEmailGet = false,
-                ExcludeResendConfirmationEmailPost = false,
-                ExcludeForgotPasswordPost = true,
-                ExcludeResetPasswordPost = true,
-                ExcludeManageGroup = true,
-                Exclude2faPost = false,
-                ExcludegInfoGet = true,
-                ExcludeInfoPost = true,
-            });
+           
             app.Run();
         }
     }

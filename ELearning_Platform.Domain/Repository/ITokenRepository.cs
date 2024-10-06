@@ -8,5 +8,7 @@ namespace ELearning_Platform.Domain.Repository
     {
         void SetCookiesInsideResponse(TokenModelDto tokenModel);
         Task<string> GenerateTokenAsync(ClaimsInformations tokenInformations, IList<string> roles);
+
+        string GetRefreshTokenFromContext();
     }
 }

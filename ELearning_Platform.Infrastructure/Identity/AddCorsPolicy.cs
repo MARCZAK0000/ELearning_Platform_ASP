@@ -8,11 +8,10 @@ namespace ELearning_Platform.Infrastructure.Identity
         {
             services.AddCors(pr => pr.AddPolicy("corsPolicy", options =>
             {
-                options.WithOrigins("http://localhost:5173")
+                options.WithOrigins("http://localhost:5173", "http://192.168.1.21:5173")
                      .AllowCredentials()
                      .AllowAnyMethod()
-                     .AllowAnyHeader()
-                     .AllowAnyMethod();
+                     .AllowAnyHeader();
             }));
         }
     }

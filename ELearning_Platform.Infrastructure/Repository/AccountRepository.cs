@@ -113,11 +113,11 @@ namespace ELearning_Platform.Infrastructure.Repository
 
 
 
-        public async Task<LoginResponse> RefreshTokenAsync(RefreshTokenModelDto refreshToken, CancellationToken cancellationToken)
+        public async Task<LoginResponse> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)
         {
             var currentUser = _userContext.GetCurrentUser();
             var account = await _userManager.FindByIdAsync(currentUser.UserID);
-            if (account!.RefreshToken != refreshToken.RefreshToken)
+            if (account!.RefreshToken != refreshToken)
             {
                 throw new InvalidRefreshTokenException("Invalid Refresh Token");
             }
@@ -148,9 +148,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             return new LoginResponse()
             {
 
-                Success = SignInResult.Success.Succeeded,
-                Email = account.Email,
-                Role = roles.Count >= 1 ? roles[0] : roles[roles.Count - 1],
+                
                 TokenModelDto = new TokenModelDto()
                 {
                     AccessToken = token,

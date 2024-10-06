@@ -1,5 +1,6 @@
 ﻿using ELearning_Platform.Domain.Authentication;
 using ELearning_Platform.Domain.Enitities;
+using ELearning_Platform.Domain.Exceptions;
 using ELearning_Platform.Domain.Models.AccountModel;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Infrastructure.Authentications;
@@ -50,6 +51,19 @@ namespace ELearning_Platform.Infrastructure.Repository
             return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
+        public string GetRefreshTokenFromContext()
+        {
+            var context = _httpContext.HttpContext;
+            var cfg = new HttpOnlyCookieOptions();
+            cookieOptions?.Invoke(cfg);
+            context!.Request.Cookies.TryGetValue(cfg.RefreshTokenName, out string? refreshToken);
+            if(string.IsNullOrEmpty(refreshToken))
+            {
+                throw new InvalidRefreshTokenException("Invalid Refresh token");
+            }
+            return refreshToken;
+        }
+
         public void SetCookiesInsideResponse(TokenModelDto tokenModel)
         {
             var context = _httpContext.HttpContext!;
@@ -61,8 +75,8 @@ namespace ELearning_Platform.Infrastructure.Repository
                 Expires = cfg.AccessTokenExpireTime,
                 HttpOnly = cfg.IsHttpOnly,
                 IsEssential = true,
-                Secure = true,
-                SameSite = SameSiteMode.None
+                Secure = false,
+                SameSite = SameSiteMode.Lax
             });
 
             context.Response.Cookies.Append(cfg.RefreshTokenName, tokenModel.RefreshToken,
@@ -71,8 +85,8 @@ namespace ELearning_Platform.Infrastructure.Repository
                 Expires = cfg.RefreshTokenExpireTime,
                 HttpOnly = cfg.IsHttpOnly,
                 IsEssential = true,
-                Secure = true,
-                SameSite = SameSiteMode.None
+                Secure = false,
+                SameSite = SameSiteMode.Lax
             });
         }
     }
