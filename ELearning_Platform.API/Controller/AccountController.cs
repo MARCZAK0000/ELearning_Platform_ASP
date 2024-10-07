@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ELearning_Platform.API.Controller
 {
@@ -28,5 +29,13 @@ namespace ELearning_Platform.API.Controller
         [HttpPost("refresh")]
         public async Task<IActionResult> RefreshTokenAsync(CancellationToken token)
             => Ok(await _mediator.Send(new RefreshTokenAsyncCommand(), cancellationToken: token));
+        [Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet("role")]
+        public async Task<IActionResult> GetRole()
+        {
+            var user = HttpContext.User;
+
+            return await Task.FromResult(Ok(user!.FindFirst(pr => pr.Type == ClaimTypes.Role)!.Value));
+        } 
     }
 }

@@ -17,7 +17,7 @@ namespace ELearning_Platform.API.Controller
     {
         private readonly IMediator _mediator = mediator;
 
-        [HttpGet("informations")]
+        [HttpGet("me")]
         public async Task<IActionResult> GetInfromationsAboutCurrentUser(CancellationToken token)
         {
             var result = await _mediator.Send(request: new GetUserInformationsAsyncQuery(), cancellationToken: token);

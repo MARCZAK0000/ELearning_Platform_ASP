@@ -16,6 +16,8 @@ namespace ELearning_Platform.Domain.Response.UserReponse
 
         public string PhoneNumber { get; set; }
 
+        public string RoleName { get; set; }
+
         public UserAddressDto Address { get; set; }
 
         public string? ClassName { get; set; }

@@ -11,25 +11,52 @@ using ELearning_Platform.Domain.Models.UserAddress;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Azure.Storage.Blobs.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace ELearning_Platform.Infrastructure.Repository
 {
-    public class UserRepository(PlatformDb platformDb, IUserContext userContext, BlobServiceClient blobServiceClient) : IUserRepository
+    public class UserRepository(PlatformDb platformDb, 
+        IUserContext userContext, BlobServiceClient blobServiceClient
+        ,UserManager<Account> userManager) : IUserRepository
     {
         private readonly PlatformDb _platformDb = platformDb;
         private readonly IUserContext _userContext = userContext;
         private readonly BlobServiceClient _blobServiceClient = blobServiceClient;
+        private readonly UserManager<Account> _userManager = userManager;   
         private List<string> _extension = [".jpg", ".jpeg", ".png"];
-        public async Task<UserInformations> GetUserInformationsAsync(CancellationToken token)
+        public async Task<GetUserInformationsDto> GetUserInformationsAsync(CancellationToken token)
         {
             var currentUser = _userContext.GetCurrentUser();
+            var user = await _userManager.FindByIdAsync(currentUser.UserID);
 
             var informations = await _platformDb
                 .UserInformations
                 .Include(pr=>pr.Address)
+                .Include(pr=>pr.Class)
                 .Where(pr=>pr.AccountID == currentUser.UserID)
+                .Select(pr=> new GetUserInformationsDto
+                {
+                    AccountID = currentUser.UserID,
+                    EmailAddress = pr.EmailAddress,
+                    FirstName = pr.FirstName,
+                    Surname = pr.Surname,
+                    SecondName = pr.SecondName,
+                    PhoneNumber = pr.PhoneNumber,
+                    ClassName = pr.Class.Name,
+                    Address = new UserAddressDto
+                    {
+                        City= pr.Address.City,
+                        Country = pr.Address.Country,
+                        StreetName= pr.Address.StreetName,
+                        PostalCode = pr.Address.PostalCode
+                    }
+                     
+                })
                 .FirstOrDefaultAsync(token)??
                 throw new InternalServerErrorException("Something went wrong");
+
+            var roles = await _userManager.GetRolesAsync(user!);
+            informations.RoleName = roles.Count>=1?roles[roles.Count-1]:roles[0];
 
             return informations;
         }

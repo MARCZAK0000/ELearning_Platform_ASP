@@ -9,7 +9,7 @@ namespace ELearning_Platform.Domain.Repository
 {
     public interface IUserRepository
     {
-        Task<UserInformations> GetUserInformationsAsync(CancellationToken token);
+        Task<GetUserInformationsDto> GetUserInformationsAsync(CancellationToken token);
 
         Task<Pagination<GetUserInformationsDto>> GetAllUsersAsync(PaginationModelDto pagination, CancellationToken token);
 
