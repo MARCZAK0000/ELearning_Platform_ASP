@@ -1,5 +1,6 @@
 ﻿using ELearning_Platform.Application.Services.AccountServices.Command.RefreshToken;
 using ELearning_Platform.Application.Services.AccountServices.Command.SignIn;
+using ELearning_Platform.Domain.Response.AccountResponse;
 using ELearning_Platform.Infrastructure.Services.AccountServices.Command.Register;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -34,8 +35,16 @@ namespace ELearning_Platform.API.Controller
         public async Task<IActionResult> GetRole()
         {
             var user = HttpContext.User;
-
-            return await Task.FromResult(Ok(user!.FindFirst(pr => pr.Type == ClaimTypes.Role)!.Value));
+            if (user==null || !user.Identity!.IsAuthenticated)
+            {
+                return await Task.FromResult(Ok(new RoleResponse() { IsSuccess = false }));
+            }
+            return await Task.FromResult(Ok(new RoleResponse()
+            {
+                IsSuccess = true,
+                Role = user!.FindFirst(pr => pr.Type == ClaimTypes.Role)!.Value
+            }));
+            
         } 
     }
 }

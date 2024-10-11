@@ -7,6 +7,8 @@ using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Domain.Response.AccountResponse;
 using ELearning_Platform.Infrastructure.Authorization;
 using ELearning_Platform.Infrastructure.Database;
+using ELearning_Platform.Infrastructure.EmailSender;
+using ELearning_Platform.Infrastructure.QueueService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,13 +16,14 @@ namespace ELearning_Platform.Infrastructure.Repository
 {
     public class AccountRepository(SignInManager<Account> signInManager, PlatformDb platformDb,
         UserManager<Account> userManager, IUserContext userContext,
-        ITokenRepository tokenRepository) : IAccountRepository
+        ITokenRepository tokenRepository, IBackgroundTaskQueue backgroundTaskQueue, IEmailSender emailSender) : IAccountRepository
     {
         private readonly SignInManager<Account> _signInManager = signInManager;
         private readonly UserManager<Account> _userManager = userManager;
         private readonly PlatformDb _platformDb = platformDb;
         private readonly IUserContext _userContext = userContext;
-
+        private readonly IBackgroundTaskQueue _backgroundTaskQueue = backgroundTaskQueue;  
+        private readonly IEmailSender _emailSender = emailSender;
         private readonly ITokenRepository _tokenRepository = tokenRepository;
 
         public async Task RegisterAccountAsync(RegisterModelDto registerModelDto, CancellationToken cancellationToken)

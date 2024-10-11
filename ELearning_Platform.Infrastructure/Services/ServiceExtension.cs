@@ -3,6 +3,7 @@ using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Infrastructure.Authentications;
 using ELearning_Platform.Infrastructure.Database;
 using ELearning_Platform.Infrastructure.Identity;
+using ELearning_Platform.Infrastructure.QueueService;
 using ELearning_Platform.Infrastructure.Repository;
 using ELearning_Platform.Infrastructure.StorageAccount;
 using Microsoft.AspNetCore.Http;
@@ -48,6 +49,8 @@ namespace ELearning_Platform.Infrastructure.Services
             configuration.GetSection("BlobStorageTablesNames").Bind(blobNames);
             services.AddSingleton(blobNames);
 
+            services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>(); //Add Background TaskQueue
+            services.AddHostedService<EmailSenderBackgroundService>(); //Add BackGroundService 
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISchoolRepository, SchoolRepository>();
