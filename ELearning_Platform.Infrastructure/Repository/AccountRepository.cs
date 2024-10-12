@@ -5,9 +5,10 @@ using ELearning_Platform.Domain.Helper;
 using ELearning_Platform.Domain.Models.AccountModel;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Domain.Response.AccountResponse;
+using ELearning_Platform.Domain.Settings;
 using ELearning_Platform.Infrastructure.Authorization;
 using ELearning_Platform.Infrastructure.Database;
-using ELearning_Platform.Infrastructure.EmailSender;
+using ELearning_Platform.Infrastructure.EmailSender.Interface;
 using ELearning_Platform.Infrastructure.QueueService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,15 +17,18 @@ namespace ELearning_Platform.Infrastructure.Repository
 {
     public class AccountRepository(SignInManager<Account> signInManager, PlatformDb platformDb,
         UserManager<Account> userManager, IUserContext userContext,
-        ITokenRepository tokenRepository, IBackgroundTaskQueue backgroundTaskQueue, IEmailSender emailSender) : IAccountRepository
+        ITokenRepository tokenRepository, IBackgroundTaskQueue backgroundTaskQueue,
+        IEmailSender emailSender, EmailSettings emailSettings, IEmailSenderHelper emailHelper) : IAccountRepository
     {
         private readonly SignInManager<Account> _signInManager = signInManager;
         private readonly UserManager<Account> _userManager = userManager;
         private readonly PlatformDb _platformDb = platformDb;
         private readonly IUserContext _userContext = userContext;
-        private readonly IBackgroundTaskQueue _backgroundTaskQueue = backgroundTaskQueue;  
+        private readonly IBackgroundTaskQueue _backgroundTaskQueue = backgroundTaskQueue;
         private readonly IEmailSender _emailSender = emailSender;
         private readonly ITokenRepository _tokenRepository = tokenRepository;
+        private readonly EmailSettings _emailSettings = emailSettings;
+        private readonly IEmailSenderHelper _emailHelper = emailHelper;
 
         public async Task RegisterAccountAsync(RegisterModelDto registerModelDto, CancellationToken cancellationToken)
         {
@@ -58,6 +62,12 @@ namespace ELearning_Platform.Infrastructure.Repository
             account.PasswordHash = _userManager.PasswordHasher.HashPassword(user: account, password: registerModelDto.Password);
             account.User.AccountID = account.Id;
             account.User.Address.AccountID = account.Id;
+
+            var confrimEmailToken = await _userManager.GenerateEmailConfirmationTokenAsync(account);    
+            _backgroundTaskQueue.QueueBackgroundWorkItem(async token =>
+            {
+                await _emailSender.SendEmailAsync(_emailHelper.GenerateConfirmEmailMessage(email: registerModelDto.AddressEmail, token: confrimEmailToken), token);
+            });
 
             await _userManager.CreateAsync(user: account);
             await _userManager.AddToRoleAsync(user: account, role: "student");
@@ -104,7 +114,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             {
                 Success = SignInResult.Success.Succeeded,
                 Email = account.Email,
-                Role = roles.Count >= 1 ? roles[0]: roles[roles.Count-1],
+                Role = roles.Count >= 1 ? roles[0] : roles[roles.Count - 1],
                 TokenModelDto = new TokenModelDto()
                 {
                     AccessToken = token,
@@ -151,7 +161,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             return new LoginResponse()
             {
 
-                
+
                 TokenModelDto = new TokenModelDto()
                 {
                     AccessToken = token,

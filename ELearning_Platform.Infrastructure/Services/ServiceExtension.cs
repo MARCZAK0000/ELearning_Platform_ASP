@@ -1,7 +1,10 @@
 ﻿using Azure.Storage.Blobs;
 using ELearning_Platform.Domain.Repository;
+using ELearning_Platform.Domain.Settings;
 using ELearning_Platform.Infrastructure.Authentications;
 using ELearning_Platform.Infrastructure.Database;
+using ELearning_Platform.Infrastructure.EmailSender.Class;
+using ELearning_Platform.Infrastructure.EmailSender.Interface;
 using ELearning_Platform.Infrastructure.Identity;
 using ELearning_Platform.Infrastructure.QueueService;
 using ELearning_Platform.Infrastructure.Repository;
@@ -10,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Options;
 
 namespace ELearning_Platform.Infrastructure.Services
 {
@@ -38,7 +41,7 @@ namespace ELearning_Platform.Infrastructure.Services
             configuration.GetSection("AuthSetting").Bind(authSettings);
             services.AddSingleton(authSettings);
             //Authorization and Authentication
-            
+
             services.AddAuthorizationPolicy();
             services.AddJWTTokenAuthentication(authSettings, options => 
             { 
@@ -48,6 +51,24 @@ namespace ELearning_Platform.Infrastructure.Services
             var blobNames = new BlobStorageTablesNames();
             configuration.GetSection("BlobStorageTablesNames").Bind(blobNames);
             services.AddSingleton(blobNames);
+
+
+            services.AddOptions<EmailSettings>()
+                .BindConfiguration("EmailAuthentication")
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            services.AddSingleton(sp=>sp.GetRequiredService<IOptionsMonitor<EmailSettings>>().CurrentValue);
+
+            services.AddOptions<ClientSettings>()
+                .BindConfiguration(nameof(ClientSettings))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            services.AddSingleton(sp=>sp.GetRequiredService<IOptionsMonitor<ClientSettings>>().CurrentValue);
+
+            services.AddScoped<IEmailSenderHelper, EmailSenderHelper>();
+            services.AddSingleton<IEmailSender, EmailSender.Class.EmailSender>();
 
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>(); //Add Background TaskQueue
             services.AddHostedService<EmailSenderBackgroundService>(); //Add BackGroundService 

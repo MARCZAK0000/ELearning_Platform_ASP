@@ -33,6 +33,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                 .UserInformations
                 .Include(pr=>pr.Address)
                 .Include(pr=>pr.Class)
+                .AsSplitQuery() //to split query 
                 .Where(pr=>pr.AccountID == currentUser.UserID)
                 .Select(pr=> new GetUserInformationsDto
                 {
@@ -69,6 +70,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                 .UserInformations
                 .Include(pr=>pr.Address)
                 .Include(pr=>pr.Class)
+                .AsSplitQuery()
                 .Select(pr=>new GetUserInformationsDto
             {
                 AccountID = pr.AccountID,
