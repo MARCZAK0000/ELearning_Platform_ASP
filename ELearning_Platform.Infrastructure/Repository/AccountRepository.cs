@@ -9,26 +9,27 @@ using ELearning_Platform.Domain.Settings;
 using ELearning_Platform.Infrastructure.Authorization;
 using ELearning_Platform.Infrastructure.Database;
 using ELearning_Platform.Infrastructure.EmailSender.Interface;
-using ELearning_Platform.Infrastructure.QueueService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ELearning_Platform.Infrastructure.QueueService;
+using ELearning_Platform.Infrastructure.BackgroundStrategy;
 
 namespace ELearning_Platform.Infrastructure.Repository
 {
     public class AccountRepository(SignInManager<Account> signInManager, PlatformDb platformDb,
         UserManager<Account> userManager, IUserContext userContext,
         ITokenRepository tokenRepository, IBackgroundTaskQueue backgroundTaskQueue,
-        IEmailSender emailSender, EmailSettings emailSettings, IEmailSenderHelper emailHelper) : IAccountRepository
+        EmailSettings emailSettings, IEmailSenderHelper emailHelper, BackgroundTask backgroundTask) : IAccountRepository
     {
         private readonly SignInManager<Account> _signInManager = signInManager;
         private readonly UserManager<Account> _userManager = userManager;
         private readonly PlatformDb _platformDb = platformDb;
         private readonly IUserContext _userContext = userContext;
         private readonly IBackgroundTaskQueue _backgroundTaskQueue = backgroundTaskQueue;
-        private readonly IEmailSender _emailSender = emailSender;
         private readonly ITokenRepository _tokenRepository = tokenRepository;
         private readonly EmailSettings _emailSettings = emailSettings;
         private readonly IEmailSenderHelper _emailHelper = emailHelper;
+        private readonly BackgroundTask _backgroundTask = backgroundTask;
 
         public async Task RegisterAccountAsync(RegisterModelDto registerModelDto, CancellationToken cancellationToken)
         {
@@ -64,9 +65,11 @@ namespace ELearning_Platform.Infrastructure.Repository
             account.User.Address.AccountID = account.Id;
 
             var confrimEmailToken = await _userManager.GenerateEmailConfirmationTokenAsync(account);    
-            _backgroundTaskQueue.QueueBackgroundWorkItem(async token =>
+            _backgroundTaskQueue.QueueBackgroundWorkItem( async token =>
             {
-                await _emailSender.SendEmailAsync(_emailHelper.GenerateConfirmEmailMessage(email: registerModelDto.AddressEmail, token: confrimEmailToken), token);
+                await _backgroundTask.ExecuteTask(Domain.BackgroundTask.BackgroundEnum.Email,
+                    _emailHelper.GenerateConfirmEmailMessage(registerModelDto.AddressEmail, 
+                    confrimEmailToken), token);
             });
 
             await _userManager.CreateAsync(user: account);

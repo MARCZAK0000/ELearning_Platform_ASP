@@ -6,7 +6,7 @@ using ELearning_Platform.Infrastructure.Database;
 using ELearning_Platform.Infrastructure.EmailSender.Class;
 using ELearning_Platform.Infrastructure.EmailSender.Interface;
 using ELearning_Platform.Infrastructure.Identity;
-using ELearning_Platform.Infrastructure.QueueService;
+using ELearning_Platform.Infrastructure.BackgroundStrategy;
 using ELearning_Platform.Infrastructure.Repository;
 using ELearning_Platform.Infrastructure.StorageAccount;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using ELearning_Platform.Infrastructure.QueueService;
+using ELearning_Platform.Domain.BackgroundTask;
 
 namespace ELearning_Platform.Infrastructure.Services
 {
@@ -71,7 +73,7 @@ namespace ELearning_Platform.Infrastructure.Services
             services.AddSingleton<IEmailSender, EmailSender.Class.EmailSender>();
 
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>(); //Add Background TaskQueue
-            services.AddHostedService<EmailSenderBackgroundService>(); //Add BackGroundService 
+            services.AddHostedService<CustomBackgroundSerive>(); //Add BackGroundService 
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISchoolRepository, SchoolRepository>();
@@ -90,6 +92,21 @@ namespace ELearning_Platform.Infrastructure.Services
                     );
             });
             services.AddScoped<INotificaitonRepository, NotificationReposiotry>();
+
+
+            //Background Task
+            services.AddTransient<EmailBackgroundTask>();
+            services.AddTransient<BackgroundTask>();
+            services.AddTransient<Func<BackgroundEnum, IBackgroundTask>>(serviceProvider => key =>
+            {
+                switch (key)
+                {
+                    case BackgroundEnum.Email:
+                        return serviceProvider.GetRequiredService<EmailBackgroundTask>();
+                    default:
+                        throw new ArgumentException("Invalid Service");
+                }
+            });
 
         }
     }

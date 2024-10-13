@@ -1,15 +1,12 @@
-using ELearning_Platform.API.Hubs;
+using ELearning_Platform.API.MainHubs;
 using ELearning_Platform.API.Middleware;
-using ELearning_Platform.API.Overrides;
-using ELearning_Platform.Infrastructure.Extensions;
-using ELearning_Platform.Infrastructure.Identity;
+using ELearning_Platform.API.Swagger;
 using ELearning_Platform.Domain.Enitities;
 using ELearning_Platform.Infrastructure.Database;
+using ELearning_Platform.Infrastructure.Extensions;
 using ELearning_Platform.Infrastructure.Services;
 using ELearning_Platform.Infrastructure.StorageAccount;
-using ELearning_Platform.API.Swagger;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace ELearning_Platform.API
 {
@@ -33,7 +30,7 @@ namespace ELearning_Platform.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddControllers();
             builder.Services.AddSwagger();
-           
+
             var app = builder.Build();
             var scope = app.Services.CreateScope();
             var seeder = scope.ServiceProvider.GetRequiredService<SeederDb>();
@@ -67,7 +64,6 @@ namespace ELearning_Platform.API
             app.UseAuthorization(); //Add to Avoid problem with Identity  
             app.MapControllers();
             app.MapHub<NotificationHub>("/hub/notifications");
-           
             app.Run();
         }
     }
