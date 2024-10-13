@@ -10,7 +10,8 @@ namespace ELearning_Platform.Infrastructure.StorageAccount
 
         public async Task CreateTable()
         {
-            foreach (var item in _blobStorageTableNames.BlobStorageTables)
+            string [] table = [_blobStorageTableNames.profileImage, _blobStorageTableNames.video, _blobStorageTableNames.lessonImage];
+            foreach (var item in table)
             {
                 var container = _blobServiceClient.GetBlobContainerClient(item);
                 if (!await container.ExistsAsync())
@@ -18,7 +19,6 @@ namespace ELearning_Platform.Infrastructure.StorageAccount
                     await container.CreateIfNotExistsAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
                 }
             }
-
             await Task.CompletedTask;
         }
     }

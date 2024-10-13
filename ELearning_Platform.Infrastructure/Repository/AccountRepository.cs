@@ -11,21 +11,21 @@ using ELearning_Platform.Infrastructure.Database;
 using ELearning_Platform.Infrastructure.EmailSender.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ELearning_Platform.Infrastructure.QueueService;
 using ELearning_Platform.Infrastructure.BackgroundStrategy;
+using ELearning_Platform.Domain.BackgroundTask;
 
 namespace ELearning_Platform.Infrastructure.Repository
 {
     public class AccountRepository(SignInManager<Account> signInManager, PlatformDb platformDb,
         UserManager<Account> userManager, IUserContext userContext,
-        ITokenRepository tokenRepository, IBackgroundTaskQueue backgroundTaskQueue,
+        ITokenRepository tokenRepository, IEmailNotificationHandlerQueue backgroundTaskQueue,
         EmailSettings emailSettings, IEmailSenderHelper emailHelper, BackgroundTask backgroundTask) : IAccountRepository
     {
         private readonly SignInManager<Account> _signInManager = signInManager;
         private readonly UserManager<Account> _userManager = userManager;
         private readonly PlatformDb _platformDb = platformDb;
         private readonly IUserContext _userContext = userContext;
-        private readonly IBackgroundTaskQueue _backgroundTaskQueue = backgroundTaskQueue;
+        private readonly IEmailNotificationHandlerQueue _backgroundTaskQueue = backgroundTaskQueue;
         private readonly ITokenRepository _tokenRepository = tokenRepository;
         private readonly EmailSettings _emailSettings = emailSettings;
         private readonly IEmailSenderHelper _emailHelper = emailHelper;

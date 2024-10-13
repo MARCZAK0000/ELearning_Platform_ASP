@@ -1,10 +1,11 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using ELearning_Platform.Domain.BackgroundTask;
+using Microsoft.Extensions.Hosting;
 
-namespace ELearning_Platform.Infrastructure.QueueService
+namespace ELearning_Platform.API.QueueService
 {
-    public class CustomBackgroundSerive(IBackgroundTaskQueue backgroundTaskQueue) : BackgroundService
+    public class EmailNotificationBackgroundService(IEmailNotificationHandlerQueue backgroundTaskQueue) : BackgroundService
     {
-        private readonly IBackgroundTaskQueue _backgroundTaskQueue = backgroundTaskQueue;
+        private readonly IEmailNotificationHandlerQueue _backgroundTaskQueue = backgroundTaskQueue;
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {

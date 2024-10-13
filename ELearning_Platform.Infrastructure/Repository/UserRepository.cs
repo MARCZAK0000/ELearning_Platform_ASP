@@ -12,18 +12,23 @@ using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Identity;
+using ELearning_Platform.Domain.BackgroundTask;
+using ELearning_Platform.Infrastructure.QueueService;
+using ELearning_Platform.Infrastructure.BackgroundStrategy;
 
 namespace ELearning_Platform.Infrastructure.Repository
 {
     public class UserRepository(PlatformDb platformDb, 
-        IUserContext userContext, BlobServiceClient blobServiceClient
-        ,UserManager<Account> userManager) : IUserRepository
+        IUserContext userContext, BackgroundTask backgroundTask
+        ,UserManager<Account> userManager, IImageHandlerQueue imageHandlerQueue
+        ) : IUserRepository
     {
         private readonly PlatformDb _platformDb = platformDb;
         private readonly IUserContext _userContext = userContext;
-        private readonly BlobServiceClient _blobServiceClient = blobServiceClient;
-        private readonly UserManager<Account> _userManager = userManager;   
-        private List<string> _extension = [".jpg", ".jpeg", ".png"];
+        private readonly UserManager<Account> _userManager = userManager;
+        private readonly IImageHandlerQueue _imageHandlerQueue = imageHandlerQueue;
+        private readonly BackgroundTask _backgroundTask = backgroundTask;
+        private readonly List<string> _extension = [".jpg", ".jpeg", ".png"];
         public async Task<GetUserInformationsDto> GetUserInformationsAsync(CancellationToken token)
         {
             var currentUser = _userContext.GetCurrentUser();
@@ -143,24 +148,23 @@ namespace ELearning_Platform.Infrastructure.Repository
             {
                 throw new BadRequestException("Invalid image extension");
             }
-
-            var container = _blobServiceClient.GetBlobContainerClient(blobContainerName: "platformdb-userimage");
-
-            await container.DeleteBlobIfExistsAsync(blobName: currentUser.UserID, DeleteSnapshotsOption.None, cancellationToken: cancellationToken);
-
-            var newBlob = container.GetBlobClient(blobName: currentUser.UserID);
-
-            var blobHeader = new BlobHttpHeaders()
+            using var memoryStrem = new MemoryStream();
+            file.CopyTo(memoryStrem);
+            var data = memoryStrem.ToArray();   
+            _imageHandlerQueue.QueueBackgroundWorkItem(async token =>
             {
-                ContentType = $"image/jpeg"
-            };
+                await _backgroundTask.ExecuteTask(BackgroundEnum.Image,
+                    new UpdateUserImageProfileDto
+                    {
+                        Image = data,
+                        UserID = currentUser.UserID
+                    }, token);
+            });
 
-            await newBlob.UploadAsync(content:file.OpenReadStream()
-                , options: new BlobUploadOptions { HttpHeaders = blobHeader }
-                , cancellationToken: cancellationToken);
 
             return true;
-        
+
+
         }
     }
 }

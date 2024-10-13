@@ -14,8 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using ELearning_Platform.Infrastructure.QueueService;
 using ELearning_Platform.Domain.BackgroundTask;
+using ELearning_Platform.Infrastructure.QueueService;
 
 namespace ELearning_Platform.Infrastructure.Services
 {
@@ -50,17 +50,21 @@ namespace ELearning_Platform.Infrastructure.Services
                 options.IsHttpOnly = true;
             });
             //binding
-            var blobNames = new BlobStorageTablesNames();
-            configuration.GetSection("BlobStorageTablesNames").Bind(blobNames);
-            services.AddSingleton(blobNames);
+            services.AddOptions<BlobStorageTablesNames>()
+                .BindConfiguration(nameof(BlobStorageTablesNames))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
 
+            services.AddSingleton(sp
+                =>sp.GetRequiredService<IOptions<BlobStorageTablesNames>>().Value);
 
             services.AddOptions<EmailSettings>()
                 .BindConfiguration("EmailAuthentication")
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
 
-            services.AddSingleton(sp=>sp.GetRequiredService<IOptionsMonitor<EmailSettings>>().CurrentValue);
+            services.AddSingleton(sp
+                =>sp.GetRequiredService<IOptionsMonitor<EmailSettings>>().CurrentValue);
 
             services.AddOptions<ClientSettings>()
                 .BindConfiguration(nameof(ClientSettings))
@@ -72,8 +76,7 @@ namespace ELearning_Platform.Infrastructure.Services
             services.AddScoped<IEmailSenderHelper, EmailSenderHelper>();
             services.AddSingleton<IEmailSender, EmailSender.Class.EmailSender>();
 
-            services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>(); //Add Background TaskQueue
-            services.AddHostedService<CustomBackgroundSerive>(); //Add BackGroundService 
+         
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISchoolRepository, SchoolRepository>();
@@ -92,17 +95,22 @@ namespace ELearning_Platform.Infrastructure.Services
                     );
             });
             services.AddScoped<INotificaitonRepository, NotificationReposiotry>();
-
+            services.AddScoped<IAzureRepository, AzureRepository>();
 
             //Background Task
+            services.AddSingleton<IEmailNotificationHandlerQueue, EmailNotificationHandlerQueue>(); //Add Email Background TaskQueue
+            services.AddSingleton<IImageHandlerQueue, ImageHandlerQueue>(); //Add Image Background Queu
             services.AddTransient<EmailBackgroundTask>();
-            services.AddTransient<BackgroundTask>();
-            services.AddTransient<Func<BackgroundEnum, IBackgroundTask>>(serviceProvider => key =>
+            services.AddTransient<ImageBackgroundTask>();
+            services.AddTransient<BackgroundTask>(); //Strategy 
+            services.AddTransient<Func<BackgroundEnum, IBackgroundTask>>(serviceProvider => key => //Strategy interface registration
             {
                 switch (key)
                 {
                     case BackgroundEnum.Email:
                         return serviceProvider.GetRequiredService<EmailBackgroundTask>();
+                    case BackgroundEnum.Image:
+                        return serviceProvider.GetRequiredService<ImageBackgroundTask>();
                     default:
                         throw new ArgumentException("Invalid Service");
                 }

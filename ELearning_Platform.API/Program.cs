@@ -1,5 +1,6 @@
 using ELearning_Platform.API.MainHubs;
 using ELearning_Platform.API.Middleware;
+using ELearning_Platform.API.QueueService;
 using ELearning_Platform.API.Swagger;
 using ELearning_Platform.Domain.Enitities;
 using ELearning_Platform.Infrastructure.Database;
@@ -30,7 +31,8 @@ namespace ELearning_Platform.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddControllers();
             builder.Services.AddSwagger();
-
+            builder.Services.AddHostedService<EmailNotificationBackgroundService>(); //Add BackGroundService 
+            builder.Services.AddHostedService<ImageHandlerBackgroundService>();
             var app = builder.Build();
             var scope = app.Services.CreateScope();
             var seeder = scope.ServiceProvider.GetRequiredService<SeederDb>();
