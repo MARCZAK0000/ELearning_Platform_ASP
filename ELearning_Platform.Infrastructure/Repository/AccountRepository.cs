@@ -8,7 +8,6 @@ using ELearning_Platform.Domain.Response.AccountResponse;
 using ELearning_Platform.Domain.Settings;
 using ELearning_Platform.Infrastructure.Authorization;
 using ELearning_Platform.Infrastructure.Database;
-using ELearning_Platform.Infrastructure.EmailSender.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ELearning_Platform.Infrastructure.BackgroundStrategy;

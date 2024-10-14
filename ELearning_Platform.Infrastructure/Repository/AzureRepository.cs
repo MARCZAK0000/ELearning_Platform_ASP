@@ -1,10 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using ELearning_Platform.Domain.Repository;
-using ELearning_Platform.Infrastructure.Authorization;
 using ELearning_Platform.Infrastructure.StorageAccount;
-using Microsoft.AspNetCore.Http;
-using System.Threading;
 
 namespace ELearning_Platform.Infrastructure.Repository
 {
@@ -15,7 +12,7 @@ namespace ELearning_Platform.Infrastructure.Repository
         private readonly BlobStorageTablesNames _blobStorageTablesNames = blobStorageTablesNames;
         public async Task<bool> UploadUserImage(byte[] file, string userID, CancellationToken token)
         {
-            if(file==null || file.Length==0) return false;
+            if (file == null || file.Length == 0) return false;
             var container = _blobServiceClient.GetBlobContainerClient(blobContainerName: _blobStorageTablesNames.profileImage);
             await container.DeleteBlobIfExistsAsync(blobName: userID, DeleteSnapshotsOption.None, cancellationToken: token);
 

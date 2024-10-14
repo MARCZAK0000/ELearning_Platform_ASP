@@ -1,6 +1,6 @@
 ﻿using ELearning_Platform.Domain.BackgroundTask;
 using ELearning_Platform.Domain.Email;
-using ELearning_Platform.Infrastructure.EmailSender.Interface;
+using ELearning_Platform.Domain.Repository;
 
 namespace ELearning_Platform.Infrastructure.BackgroundStrategy
 {

@@ -1,6 +1,6 @@
 ﻿using ELearning_Platform.Domain.Email;
+using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Domain.Settings;
-using ELearning_Platform.Infrastructure.EmailSender.Interface;
 using System.Net;
 
 namespace ELearning_Platform.Infrastructure.EmailSender.Class

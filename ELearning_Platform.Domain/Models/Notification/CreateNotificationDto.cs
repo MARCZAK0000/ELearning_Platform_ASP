@@ -7,5 +7,6 @@
         public string Describtion { get; set; }
 
         public string ReciverID { get; set; }
+
     }
 }

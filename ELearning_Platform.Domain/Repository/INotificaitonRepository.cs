@@ -9,6 +9,8 @@ namespace ELearning_Platform.Domain.Repository
     {
         Task<bool> CreateNotificationAsync(CreateNotificationDto createNotification, CancellationToken token);
 
+        Task<bool> CreateMoreThanOneNotificationAsync(List<CreateNotificationDto> list, CancellationToken token);
+
         Task<Pagination<GetNotificationModelDto>> ShowNotificationsAsync(PaginationModelDto pagination, CancellationToken token);
 
         Task<bool> ReadNotificationAsync(ReadNotificationDto readNotification, CancellationToken token);    

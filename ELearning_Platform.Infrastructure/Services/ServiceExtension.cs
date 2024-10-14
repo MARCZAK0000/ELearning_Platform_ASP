@@ -4,7 +4,6 @@ using ELearning_Platform.Domain.Settings;
 using ELearning_Platform.Infrastructure.Authentications;
 using ELearning_Platform.Infrastructure.Database;
 using ELearning_Platform.Infrastructure.EmailSender.Class;
-using ELearning_Platform.Infrastructure.EmailSender.Interface;
 using ELearning_Platform.Infrastructure.Identity;
 using ELearning_Platform.Infrastructure.BackgroundStrategy;
 using ELearning_Platform.Infrastructure.Repository;
