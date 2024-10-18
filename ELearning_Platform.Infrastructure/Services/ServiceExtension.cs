@@ -63,14 +63,15 @@ namespace ELearning_Platform.Infrastructure.Services
                 .ValidateOnStart();
 
             services.AddSingleton(sp
-                =>sp.GetRequiredService<IOptionsMonitor<EmailSettings>>().CurrentValue);
+                =>sp.GetRequiredService<IOptionsMonitor<EmailSettings>>().CurrentValue); //Singleton Implementation but cannot be changed
 
             services.AddOptions<ClientSettings>()
                 .BindConfiguration(nameof(ClientSettings))
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
 
-            services.AddSingleton(sp=>sp.GetRequiredService<IOptionsMonitor<ClientSettings>>().CurrentValue);
+            services.AddSingleton
+                (sp=>sp.GetRequiredService<IOptionsMonitor<ClientSettings>>().CurrentValue); //Singleton Implementation but can be changed
 
             services.AddScoped<IEmailSenderHelper, EmailSenderHelper>();
             services.AddSingleton<IEmailSender, EmailSender.Class.EmailSender>();
@@ -114,6 +115,21 @@ namespace ELearning_Platform.Infrastructure.Services
                         throw new ArgumentException("Invalid Service");
                 }
             });
+
+
+            //NotificationDecorator
+            //Notification Gateway
+            services.AddScoped<INotificationGateway, NotificationGateway>();
+            //Decorator
+            services.AddScoped<INotificationDecorator, PushNotification>();
+            services.AddScoped<INotificationDecorator, EmailNotification>();
+            services.AddScoped<INotificationDecorator, SMSNotification>();
+            services.AddOptions<NotificationSettings>()
+                .BindConfiguration(nameof(NotificationSettings))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+            services.AddSingleton
+                (sp => sp.GetRequiredService<IOptionsMonitor<NotificationSettings>>().CurrentValue); //Singleton Implementation but can be changed
 
         }
     }

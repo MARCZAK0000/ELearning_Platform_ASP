@@ -12,11 +12,11 @@ using Microsoft.EntityFrameworkCore;
 namespace ELearning_Platform.Infrastructure.Repository
 {
     public class NotificationReposiotry(PlatformDb platformDb, 
-        IUserContext userContext, INotificationHandler notificationHandler) : INotificaitonRepository
+        IUserContext userContext, INotificationGateway notificationHandler) : INotificaitonRepository
     {
         private readonly IUserContext _userContext = userContext;
         private readonly PlatformDb _platformDb = platformDb;
-        private readonly INotificationHandler _notificationHandler = notificationHandler;
+        private readonly INotificationGateway _notificationHandler = notificationHandler;
 
         public async Task<bool> CreateMoreThanOneNotificationAsync(List<CreateNotificationDto> list, CancellationToken token)
         {
@@ -32,7 +32,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             await _platformDb.Notifications.AddRangeAsync(notifications, token);
             await _platformDb.SaveChangesAsync(token);
 
-            await _notificationHandler.HandleNotifications(notifications, token);
+            await _notificationHandler.HandleNotifications(list, token);
 
             return true;
             

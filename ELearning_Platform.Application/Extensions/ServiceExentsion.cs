@@ -7,12 +7,11 @@ using ELearning_Platform.Infrastructure.Authorization;
 using ELearning_Platform.Infrastructure.Mapper;
 using ELearning_Platform.Infrastructure.Services.AccountServices.Command.Register;
 using ELearning_Platform.Infrastructure.Services.SchoolServices.Command.CreateClass;
-using ELearning_Platform.Infrastructure.Services.UserServices.Queries.Informations;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ELearning_Platform.Infrastructure.Extensions
+namespace ELearning_Platform.Application.Extensions
 {
     public static class ServiceExentsion
     {
@@ -30,7 +29,7 @@ namespace ELearning_Platform.Infrastructure.Extensions
             services.AddScoped<IValidator<UpdateUserInformationsAsyncCommand>, UpdateUserInformationsAsyncValidator>();
             services.AddScoped<IValidator<CreateNotificationAsyncCommand>, CreateNotificationCommandValidator>();
             services.AddScoped<IValidator<PaginationModelDto>, PaginationValidator>();
-            services.AddScoped<IUserContext,  UserContext>();
+            services.AddScoped<IUserContext, UserContext>();
         }
     }
 }

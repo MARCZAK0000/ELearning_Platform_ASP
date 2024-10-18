@@ -160,11 +160,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                         UserID = currentUser.UserID
                     }, token);
             });
-
-
-            return true;
-
-
+            return await Task.FromResult(true);
         }
     }
 }

@@ -3,8 +3,8 @@ using ELearning_Platform.Domain.Models.Notification;
 
 namespace ELearning_Platform.Domain.Repository
 {
-    public interface INotificationDecorator
+    public interface INotificationGateway
     {
-        Task SendNotificaiton(List<CreateNotificationDto> notification, CancellationToken token);
+        public Task HandleNotifications(List<CreateNotificationDto> notification, CancellationToken token);
     }
 }

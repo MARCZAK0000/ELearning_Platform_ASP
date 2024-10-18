@@ -42,5 +42,19 @@ namespace ELearning_Platform.Infrastructure.EmailSender.Class
                       <a href='${baseURL}confirm/email/token?email={email}&token={encryptedToken}'>link</a>
                     </div>";
         }
+
+        public static string GenerateNotification(string title, string describtion)
+        {
+
+            return $@"
+                   <html>
+                    <body>
+                        <div>
+                          <h2>{title}</h2>
+                          <h5>{describtion}</h2>
+                        </div>
+                    </body>
+                   </html>";
+        }
     }
 }
