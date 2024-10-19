@@ -10,16 +10,17 @@ namespace ELearning_Platform.Infrastructure.Repository
     public class EmailNotification(NotificationSettings notificationSettings,
         IEmailSender emailSender,
         IEmailNotificationHandlerQueue queue, 
-        EmailSettings emailSettings) : INotificationDecorator
+        EmailSettings emailSettings, INotificationDecorator notificationDecorator) : INotificationDecorator
     {
         private readonly NotificationSettings _notificationSettings = notificationSettings;
         private readonly IEmailSender _emailSender = emailSender;
         private readonly IEmailNotificationHandlerQueue _queue = queue;
         private readonly EmailSettings _emailSettings = emailSettings;
-
-        public Task SendNotificaiton(List<CreateNotificationDto> notification, CancellationToken token)
+        private readonly INotificationDecorator _notificationDecorator = notificationDecorator;
+        public async Task SendNotificaiton(List<CreateNotificationDto> notification, CancellationToken token)
         {
-            if (_notificationSettings.EmailNotifications)
+            await _notificationDecorator.SendNotificaiton(notification, token);
+            if (_notificationSettings.EmailNotification)
             {
                 _queue.QueueBackgroundWorkItem(async token =>
                 {
@@ -38,23 +39,34 @@ namespace ELearning_Platform.Infrastructure.Repository
                     }
                 });
             }
-            return Task.CompletedTask;
+            
         }
     }
 
-    public class SMSNotification() : INotificationDecorator
+    public class SMSNotification(NotificationSettings notificationSettings, INotificationDecorator notificationDecorator) : INotificationDecorator
     {
-        public Task SendNotificaiton(List<CreateNotificationDto> notification, CancellationToken token)
+        private readonly INotificationDecorator _notificationDecorator = notificationDecorator;
+        private readonly NotificationSettings _notificationSettings = notificationSettings;
+        public async Task SendNotificaiton(List<CreateNotificationDto> notification, CancellationToken token)
         {
-            throw new NotImplementedException();
+            await _notificationDecorator.SendNotificaiton(notification, token);
+            if (_notificationSettings.SMSNotification)
+            {
+                throw new NotImplementedException();
+            }
+            
         }
     }
 
-    public class PushNotification() : INotificationDecorator
+    public class PushNotification(NotificationSettings notificationSettings) : INotificationDecorator
     {
-        public Task SendNotificaiton(List<CreateNotificationDto> notification, CancellationToken token)
+        private readonly NotificationSettings _notificationSettings = notificationSettings;
+        public async Task SendNotificaiton(List<CreateNotificationDto> notification, CancellationToken token)
         {
-            throw new NotImplementedException();
+            if (_notificationSettings.PushNotification)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

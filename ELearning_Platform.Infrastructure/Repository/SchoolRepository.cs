@@ -54,9 +54,16 @@ namespace ELearning_Platform.Infrastructure.Repository
 
             var usersToAdd = await _platformDb.UserInformations
                 .Include(pr=>pr.Account)
-                .Where(u => addToClass.UsersToAdd.Contains(u.AccountID) 
-                    && _userManager.GetRolesAsync(u.Account).GetAwaiter().GetResult().Contains("student"))
+                .Where(u => addToClass.UsersToAdd.Contains(u.AccountID))
                 .ToListAsync(cancellationToken: token);
+
+            foreach (var item in usersToAdd)
+            {
+                if (!await _userManager.IsInRoleAsync(item.Account, "student"))
+                {
+                    usersToAdd.Remove(item);
+                }
+            }
 
             if (usersToAdd.Count != addToClass.UsersToAdd.Count)
             {
@@ -75,8 +82,8 @@ namespace ELearning_Platform.Infrastructure.Repository
             {
                 notifications.Add(new CreateNotificationDto
                 {
-                    Title = nameof(this.AddStudentToClassAsync),
-                    Describtion = "Add to Class",
+                    Title = $"Add to class: ${addToClass.ClassID}",
+                    Describtion = "You have been add to class ",
                     ReciverID = item.AccountID,
                     EmailAddress = item.EmailAddress,
                 });

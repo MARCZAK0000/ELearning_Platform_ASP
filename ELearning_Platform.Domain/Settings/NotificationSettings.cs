@@ -8,7 +8,7 @@ namespace ELearning_Platform.Domain.Settings
         private readonly object _lockB = new();
         private readonly object _lockC = new();
         [Required]
-        public bool EmailNotifications
+        public bool EmailNotification
         {
             get {
                 lock (_lockA)
@@ -47,7 +47,7 @@ namespace ELearning_Platform.Domain.Settings
 
         [Required]
       
-        public bool PushNotificationn
+        public bool PushNotification
         {
             get
             {

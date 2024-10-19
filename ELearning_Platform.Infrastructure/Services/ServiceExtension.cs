@@ -119,11 +119,7 @@ namespace ELearning_Platform.Infrastructure.Services
 
             //NotificationDecorator
             //Notification Gateway
-            services.AddScoped<INotificationGateway, NotificationGateway>();
-            //Decorator
-            services.AddScoped<INotificationDecorator, PushNotification>();
-            services.AddScoped<INotificationDecorator, EmailNotification>();
-            services.AddScoped<INotificationDecorator, SMSNotification>();
+
             services.AddOptions<NotificationSettings>()
                 .BindConfiguration(nameof(NotificationSettings))
                 .ValidateDataAnnotations()
@@ -131,6 +127,21 @@ namespace ELearning_Platform.Infrastructure.Services
             services.AddSingleton
                 (sp => sp.GetRequiredService<IOptionsMonitor<NotificationSettings>>().CurrentValue); //Singleton Implementation but can be changed
 
+            services.AddScoped<INotificationGateway, NotificationGateway>();
+            //Decorator
+            services.AddScoped<INotificationDecorator>(serviceProvider =>
+            {
+                var notificationSettings = serviceProvider.GetRequiredService<NotificationSettings>();
+                var emailSender = serviceProvider.GetRequiredService<IEmailSender>();
+                var emailQueue = serviceProvider.GetRequiredService<IEmailNotificationHandlerQueue>();
+                var emailSettings = serviceProvider.GetRequiredService<EmailSettings>();
+
+                var pushNotifications = new PushNotification(notificationSettings);
+                var emailNotifications = new EmailNotification(notificationSettings, emailSender, emailQueue, emailSettings, pushNotifications);
+                var smsNotifications = new SMSNotification(notificationSettings, emailNotifications);
+
+                return smsNotifications;
+            });
         }
     }
 }
