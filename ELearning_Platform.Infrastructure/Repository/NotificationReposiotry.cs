@@ -1,4 +1,5 @@
-﻿using ELearning_Platform.Domain.Enitities;
+﻿using Azure.Core;
+using ELearning_Platform.Domain.Enitities;
 using ELearning_Platform.Domain.Exceptions;
 using ELearning_Platform.Domain.Models.Notification;
 using ELearning_Platform.Domain.Models.Pagination;
@@ -32,7 +33,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             await _platformDb.Notifications.AddRangeAsync(notifications, token);
             await _platformDb.SaveChangesAsync(token);
 
-            await _notificationHandler.HandleNotifications(list, token);
+            await _notificationHandler.HandleNotifications(list.Select(pr=>pr.ReciverID).ToList(), token);
 
             return true;
             
@@ -72,6 +73,34 @@ namespace ELearning_Platform.Infrastructure.Repository
             return findNotification > 0;
         }
 
+        public async Task<GetNotificationModelDto> ShowNotification(string notificationID, CancellationToken token)
+        {
+            if(!Guid.TryParse(notificationID, out var id))
+            {
+                return new GetNotificationModelDto { };
+            }
+
+            return await _platformDb.Notifications
+                .Where(pr => pr.NotficaitonID == id)
+                .Select(pr => new GetNotificationModelDto
+                {
+                    NotificationID = pr.NotficaitonID,
+                    Title = pr.Title,
+                    Description = pr.Description,
+                    ReciverID = pr.RecipientID,
+                    Sender = new GetNotificationSenderDto()
+                    {
+                        AccountID = pr.Sender.AccountID,
+                        FirstName = pr.Sender.FirstName,
+                        Surname = pr.Sender.Surname,
+                        Email = pr.Sender.EmailAddress,
+                    },
+                    IsUnRead = pr.IsUnread,
+                    TimeSent = pr.TimeSent,
+                })
+                .FirstOrDefaultAsync(token)??new GetNotificationModelDto();
+        }
+
 
         /// <summary>
         /// For the purpose of this method <see cref="PaginationBuilder{T}.SetTotalCount(int)"/> is used for unread notifications
@@ -93,12 +122,13 @@ namespace ELearning_Platform.Infrastructure.Repository
                     NotificationID = pr.NotficaitonID,
                     Title = pr.Title,
                     Description = pr.Description,
+                    ReciverID = pr.RecipientID,
                     Sender = new GetNotificationSenderDto()
                     {
                         AccountID = pr.Sender.AccountID,
                         FirstName = pr.Sender.FirstName,
                         Surname = pr.Sender.Surname,
-
+                        Email = pr.Sender.EmailAddress,
                     },
                     IsUnRead = pr.IsUnread,
                     TimeSent = pr.TimeSent,
