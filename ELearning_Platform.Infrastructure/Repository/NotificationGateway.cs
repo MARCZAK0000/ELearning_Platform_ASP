@@ -12,9 +12,9 @@ namespace ELearning_Platform.Infrastructure.Repository
     public class NotificationGateway(INotificationDecorator notificationDecorator) : INotificationGateway
     {
         private readonly INotificationDecorator _notificationDecorator = notificationDecorator;
-        public async Task HandleNotifications(List<CreateNotificationDto> notification, CancellationToken token)
+        public async Task HandleNotifications(List<string> list, CancellationToken token)
         {
-            await _notificationDecorator.SendNotificaiton(notification, token);
+            await _notificationDecorator.SendNotificaiton(list, token);
         }
     }
 }

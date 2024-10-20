@@ -4,8 +4,6 @@ using ELearning_Platform.Domain.Models.Notification;
 using ELearning_Platform.Domain.Models.SchoolModel;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Domain.Response.ClassResponse;
-using ELearning_Platform.Infrastructure.Authorization;
-using ELearning_Platform.Infrastructure.BackgroundStrategy;
 using ELearning_Platform.Infrastructure.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -53,7 +51,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                 ?? throw new NotFoundException("Class not found");
 
             var usersToAdd = await _platformDb.UserInformations
-                .Include(pr=>pr.Account)
+                .Include(pr => pr.Account)
                 .Where(u => addToClass.UsersToAdd.Contains(u.AccountID))
                 .ToListAsync(cancellationToken: token);
 

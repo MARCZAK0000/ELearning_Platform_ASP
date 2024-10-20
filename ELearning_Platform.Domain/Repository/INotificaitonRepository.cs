@@ -13,6 +13,8 @@ namespace ELearning_Platform.Domain.Repository
 
         Task<Pagination<GetNotificationModelDto>> ShowNotificationsAsync(PaginationModelDto pagination, CancellationToken token);
 
+        Task<GetNotificationModelDto> ShowNotification(string notificationID , CancellationToken token);
+
         Task<bool> ReadNotificationAsync(ReadNotificationDto readNotification, CancellationToken token);    
     }
 }

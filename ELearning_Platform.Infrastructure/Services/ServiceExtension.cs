@@ -15,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ELearning_Platform.Domain.BackgroundTask;
 using ELearning_Platform.Infrastructure.QueueService;
+using Microsoft.AspNetCore.SignalR;
+using ELearning_Platform.Infrastructure.Hubs;
 
 namespace ELearning_Platform.Infrastructure.Services
 {
@@ -135,9 +137,13 @@ namespace ELearning_Platform.Infrastructure.Services
                 var emailSender = serviceProvider.GetRequiredService<IEmailSender>();
                 var emailQueue = serviceProvider.GetRequiredService<IEmailNotificationHandlerQueue>();
                 var emailSettings = serviceProvider.GetRequiredService<EmailSettings>();
+                var notificationRepository = serviceProvider.GetRequiredService<INotificaitonRepository>();
+                var hubContext = serviceProvider.GetRequiredService<IHubContext<StronglyTypedNotificationHub, INotificationClient>>();
 
-                var pushNotifications = new PushNotification(notificationSettings);
-                var emailNotifications = new EmailNotification(notificationSettings, emailSender, emailQueue, emailSettings, pushNotifications);
+
+                var pushNotifications = new PushNotification(notificationSettings, hubContext, notificationRepository);
+                var emailNotifications = new EmailNotification(notificationSettings, emailSender, 
+                        emailQueue, emailSettings, pushNotifications, notificationRepository);
                 var smsNotifications = new SMSNotification(notificationSettings, emailNotifications);
 
                 return smsNotifications;
