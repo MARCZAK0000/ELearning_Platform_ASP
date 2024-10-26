@@ -25,7 +25,7 @@ namespace ELearning_Platform.API.Controller
         }
 
         [HttpGet("informations/all")]
-        public async Task<IActionResult> GetInfromationsAboutAllUsers([FromBody] GetInfromationsAboutAllUsersAsyncQuery request, CancellationToken token) => 
+        public async Task<IActionResult> GetInfromationsAboutAllUsers([FromQuery] GetInfromationsAboutAllUsersAsyncQuery request, CancellationToken token) => 
             Ok(await _mediator.Send(request: request, cancellationToken: token));
 
         [HttpPut("update")]

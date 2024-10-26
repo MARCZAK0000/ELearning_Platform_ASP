@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Identity;
 using ELearning_Platform.Domain.BackgroundTask;
 using ELearning_Platform.Infrastructure.QueueService;
 using ELearning_Platform.Infrastructure.BackgroundStrategy;
+using ELearning_Platform.Domain.Order;
+using System.Linq.Expressions;
 
 namespace ELearning_Platform.Infrastructure.Repository
 {
@@ -94,7 +96,19 @@ namespace ELearning_Platform.Infrastructure.Repository
                 },
             });
             var count = await resultBase.CountAsync(cancellationToken: token);
-            
+
+            var columnSelector = new Dictionary<OrderByEnum, Expression<Func<GetUserInformationsDto, object>>>
+            {
+                {   OrderByEnum.Surname, pr => pr.Surname},
+                {   OrderByEnum.City, pr=>pr.Address.City},
+                {   OrderByEnum.ClassName, pr=>pr.ClassName }
+
+            };
+
+            resultBase = pagination.IsDesc ? 
+                resultBase.OrderByDescending(columnSelector[pagination.OrderBy]):
+                resultBase.OrderBy(columnSelector[pagination.OrderBy]);
+
             var result = await resultBase
                 .Skip(((pagination.PageIndex-1)*pagination.PageSize))
                 .Take(pagination.PageSize)

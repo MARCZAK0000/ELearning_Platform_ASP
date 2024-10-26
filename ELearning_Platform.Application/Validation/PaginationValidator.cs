@@ -1,4 +1,5 @@
 ﻿using ELearning_Platform.Domain.Models.Pagination;
+using ELearning_Platform.Domain.Order;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,10 @@ namespace ELearning_Platform.Application.Validation
 
             RuleFor(pr => pr.PageSize)
                 .GreaterThanOrEqualTo(0);
+
+            RuleFor(pr => pr.OrderBy)
+                .IsInEnum();
+            
         }
     }
 }

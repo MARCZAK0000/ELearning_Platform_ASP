@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ELearning_Platform.Domain.Order;
 
 namespace ELearning_Platform.Domain.Models.Pagination
 {
@@ -11,5 +7,9 @@ namespace ELearning_Platform.Domain.Models.Pagination
         public int PageIndex { get; set; }
 
         public int PageSize { get; set; }
+
+        public OrderByEnum OrderBy { get; set; }
+
+        public bool IsDesc {  get; set; }
     }
 }
