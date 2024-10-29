@@ -4,7 +4,7 @@ using MediatR;
 
 namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddToClass
 {
-    public class AddToClassAsyncCommand: AddStudentToClassDto, IRequest<AddStudentToClassResponse>
+    public class AddToClassAsyncCommand: AddStudentToClassDto, IRequest<bool>
     {
     }
 }

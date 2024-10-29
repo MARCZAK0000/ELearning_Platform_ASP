@@ -1,5 +1,6 @@
 ﻿using ELearning_Platform.Application.Services.AccountServices.Command.SignIn;
 using ELearning_Platform.Application.Services.NotificationServices.Command.CreateNotification;
+using ELearning_Platform.Application.Services.SchoolServices.Command.AddSubject;
 using ELearning_Platform.Application.Services.UserServices.Command.UpdateUserInformations;
 using ELearning_Platform.Application.Validation;
 using ELearning_Platform.Domain.Models.Pagination;
@@ -29,6 +30,7 @@ namespace ELearning_Platform.Application.Extensions
             services.AddScoped<IValidator<UpdateUserInformationsAsyncCommand>, UpdateUserInformationsAsyncValidator>();
             services.AddScoped<IValidator<CreateNotificationAsyncCommand>, CreateNotificationCommandValidator>();
             services.AddScoped<IValidator<PaginationModelDto>, PaginationValidator>();
+            services.AddScoped<IValidator<AddSubjectAsyncCommand>, AddSubjectAsyncCommandValidator>();  
             services.AddScoped<IUserContext, UserContext>();
         }
     }

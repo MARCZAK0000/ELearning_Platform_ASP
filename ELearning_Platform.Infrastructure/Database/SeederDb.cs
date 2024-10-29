@@ -1,6 +1,6 @@
-﻿using ELearning_Platform.Infrastructure.AuthPolicy;
-using ELearning_Platform.Domain.Enitities;
+﻿using ELearning_Platform.Domain.Enitities;
 using Microsoft.AspNetCore.Identity;
+using ELearning_Platform.Domain.Authorization;
 
 namespace ELearning_Platform.Infrastructure.Database
 {

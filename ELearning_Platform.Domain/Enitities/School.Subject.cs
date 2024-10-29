@@ -20,6 +20,8 @@
 
         public ELearningClass Class { get; set; }
 
+        public List<Lesson>? Lessons { get; set; }
+
         public DateTime ModifiedDate { get; set; } = DateTime.Now;
     }
 }

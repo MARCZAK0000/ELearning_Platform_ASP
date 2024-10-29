@@ -4,9 +4,9 @@ using ELearning_Platform.Domain.Exceptions;
 
 namespace ELearning_Platform.API.QueueService
 {
-    public class ImageHandlerBackgroundService(IImageHandlerQueue queue) : BackgroundService
+    public class ImageHandlerBackgroundService(IAzureHandlerQueue queue) : BackgroundService
     {
-        private readonly IImageHandlerQueue _queue = queue;
+        private readonly IAzureHandlerQueue _queue = queue;
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             if (!stoppingToken.IsCancellationRequested)

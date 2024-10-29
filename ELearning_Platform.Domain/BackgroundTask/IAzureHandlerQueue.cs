@@ -1,6 +1,6 @@
 ﻿namespace ELearning_Platform.Domain.BackgroundTask
 {
-    public interface IImageHandlerQueue
+    public interface IAzureHandlerQueue
     {
         void QueueBackgroundWorkItem(Func<CancellationToken, Task> task);
 

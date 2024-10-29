@@ -3,6 +3,7 @@
     public enum BackgroundEnum
     {
         Email, 
-        Image
+        Image,
+        File
     }
 }

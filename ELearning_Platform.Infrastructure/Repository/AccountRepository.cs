@@ -16,14 +16,13 @@ using ELearning_Platform.Domain.BackgroundTask;
 namespace ELearning_Platform.Infrastructure.Repository
 {
     public class AccountRepository(SignInManager<Account> signInManager, PlatformDb platformDb,
-        UserManager<Account> userManager, IUserContext userContext,
+        UserManager<Account> userManager, 
         ITokenRepository tokenRepository, IEmailNotificationHandlerQueue backgroundTaskQueue,
         EmailSettings emailSettings, IEmailSenderHelper emailHelper, BackgroundTask backgroundTask) : IAccountRepository
     {
         private readonly SignInManager<Account> _signInManager = signInManager;
         private readonly UserManager<Account> _userManager = userManager;
         private readonly PlatformDb _platformDb = platformDb;
-        private readonly IUserContext _userContext = userContext;
         private readonly IEmailNotificationHandlerQueue _backgroundTaskQueue = backgroundTaskQueue;
         private readonly ITokenRepository _tokenRepository = tokenRepository;
         private readonly EmailSettings _emailSettings = emailSettings;
@@ -128,10 +127,10 @@ namespace ELearning_Platform.Infrastructure.Repository
 
 
 
-        public async Task<LoginResponse> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)
+        public async Task<LoginResponse> RefreshTokenAsync(string userID,string refreshToken, CancellationToken cancellationToken)
         {
-            var currentUser = _userContext.GetCurrentUser();
-            var account = await _userManager.FindByIdAsync(currentUser.UserID);
+            
+            var account = await _userManager.FindByIdAsync(userID);
             if (account!.RefreshToken != refreshToken)
             {
                 throw new InvalidRefreshTokenException("Invalid Refresh Token");

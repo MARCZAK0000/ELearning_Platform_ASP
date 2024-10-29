@@ -9,6 +9,6 @@ namespace ELearning_Platform.Domain.Repository
 
         Task<LoginResponse> SignInAsync(LoginModelDto loginModelDto, CancellationToken cancellationToken);
 
-        Task<LoginResponse> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken);
+        Task<LoginResponse> RefreshTokenAsync(string userID, string refreshToken, CancellationToken cancellationToken);
     }
 }

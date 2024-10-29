@@ -12,13 +12,16 @@ namespace ELearning_Platform.Infrastructure.Repository
 {
     public class SchoolRepository
         (PlatformDb platformDb,
-        UserManager<Account> userManager, INotificaitonRepository notificaitonRepository) : ISchoolRepository
+        UserManager<Account> userManager, INotificaitonRepository notificaitonRepository,
+         ILessonMaterialsRepository lessonMaterialsRepository) : ISchoolRepository
     {
         private readonly PlatformDb _platformDb = platformDb;
 
         private readonly UserManager<Account> _userManager = userManager;
 
         private readonly INotificaitonRepository _notificaitonRepository = notificaitonRepository;
+
+        private readonly ILessonMaterialsRepository _lessonMaterialsRepository = lessonMaterialsRepository;
 
         public async Task<CreateClassResponse> CreateClassAsync
             (CreateClassDto createClass, CancellationToken token)
@@ -74,26 +77,152 @@ namespace ELearning_Platform.Infrastructure.Repository
 
             await _platformDb.SaveChangesAsync(token);
 
-            var notifications = new List<CreateNotificationDto>();
-
-            foreach (var item in usersToAdd)
-            {
-                notifications.Add(new CreateNotificationDto
-                {
-                    Title = $"Add to class: ${addToClass.ClassID}",
-                    Describtion = "You have been add to class ",
-                    ReciverID = item.AccountID,
-                    EmailAddress = item.EmailAddress,
-                });
-            }
-
-            await _notificaitonRepository.CreateMoreThanOneNotificationAsync(notifications, token);
             return new AddStudentToClassResponse()
             {
-                AddedUsers = addToClass.UsersToAdd,
+                AddedUsers = usersToAdd,
                 IsSuccess = true,
             };
 
+        }
+
+        public async Task<bool> CreateLessonAsync(string userId, Subject findSubject, CreateLessonDto createLessonDto, CancellationToken token)
+        {
+
+            if (Guid.TryParse(createLessonDto.SubjectID, out var subjectID))
+            {
+                throw new BadRequestException("Invalid ClassID");
+            }
+
+            //var findSubject = await
+            //   _platformDb
+            //   .Subjects
+            //   .Where(pr => pr.SubjectId == subjectID && pr.TeacherID ==" currentUser.UserID")
+            //   .FirstOrDefaultAsync(token) ??
+            //   throw new NotFoundException("Cannot find class");
+
+            findSubject.Lessons ??= [];
+
+            var lesson = new Lesson
+            {
+                ClassID = findSubject.ClassID,
+                SubjectID = subjectID,
+                LessonDate = createLessonDto.LessonDate,
+                LessonTopic = createLessonDto.LessonDescription,
+                LessonDescription = createLessonDto.LessonDescription,
+                TeacherID = userId,
+            };
+
+            var lessonMaterials = new List<LessonMaterials>();
+
+            foreach (var item in createLessonDto.Materials)
+            {
+                lessonMaterials.Add(new LessonMaterials()
+                {
+                    LessonID = lesson.LessonID,
+                    Name = $"{lesson.LessonID}_{item.FileName}_{lessonMaterials.Count}",
+                    Type = Path.GetExtension(item.FileName),
+                });
+            }
+            lesson.LessonMaterials = lessonMaterials;
+            await _platformDb.Lessons.AddAsync(lesson, token);
+            await _platformDb.SaveChangesAsync(token);
+
+
+            await _lessonMaterialsRepository.AddLessonMaterialsAsync(createLessonDto.Materials, lesson.LessonID.ToString(), token);
+
+            var findClass = await _platformDb
+                .ELearningClasses
+                .Include(pr => pr.Students)
+                .Where(c => c.ELearningClassID == findSubject.ClassID)
+                .FirstOrDefaultAsync(token);
+
+            if (findClass != null && findClass.Students != null)
+            {
+
+                var notifications = new List<CreateNotificationDto>();
+                foreach (var item in findClass.Students)
+                {
+                    notifications.Add(new CreateNotificationDto()
+                    {
+                        Title = createLessonDto.LessonName,
+                        Describtion = $"New Lesson: {createLessonDto.LessonDescription}\r\n" +
+                        $"Date: {createLessonDto.LessonDate}",
+                        EmailAddress = item.EmailAddress,
+                        ReciverID = item.AccountID,
+                        SenderID = item.AccountID,
+                    });
+                }
+                await _notificaitonRepository.CreateMoreThanOneNotificationAsync(notifications, token);
+
+            }
+
+            return true;
+        }
+
+        public async Task<bool> CreateSubjectAsync(string userID, CreateSubjectDto createSubjectDto, CancellationToken token)
+        {
+            
+
+            if (!Guid.TryParse(createSubjectDto.ClassID, out Guid classID))
+            {
+                throw new BadRequestException("Invalid class name");
+            }
+
+            (string firstName, string surname) teacherInfo;
+
+            if (string.IsNullOrEmpty(createSubjectDto.TeacherID))
+            {
+                var teacherData = await _platformDb.UserInformations
+                    .Where(pr => pr.AccountID == userID)
+                    .Select(pr => new { pr.FirstName, pr.Surname })
+                    .FirstOrDefaultAsync(token) ??
+                    throw new NotFoundException("Invalid Teacher");
+                teacherInfo = (teacherData.FirstName, teacherData.Surname);
+            }
+            else
+            {
+                var teacherData = await _platformDb.UserInformations
+                    .Where(pr => pr.AccountID == createSubjectDto.TeacherID)
+                    .Select(pr => new { pr.FirstName, pr.Surname })
+                    .FirstOrDefaultAsync(token) ??
+                    throw new NotFoundException("Invalid Teacher");
+
+                teacherInfo = (teacherData.FirstName, teacherData.Surname);
+            }
+
+
+            var subject = new Subject()
+            {
+                ClassID = classID,
+                Name = createSubjectDto.SubjectName,
+                Description = createSubjectDto.SubjectDescription,
+                TeacherID = createSubjectDto.TeacherID ?? userID,
+                TeacherName = teacherInfo.firstName,
+                TeacherSurname = teacherInfo.surname,
+            };
+
+            await _platformDb.Subjects.AddAsync(subject, token);
+            await _platformDb.SaveChangesAsync(token);
+
+            return true;
+
+        }
+
+        public async Task<Subject> FindSubjectByTeacherID(string TeacherID, CancellationToken token)
+        {
+            return await _platformDb.Subjects.Where(pr => pr.TeacherID == TeacherID).FirstOrDefaultAsync(token)
+                ?? throw new NotFoundException("Invalid Teacher ID");
+        }
+
+        public async Task<ELearningClass> FindClassById(string id, CancellationToken token)
+        {
+            if(Guid.TryParse(id, out var classID))
+            {
+                throw new BadRequestException("Invalid guid");
+            }
+            return await _platformDb.ELearningClasses.
+                Where(pr=>pr.ELearningClassID==classID).FirstOrDefaultAsync(token)??
+                throw new NotFoundException("Invalid class id");    
         }
     }
 }

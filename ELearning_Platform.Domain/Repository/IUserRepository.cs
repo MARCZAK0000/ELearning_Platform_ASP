@@ -9,12 +9,12 @@ namespace ELearning_Platform.Domain.Repository
 {
     public interface IUserRepository
     {
-        Task<GetUserInformationsDto> GetUserInformationsAsync(CancellationToken token);
+        Task<GetUserInformationsDto> GetUserInformationsAsync(string userID, CancellationToken token);
 
         Task<Pagination<GetUserInformationsDto>> GetAllUsersAsync(PaginationModelDto pagination, CancellationToken token);
 
-        Task<bool> UpdateUserInfomrationsAsync(UpdateUserInformationsDto updateUserInformations, CancellationToken token);
+        Task<bool> UpdateUserInfomrationsAsync(string userID, UpdateUserInformationsDto updateUserInformations, CancellationToken token);
 
-        Task<bool> UpdateOrCreateImageProfile(IFormFile file, CancellationToken cancellationToken);
+        Task<bool> UpdateOrCreateImageProfile(string userID, IFormFile file, CancellationToken cancellationToken);
     }
 }

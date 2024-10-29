@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E_LearningPlatform.Integrat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ELearning_Platform.Infrastructure", "ELearning_Platform.Infrastructure\ELearning_Platform.Infrastructure.csproj", "{D3DE6907-941D-4E7E-A8F7-6C5715AB6246}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E_LearningPlatform.UnitTest", "E_LearningPlatform.UnitTest\E_LearningPlatform.UnitTest.csproj", "{3B2577F4-24BC-4C37-82B7-64A7CE01B626}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D3DE6907-941D-4E7E-A8F7-6C5715AB6246}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3DE6907-941D-4E7E-A8F7-6C5715AB6246}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3DE6907-941D-4E7E-A8F7-6C5715AB6246}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B2577F4-24BC-4C37-82B7-64A7CE01B626}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B2577F4-24BC-4C37-82B7-64A7CE01B626}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B2577F4-24BC-4C37-82B7-64A7CE01B626}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B2577F4-24BC-4C37-82B7-64A7CE01B626}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

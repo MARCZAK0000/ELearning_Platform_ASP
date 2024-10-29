@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 
 namespace ELearning_Platform.Infrastructure.QueueService
 {
-    public class ImageHandlerQueue : IImageHandlerQueue
+    public class AzureHandlerQueue : IAzureHandlerQueue
     {
         private readonly ConcurrentQueue<Func<CancellationToken, Task>> _workitem = new();
         private readonly SemaphoreSlim _semaphore = new(0);

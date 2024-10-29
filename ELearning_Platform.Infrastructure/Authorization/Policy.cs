@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using ELearning_Platform.Domain.Authorization;
 
 namespace ELearning_Platform.Infrastructure.AuthPolicy
 {

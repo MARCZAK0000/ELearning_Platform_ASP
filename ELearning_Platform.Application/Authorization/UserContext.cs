@@ -14,15 +14,16 @@ namespace ELearning_Platform.Infrastructure.Authorization
 
             if (user == null || !user.Identity!.IsAuthenticated) 
             {
-                
-                throw new UnAuthorizedException("Authorized");
+                throw new UnAuthorizedException("UnAuthorized");
             }
 
             var userID = user.FindFirst(pr=>pr.Type == ClaimTypes.NameIdentifier)!.Value;
 
             var email = user.FindFirst(pr => pr.Type == ClaimTypes.Email)!.Value;
 
-            return new CurrentUser(userID, email);   
+            var role = user.FindFirst(pr=>pr.Type == ClaimTypes.Role)!.Value;
+
+            return new CurrentUser(userID, email, role);   
         }
     }
 }

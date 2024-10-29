@@ -98,12 +98,13 @@ namespace ELearning_Platform.Infrastructure.Services
             });
             services.AddScoped<INotificaitonRepository, NotificationReposiotry>();
             services.AddScoped<IAzureRepository, AzureRepository>();
-
+            services.AddScoped<ILessonMaterialsRepository, LessonMaterialsRepository>();
             //Background Task
             services.AddSingleton<IEmailNotificationHandlerQueue, EmailNotificationHandlerQueue>(); //Add Email Background TaskQueue
-            services.AddSingleton<IImageHandlerQueue, ImageHandlerQueue>(); //Add Image Background Queu
+            services.AddSingleton<IAzureHandlerQueue, AzureHandlerQueue>(); //Add Image Background Queu
             services.AddTransient<EmailBackgroundTask>();
             services.AddTransient<ImageBackgroundTask>();
+            services.AddTransient<UploadFilesToAzureBackgroundTask>();
             services.AddTransient<BackgroundTask>(); //Strategy 
             services.AddTransient<Func<BackgroundEnum, IBackgroundTask>>(serviceProvider => key => //Strategy interface registration
             {
@@ -113,6 +114,8 @@ namespace ELearning_Platform.Infrastructure.Services
                         return serviceProvider.GetRequiredService<EmailBackgroundTask>();
                     case BackgroundEnum.Image:
                         return serviceProvider.GetRequiredService<ImageBackgroundTask>();
+                    case BackgroundEnum.File:
+                        return serviceProvider.GetRequiredService<UploadFilesToAzureBackgroundTask>();
                     default:
                         throw new ArgumentException("Invalid Service");
                 }

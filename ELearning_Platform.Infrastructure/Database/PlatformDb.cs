@@ -36,7 +36,14 @@ namespace ELearning_Platform.Infrastructure.Database
             builder.Entity<UserInformations>(options =>
             {
                 options.ToTable("Person", "Person");
+                //Key
                 options.HasKey(pr => pr.AccountID);
+                
+                //Indexes
+                options.HasIndex(pr=>pr.Surname);
+                options.HasIndex(pr => pr.EmailAddress).IsUnique();
+
+                //Relations
                 options.HasOne(pr => pr.Account)
                 .WithOne(pr => pr.User)
                 .HasForeignKey<Account>(pr => pr.Id)
@@ -72,6 +79,8 @@ namespace ELearning_Platform.Infrastructure.Database
             {
                 options.ToTable("Class", "School");
 
+                options.HasIndex(pr => pr.Name).IsUnique();
+
                 options.HasMany(pr => pr.Students)
                 .WithOne(pr => pr.Class)
                 .HasForeignKey(pr => pr.ClassID);
@@ -91,6 +100,11 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.HasOne(pr => pr.Class)
                 .WithMany(pr => pr.Lessons)
                 .HasForeignKey(pr => pr.ClassID);
+
+                options.HasOne(pr=>pr.Subject)
+                .WithMany(pr=>pr.Lessons)
+                .HasForeignKey(pr=>pr.SubjectID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             });
 

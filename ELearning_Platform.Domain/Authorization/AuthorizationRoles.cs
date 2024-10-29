@@ -1,4 +1,4 @@
-﻿namespace ELearning_Platform.Infrastructure.AuthPolicy
+﻿namespace ELearning_Platform.Domain.Authorization
 {
     public enum AuthorizationRole
     {

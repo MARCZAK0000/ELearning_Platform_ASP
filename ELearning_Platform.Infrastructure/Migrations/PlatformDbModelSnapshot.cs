@@ -119,7 +119,7 @@ namespace ELearning_Platform.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("YearOfBeggining")
                         .HasColumnType("int");
@@ -128,6 +128,9 @@ namespace ELearning_Platform.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ELearningClassID");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Class", "School");
                 });
@@ -152,6 +155,9 @@ namespace ELearning_Platform.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("SubjectID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("TeacherID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -159,6 +165,8 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.HasKey("LessonID");
 
                     b.HasIndex("ClassID");
+
+                    b.HasIndex("SubjectID");
 
                     b.HasIndex("TeacherID");
 
@@ -333,7 +341,7 @@ namespace ELearning_Platform.Infrastructure.Migrations
 
                     b.Property<string>("EmailAddress")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -351,11 +359,16 @@ namespace ELearning_Platform.Infrastructure.Migrations
 
                     b.Property<string>("Surname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("AccountID");
 
                     b.HasIndex("ClassID");
+
+                    b.HasIndex("EmailAddress")
+                        .IsUnique();
+
+                    b.HasIndex("Surname");
 
                     b.ToTable("Person", "Person");
                 });
@@ -500,6 +513,12 @@ namespace ELearning_Platform.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ELearning_Platform.Domain.Enitities.Subject", "Subject")
+                        .WithMany("Lessons")
+                        .HasForeignKey("SubjectID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("ELearning_Platform.Domain.Enitities.UserInformations", "Teacher")
                         .WithMany("Lessons")
                         .HasForeignKey("TeacherID")
@@ -507,6 +526,8 @@ namespace ELearning_Platform.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Class");
+
+                    b.Navigation("Subject");
 
                     b.Navigation("Teacher");
                 });
@@ -640,6 +661,11 @@ namespace ELearning_Platform.Infrastructure.Migrations
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Lesson", b =>
                 {
                     b.Navigation("LessonMaterials");
+                });
+
+            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Subject", b =>
+                {
+                    b.Navigation("Lessons");
                 });
 
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.UserAddress", b =>
