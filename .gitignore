@@ -13,4 +13,7 @@ ELearning_Platform.Domain/obj
 
 ELearning_Platform.IntegrationTest/bin
 ELearning_Platform.IntegrationTest/obj
+
+ELearning_Platform.UnitTest/obj
+ELearning_Platform.UnitTest/obj
 .vs

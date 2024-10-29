@@ -93,13 +93,6 @@ namespace ELearning_Platform.Infrastructure.Repository
                 throw new BadRequestException("Invalid ClassID");
             }
 
-            //var findSubject = await
-            //   _platformDb
-            //   .Subjects
-            //   .Where(pr => pr.SubjectId == subjectID && pr.TeacherID ==" currentUser.UserID")
-            //   .FirstOrDefaultAsync(token) ??
-            //   throw new NotFoundException("Cannot find class");
-
             findSubject.Lessons ??= [];
 
             var lesson = new Lesson
@@ -162,7 +155,6 @@ namespace ELearning_Platform.Infrastructure.Repository
         public async Task<bool> CreateSubjectAsync(string userID, CreateSubjectDto createSubjectDto, CancellationToken token)
         {
             
-
             if (!Guid.TryParse(createSubjectDto.ClassID, out Guid classID))
             {
                 throw new BadRequestException("Invalid class name");
@@ -200,7 +192,6 @@ namespace ELearning_Platform.Infrastructure.Repository
                 TeacherName = teacherInfo.firstName,
                 TeacherSurname = teacherInfo.surname,
             };
-
             await _platformDb.Subjects.AddAsync(subject, token);
             await _platformDb.SaveChangesAsync(token);
 
