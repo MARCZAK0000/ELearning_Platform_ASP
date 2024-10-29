@@ -85,7 +85,7 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         }
 
-        public async Task<bool> CreateLessonAsync(string userId, Subject findSubject, CreateLessonDto createLessonDto, CancellationToken token)
+        public async Task<Lesson> CreateLessonAsync(string userId, Subject findSubject, CreateLessonDto createLessonDto, CancellationToken token)
         {
 
             if (Guid.TryParse(createLessonDto.SubjectID, out var subjectID))
@@ -120,36 +120,9 @@ namespace ELearning_Platform.Infrastructure.Repository
             await _platformDb.Lessons.AddAsync(lesson, token);
             await _platformDb.SaveChangesAsync(token);
 
+           
 
-            await _lessonMaterialsRepository.AddLessonMaterialsAsync(createLessonDto.Materials, lesson.LessonID.ToString(), token);
-
-            var findClass = await _platformDb
-                .ELearningClasses
-                .Include(pr => pr.Students)
-                .Where(c => c.ELearningClassID == findSubject.ClassID)
-                .FirstOrDefaultAsync(token);
-
-            if (findClass != null && findClass.Students != null)
-            {
-
-                var notifications = new List<CreateNotificationDto>();
-                foreach (var item in findClass.Students)
-                {
-                    notifications.Add(new CreateNotificationDto()
-                    {
-                        Title = createLessonDto.LessonName,
-                        Describtion = $"New Lesson: {createLessonDto.LessonDescription}\r\n" +
-                        $"Date: {createLessonDto.LessonDate}",
-                        EmailAddress = item.EmailAddress,
-                        ReciverID = item.AccountID,
-                        SenderID = item.AccountID,
-                    });
-                }
-                await _notificaitonRepository.CreateMoreThanOneNotificationAsync(notifications, token);
-
-            }
-
-            return true;
+            return lesson;
         }
 
         public async Task<bool> CreateSubjectAsync(string userID, CreateSubjectDto createSubjectDto, CancellationToken token)
@@ -212,7 +185,9 @@ namespace ELearning_Platform.Infrastructure.Repository
                 throw new BadRequestException("Invalid guid");
             }
             return await _platformDb.ELearningClasses.
-                Where(pr=>pr.ELearningClassID==classID).FirstOrDefaultAsync(token)??
+                Where(pr=>pr.ELearningClassID==classID)
+                .Include(pr=>pr.Students)
+                .FirstOrDefaultAsync(token)??
                 throw new NotFoundException("Invalid class id");    
         }
     }

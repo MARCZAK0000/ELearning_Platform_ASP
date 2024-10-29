@@ -30,7 +30,8 @@ namespace ELearning_Platform.Application.Extensions
             services.AddScoped<IValidator<UpdateUserInformationsAsyncCommand>, UpdateUserInformationsAsyncValidator>();
             services.AddScoped<IValidator<CreateNotificationAsyncCommand>, CreateNotificationCommandValidator>();
             services.AddScoped<IValidator<PaginationModelDto>, PaginationValidator>();
-            services.AddScoped<IValidator<AddSubjectAsyncCommand>, AddSubjectAsyncCommandValidator>();  
+            services.AddScoped<IValidator<AddSubjectAsyncCommand>, AddSubjectAsyncCommandValidator>();
+            services.AddScoped<IValidator<CreateClassAsyncCommand>, CreateClassAsyncCommandValidator>();
             services.AddScoped<IUserContext, UserContext>();
         }
     }

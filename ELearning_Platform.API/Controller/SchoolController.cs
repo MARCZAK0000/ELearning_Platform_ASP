@@ -1,4 +1,5 @@
-﻿using ELearning_Platform.Infrastructure.AuthPolicy;
+﻿using ELearning_Platform.Application.Services.SchoolServices.Command.CreateLesson;
+using ELearning_Platform.Infrastructure.AuthPolicy;
 using ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddToClass;
 using ELearning_Platform.Infrastructure.Services.SchoolServices.Command.CreateClass;
 using MediatR;
@@ -24,5 +25,15 @@ namespace ELearning_Platform.API.Controller
         [HttpPost("class/students/add")]
         public async Task<IActionResult> AddStudentToClass(AddToClassAsyncCommand command, CancellationToken token) 
             => Ok(await _mediator.Send(request: command, cancellationToken: token));
+
+        [Authorize(Policy = PolicyConstant.RequireTeacher)]
+        [HttpPost("class/subject")]
+        public async Task<IActionResult> CreateSubject([FromBody] CreateClassAsyncCommand command, CancellationToken cancellationToken)
+            => Ok(await _mediator.Send(request: command, cancellationToken: cancellationToken)); [Authorize(Policy = PolicyConstant.RequireTeacher)]
+        
+        [Authorize(Policy = PolicyConstant.RequireTeacher)]
+        [HttpPost("class/subject/lesson")]
+        public async Task<IActionResult> CreateLesson([FromBody] CreateLessonAsyncCommand command, CancellationToken cancellationToken)
+            => Ok(await _mediator.Send(request: command, cancellationToken: cancellationToken));
     }
 }
