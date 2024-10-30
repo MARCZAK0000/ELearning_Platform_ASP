@@ -21,8 +21,8 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
             var currentUser = _userContext.GetCurrentUser();
 
             if (!currentUser.IsInRole(nameof(AuthorizationRole.moderator))
-                || !currentUser.IsInRole(nameof(AuthorizationRole.admin))
-                    || !currentUser.IsInRole(nameof(AuthorizationRole.headTeacher)))
+                && !currentUser.IsInRole(nameof(AuthorizationRole.admin))
+                    && !currentUser.IsInRole(nameof(AuthorizationRole.headTeacher)))
             {
                 return false;
             }

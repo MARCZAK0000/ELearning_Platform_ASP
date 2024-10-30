@@ -7,6 +7,7 @@ using ELearning_Platform.Domain.Settings;
 using ELearning_Platform.Infrastructure.EmailSender.Class;
 using ELearning_Platform.Infrastructure.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.IdentityModel.Logging;
 using System.Collections.Generic;
 
 namespace ELearning_Platform.Infrastructure.Repository
@@ -15,31 +16,21 @@ namespace ELearning_Platform.Infrastructure.Repository
         IEmailSender emailSender,
         IEmailNotificationHandlerQueue queue, 
         EmailSettings emailSettings, 
-        INotificationDecorator notificationDecorator,
-        INotificaitonRepository notificaitonRepository) : INotificationDecorator
+        INotificationDecorator notificationDecorator) : INotificationDecorator
     {
         private readonly NotificationSettings _notificationSettings = notificationSettings;
         private readonly IEmailSender _emailSender = emailSender;
         private readonly IEmailNotificationHandlerQueue _queue = queue;
         private readonly EmailSettings _emailSettings = emailSettings;
         private readonly INotificationDecorator _notificationDecorator = notificationDecorator;
-        private readonly INotificaitonRepository _notificaitonRepository = notificaitonRepository;
-        public async Task SendNotificaiton(List<string> list, CancellationToken token)
+        public async Task SendNotificaiton(List<Notification> list, CancellationToken token)
         {
             await _notificationDecorator.SendNotificaiton(list, token);
             if (_notificationSettings.EmailNotification)
             {
-                List<GetNotificationModelDto> notifications = [];
-                foreach (var item in list)
-                {
-                    var result = await 
-                        _notificaitonRepository
-                        .ShowNotification(item, token);
-                    notifications.Add(result);
-                }
                 _queue.QueueBackgroundWorkItem(async token =>
                 {
-                    foreach (var item in notifications)
+                    foreach (var item in list)
                     {
                         if(item.Sender != null)
                         {
@@ -47,7 +38,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                             {
                                 From = _emailSettings.Email,
                                 Subject = item.Title,
-                                To = item.Sender.Email!,
+                                To = item.Sender.EmailAddress,
                                 Body = EmailSenderHelper.GenerateNotification(item.Title, item.Description)
                             }, token);
                         }
@@ -57,14 +48,13 @@ namespace ELearning_Platform.Infrastructure.Repository
             
         }
     }
-
     public class SMSNotification(NotificationSettings notificationSettings
         , INotificationDecorator notificationDecorator) 
         : INotificationDecorator
     {
         private readonly INotificationDecorator _notificationDecorator = notificationDecorator;
         private readonly NotificationSettings _notificationSettings = notificationSettings;
-        public async Task SendNotificaiton(List<string> list, CancellationToken token)
+        public async Task SendNotificaiton(List<Notification> list, CancellationToken token)
         {
             await _notificationDecorator.SendNotificaiton(list, token);
             if (_notificationSettings.SMSNotification)
@@ -74,25 +64,33 @@ namespace ELearning_Platform.Infrastructure.Repository
             
         }
     }
-
     public class PushNotification(NotificationSettings notificationSettings, IHubContext<StronglyTypedNotificationHub
-        , INotificationClient> hubContext, INotificaitonRepository notificaitonRepository) : INotificationDecorator
+        , INotificationClient> hubContext) : INotificationDecorator
     {
         private readonly NotificationSettings _notificationSettings = notificationSettings;
         private readonly IHubContext<StronglyTypedNotificationHub, INotificationClient> _hubContext = hubContext;
-        private readonly INotificaitonRepository _notificaitonRepository = notificaitonRepository;
-        public async Task SendNotificaiton(List<string> list, CancellationToken token)
+        //private readonly INotificaitonRepository _notificaitonRepository = notificaitonRepository;
+        public async Task SendNotificaiton(List<Notification> list, CancellationToken token)
         {
             if (_notificationSettings.PushNotification)
             {
-                List<GetNotificationModelDto> notifications = [];
                 foreach (var item in list)
                 {
-                    var result = await
-                        _notificaitonRepository
-                        .ShowNotification(item, token);
-                    notifications.Add(result);
-                    await _hubContext.Clients.Clients(result.ReciverID).ReciveNotification(result);
+                    
+                    await _hubContext.Clients.Clients(item.RecipientID).ReciveNotification(new GetNotificationModelDto()
+                    {
+                        Title = item.Title,
+                        Description = item.Description,
+                        NotificationID = item.NotficaitonID,
+                        IsUnRead = item.IsUnread,
+                        Sender = new GetNotificationSenderDto()
+                        {
+                            AccountID = item.Sender.AccountID,
+                            Email = item.Sender.EmailAddress,
+                            FirstName = item.Sender.FirstName,
+                            Surname = item.Sender.Surname
+                        }
+                    });
                 }
             }
         }

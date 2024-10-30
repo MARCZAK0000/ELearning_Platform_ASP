@@ -1,14 +1,12 @@
 ﻿using ELearning_Platform.Domain.Authorization;
 using ELearning_Platform.Domain.Models.Notification;
-using ELearning_Platform.Domain.Models.SchoolModel;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Infrastructure.Authorization;
 using MediatR;
-using System.Net.WebSockets;
 
 namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateLesson
 {
-    public class CreateLessonAsyncCommandHandler(ISchoolRepository schoolRepository, 
+    public class CreateLessonAsyncCommandHandler(ISchoolRepository schoolRepository,
         INotificaitonRepository notificaitonRepository
         , IUserContext userContext, ILessonMaterialsRepository materialsRepository) : IRequestHandler<CreateLessonAsyncCommand, bool>
     {
@@ -38,14 +36,14 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateL
             var result = await _schoolRepository.CreateLessonAsync(
                 userID: currentUser.IsInRole(nameof(AuthorizationRole.moderator))
                 ? subjectInfo.TeacherID : currentUser.UserID, subject: subjectInfo,
-                createLessonDto:request, token:cancellationToken);
-            
-            if(result is { }) return false;
+                createLessonDto: request, token: cancellationToken);
+
+            if (result is { }) return false;
 
             await _materialsRepository.AddLessonMaterialsAsync(request.Materials, result.LessonID.ToString(), cancellationToken);
 
             var currentClass = await _schoolRepository.
-                FindClassById(id: subjectInfo.ClassID.ToString(), 
+                FindClassById(id: subjectInfo.ClassID.ToString(),
                     token: cancellationToken);
 
             if (currentClass is null || currentClass.Students == null) return true;

@@ -33,7 +33,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             await _platformDb.Notifications.AddRangeAsync(notifications, token);
             await _platformDb.SaveChangesAsync(token);
 
-            await _notificationHandler.HandleNotifications(list.Select(pr=>pr.ReciverID).ToList(), token);
+            await _notificationHandler.HandleNotifications(notifications, token);
 
             return true;
             

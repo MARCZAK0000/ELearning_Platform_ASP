@@ -1,4 +1,5 @@
-﻿using ELearning_Platform.Application.Services.SchoolServices.Command.CreateLesson;
+﻿using ELearning_Platform.Application.Services.SchoolServices.Command.AddSubject;
+using ELearning_Platform.Application.Services.SchoolServices.Command.CreateLesson;
 using ELearning_Platform.Infrastructure.AuthPolicy;
 using ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddToClass;
 using ELearning_Platform.Infrastructure.Services.SchoolServices.Command.CreateClass;
@@ -28,12 +29,15 @@ namespace ELearning_Platform.API.Controller
 
         [Authorize(Policy = PolicyConstant.RequireTeacher)]
         [HttpPost("class/subject")]
-        public async Task<IActionResult> CreateSubject([FromBody] CreateClassAsyncCommand command, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateSubject([FromBody] AddSubjectAsyncCommand command, CancellationToken cancellationToken)
             => Ok(await _mediator.Send(request: command, cancellationToken: cancellationToken)); [Authorize(Policy = PolicyConstant.RequireTeacher)]
-        
+
         [Authorize(Policy = PolicyConstant.RequireTeacher)]
         [HttpPost("class/subject/lesson")]
-        public async Task<IActionResult> CreateLesson([FromBody] CreateLessonAsyncCommand command, CancellationToken cancellationToken)
-            => Ok(await _mediator.Send(request: command, cancellationToken: cancellationToken));
+        public async Task<IActionResult> CreateLesson([FromForm] CreateLessonAsyncCommand command, List<IFormFile> materials, CancellationToken cancellationToken)
+        {
+            command.Materials = materials;
+            return Ok(await _mediator.Send(request: command, cancellationToken: cancellationToken));
+        }
     }
 }
