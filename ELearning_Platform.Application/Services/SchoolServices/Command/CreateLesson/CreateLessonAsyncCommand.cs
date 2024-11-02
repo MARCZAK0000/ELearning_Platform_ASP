@@ -5,5 +5,6 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateL
 {
     public class CreateLessonAsyncCommand : CreateLessonDto, IRequest<bool>
     {
+
     }
 }

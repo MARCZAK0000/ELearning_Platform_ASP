@@ -34,5 +34,7 @@
 
         public virtual List<Notification>? RecivedNotifications { get; set; }
 
+        public virtual List<Grade>? Grades { get; set; }
+
     }
 }

@@ -17,5 +17,6 @@ namespace ELearning_Platform.Domain.Repository
         Task<Subject> FindSubjectByTeacherID(string TeacherID, CancellationToken token);
 
         Task<ELearningClass> FindClassById(string id, CancellationToken token);
+
     }
 }
