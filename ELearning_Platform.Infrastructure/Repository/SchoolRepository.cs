@@ -12,16 +12,11 @@ namespace ELearning_Platform.Infrastructure.Repository
 {
     public class SchoolRepository
         (PlatformDb platformDb,
-        UserManager<Account> userManager, INotificaitonRepository notificaitonRepository,
-         ILessonMaterialsRepository lessonMaterialsRepository) : ISchoolRepository
+        UserManager<Account> userManager) : ISchoolRepository
     {
         private readonly PlatformDb _platformDb = platformDb;
 
         private readonly UserManager<Account> _userManager = userManager;
-
-        private readonly INotificaitonRepository _notificaitonRepository = notificaitonRepository;
-
-        private readonly ILessonMaterialsRepository _lessonMaterialsRepository = lessonMaterialsRepository;
 
         public async Task<CreateClassResponse> CreateClassAsync
             (CreateClassDto createClass, CancellationToken token)
@@ -172,13 +167,13 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         }
 
-        public async Task<Subject> FindSubjectByTeacherID(string TeacherID, CancellationToken token)
+        public async Task<Subject> FindSubjectByTeacherIDAsync(string TeacherID, CancellationToken token)
         {
             return await _platformDb.Subjects.Where(pr => pr.TeacherID == TeacherID).FirstOrDefaultAsync(token)
                 ?? throw new NotFoundException("Invalid Teacher ID");
         }
 
-        public async Task<ELearningClass> FindClassById(string id, CancellationToken token)
+        public async Task<ELearningClass> FindClassByIdAsync(string id, CancellationToken token)
         {
             if(Guid.TryParse(id, out var classID))
             {

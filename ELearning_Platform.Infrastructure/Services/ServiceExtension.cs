@@ -17,6 +17,8 @@ using ELearning_Platform.Domain.BackgroundTask;
 using ELearning_Platform.Infrastructure.QueueService;
 using Microsoft.AspNetCore.SignalR;
 using ELearning_Platform.Infrastructure.Hubs;
+using ELearning_Platform.Domain.CalculateGrade;
+using ELearning_Platform.Infrastructure.CalculateGrade;
 
 namespace ELearning_Platform.Infrastructure.Services
 {
@@ -99,6 +101,7 @@ namespace ELearning_Platform.Infrastructure.Services
             services.AddScoped<INotificaitonRepository, NotificationReposiotry>();
             services.AddScoped<IAzureRepository, AzureRepository>();
             services.AddScoped<ILessonMaterialsRepository, LessonMaterialsRepository>();
+            services.AddScoped<IElearningTestRepository, ELearningTestRepository>();
             //Background Task
             services.AddSingleton<IEmailNotificationHandlerQueue, EmailNotificationHandlerQueue>(); //Add Email Background TaskQueue
             services.AddSingleton<IAzureHandlerQueue, AzureHandlerQueue>(); //Add Image Background Queu
@@ -150,6 +153,28 @@ namespace ELearning_Platform.Infrastructure.Services
 
                 return smsNotifications;
             });
+
+            //CalculateGradeFactory
+            services.AddOptions<GradeInformations>()
+                .BindConfiguration(nameof(GradeInformations))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            services.AddSingleton
+                (sp=>sp.GetRequiredService<IOptions<GradeInformations>>().Value);
+
+            services.AddOptions<GradePercentage>()
+                .BindConfiguration(nameof(GradePercentage))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            services.AddSingleton
+                (sp => sp.GetRequiredService<IOptionsMonitor<GradeInformations>>().CurrentValue);
+
+            services.AddSingleton<ICalculateGradeFactory, CalculateGradeFactory>();
+            services.AddSingleton<USACalculateGrade>();
+            services.AddSingleton<PolandCalculateGrade>();
+            services.AddSingleton<GermanCalculateGrade>();
         }
     }
 }

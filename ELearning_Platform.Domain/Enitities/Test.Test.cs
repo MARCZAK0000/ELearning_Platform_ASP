@@ -23,11 +23,10 @@ namespace ELearning_Platform.Domain.Enitities
         public List<Grade>? Grades { get; set; }
 
         public Subject Subject { get; set; }
+
         public static string CalcutlateGrade(Func<TestLevel, int, string> calculate, TestLevel testLevel, int score)
         {
             return calculate(testLevel, score);
         }
-
-
     }
 }

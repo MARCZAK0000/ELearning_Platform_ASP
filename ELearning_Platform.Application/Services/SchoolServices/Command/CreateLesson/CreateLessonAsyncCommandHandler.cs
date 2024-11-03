@@ -27,7 +27,7 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateL
         public async Task<bool> Handle(CreateLessonAsyncCommand request, CancellationToken cancellationToken)
         {
             var currentUser = _userContext.GetCurrentUser();
-            var subjectInfo = await _schoolRepository.FindSubjectByTeacherID(currentUser.UserID, cancellationToken);
+            var subjectInfo = await _schoolRepository.FindSubjectByTeacherIDAsync(currentUser.UserID, cancellationToken);
 
             if (subjectInfo == null
                 || subjectInfo.TeacherID != currentUser.UserID
@@ -43,7 +43,7 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateL
             await _materialsRepository.AddLessonMaterialsAsync(request.Materials, result.LessonID.ToString(), cancellationToken);
 
             var currentClass = await _schoolRepository.
-                FindClassById(id: subjectInfo.ClassID.ToString(),
+                FindClassByIdAsync(id: subjectInfo.ClassID.ToString(),
                     token: cancellationToken);
 
             if (currentClass is null || currentClass.Students == null) return true;

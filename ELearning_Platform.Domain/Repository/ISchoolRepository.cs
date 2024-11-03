@@ -14,9 +14,8 @@ namespace ELearning_Platform.Domain.Repository
 
         Task<Lesson> CreateLessonAsync(string userID, Subject subject, CreateLessonDto createLessonDto, CancellationToken token);
 
-        Task<Subject> FindSubjectByTeacherID(string TeacherID, CancellationToken token);
+        Task<Subject> FindSubjectByTeacherIDAsync(string TeacherID, CancellationToken token);
 
-        Task<ELearningClass> FindClassById(string id, CancellationToken token);
-
+        Task<ELearningClass> FindClassByIdAsync(string id, CancellationToken token);
     }
 }
