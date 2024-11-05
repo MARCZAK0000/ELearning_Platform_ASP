@@ -5,6 +5,6 @@ namespace ELearning_Platform.Domain.Repository
 {
     public interface INotificationDecorator
     {
-        Task SendNotificaiton(List<Notification> list, CancellationToken token);
+        Task SendNotificaiton((string email, string userID) currentUser, List<Notification> list, CancellationToken token);
     }
 }

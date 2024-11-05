@@ -5,6 +5,6 @@ namespace ELearning_Platform.Domain.Repository
 {
     public interface INotificationGateway
     {
-        public Task HandleNotifications(List<Notification> users, CancellationToken token);
+        public Task HandleNotifications((string email, string userID) currentUser, List<Notification> users, CancellationToken token);
     }
 }

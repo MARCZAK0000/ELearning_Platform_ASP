@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 
 namespace ELearning_Platform.Infrastructure.CalculateGrade
 {
-    internal class GermanCalculateGrade : ICalculateGradeBase
+    public class GermanCalculateGrade : ICalculateGradeBase
     {
+        public string CalculateGrade()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

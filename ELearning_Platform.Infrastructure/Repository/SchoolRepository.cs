@@ -44,7 +44,6 @@ namespace ELearning_Platform.Infrastructure.Repository
             var eClass = await _platformDb
                 .ELearningClasses
                 .Where(pr => pr.ELearningClassID == addToClass.ClassID)
-                .Select(pr => pr.Students)
                 .FirstOrDefaultAsync(cancellationToken: token)
                 ?? throw new NotFoundException("Class not found");
 
@@ -66,9 +65,9 @@ namespace ELearning_Platform.Infrastructure.Repository
                 throw new NotFoundException("One or more users not found");
             }
 
-            eClass ??= new List<UserInformations>();
+            eClass.Students??=[];
 
-            eClass.AddRange(usersToAdd);
+            eClass.Students.AddRange(usersToAdd);
 
             await _platformDb.SaveChangesAsync(token);
 
@@ -83,7 +82,7 @@ namespace ELearning_Platform.Infrastructure.Repository
         public async Task<Lesson> CreateLessonAsync(string userId, Subject findSubject, CreateLessonDto createLessonDto, CancellationToken token)
         {
 
-            if (Guid.TryParse(createLessonDto.SubjectID, out var subjectID))
+            if (!Guid.TryParse(createLessonDto.SubjectID, out var subjectID))
             {
                 throw new BadRequestException("Invalid ClassID");
             }
@@ -175,7 +174,7 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         public async Task<ELearningClass> FindClassByIdAsync(string id, CancellationToken token)
         {
-            if(Guid.TryParse(id, out var classID))
+            if(!Guid.TryParse(id, out var classID))
             {
                 throw new BadRequestException("Invalid guid");
             }
@@ -184,6 +183,19 @@ namespace ELearning_Platform.Infrastructure.Repository
                 .Include(pr=>pr.Students)
                 .FirstOrDefaultAsync(token)??
                 throw new NotFoundException("Invalid class id");    
+        }
+
+        public async Task<Subject> FindSubjectByIDAsync(string subjectID, CancellationToken cancellationToken)
+        {
+            if(!Guid.TryParse(subjectID, out var id))
+            {
+                throw new BadRequestException("Invalid Guid");
+            }
+            return await _platformDb
+                .Subjects
+                .Where(pr => pr.SubjectId == id)
+                .FirstOrDefaultAsync(cancellationToken) ??
+                throw new NotFoundException("Subject Not Found");
         }
     }
 }

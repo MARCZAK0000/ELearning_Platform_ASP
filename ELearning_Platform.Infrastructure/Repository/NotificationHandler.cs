@@ -23,24 +23,26 @@ namespace ELearning_Platform.Infrastructure.Repository
         private readonly IEmailNotificationHandlerQueue _queue = queue;
         private readonly EmailSettings _emailSettings = emailSettings;
         private readonly INotificationDecorator _notificationDecorator = notificationDecorator;
-        public async Task SendNotificaiton(List<Notification> list, CancellationToken token)
+        public async Task SendNotificaiton((string email, string userID) currentUser, List<Notification> list, CancellationToken token)
         {
-            await _notificationDecorator.SendNotificaiton(list, token);
+            await _notificationDecorator.SendNotificaiton(currentUser, list, token);
             if (_notificationSettings.EmailNotification)
             {
                 _queue.QueueBackgroundWorkItem(async token =>
                 {
-                    foreach (var item in list)
+                    if(currentUser.email != null)
                     {
-                        if(item.Sender != null)
+                        foreach (var item in list)
                         {
+                        
                             await _emailSender.SendEmailAsync(new Domain.Email.EmailDto()
                             {
                                 From = _emailSettings.Email,
                                 Subject = item.Title,
-                                To = item.Sender.EmailAddress,
+                                To = item.Recipient.EmailAddress,
                                 Body = EmailSenderHelper.GenerateNotification(item.Title, item.Description)
                             }, token);
+                        
                         }
                     }
                 });
@@ -54,9 +56,9 @@ namespace ELearning_Platform.Infrastructure.Repository
     {
         private readonly INotificationDecorator _notificationDecorator = notificationDecorator;
         private readonly NotificationSettings _notificationSettings = notificationSettings;
-        public async Task SendNotificaiton(List<Notification> list, CancellationToken token)
+        public async Task SendNotificaiton((string email, string userID) currentUser, List<Notification> list, CancellationToken token)
         {
-            await _notificationDecorator.SendNotificaiton(list, token);
+            await _notificationDecorator.SendNotificaiton(currentUser,list, token);
             if (_notificationSettings.SMSNotification)
             {
                 throw new NotImplementedException();
@@ -70,7 +72,7 @@ namespace ELearning_Platform.Infrastructure.Repository
         private readonly NotificationSettings _notificationSettings = notificationSettings;
         private readonly IHubContext<StronglyTypedNotificationHub, INotificationClient> _hubContext = hubContext;
         //private readonly INotificaitonRepository _notificaitonRepository = notificaitonRepository;
-        public async Task SendNotificaiton(List<Notification> list, CancellationToken token)
+        public async Task SendNotificaiton((string email, string userID) currentUser, List<Notification> list, CancellationToken token)
         {
             if (_notificationSettings.PushNotification)
             {

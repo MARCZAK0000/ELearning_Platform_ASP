@@ -58,7 +58,7 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.HasOne(pr => pr.Account)
                 .WithOne(pr => pr.User)
                 .HasForeignKey<Account>(pr => pr.Id)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
             builder.Entity<UserAddress>(options =>
@@ -69,7 +69,7 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.HasOne(pr => pr.User)
                 .WithOne(pr => pr.Address)
                 .HasForeignKey<UserInformations>(pr => pr.AccountID)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
 
@@ -115,7 +115,7 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.HasOne(pr=>pr.Subject)
                 .WithMany(pr=>pr.Lessons)
                 .HasForeignKey(pr=>pr.SubjectID)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             });
 
@@ -138,12 +138,12 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.HasOne(pr=>pr.Sender)
                 .WithMany(pr=>pr.SentNotfications)
                 .HasForeignKey(pr=>pr.SenderID)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.Restrict);
                 
                 options.HasOne(pr => pr.Recipient)
                 .WithMany(pr => pr.RecivedNotifications)
                 .HasForeignKey(pr => pr.RecipientID)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
             builder.Entity<Grade>(options => 
@@ -157,17 +157,17 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.HasOne(pr => pr.Subject)
                 .WithMany(pr => pr.Grades)
                 .HasForeignKey(pr => pr.SubjectID)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
                 options.HasOne(pr=>pr.Account)
                 .WithMany(pr=>pr.Grades)
                 .HasForeignKey(pr=>pr.AccountId)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
                 options.HasOne(pr=>pr.Test)
                 .WithMany(pr=>pr.Grades)
                 .HasForeignKey(pr=>pr.TestID)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             });
 
@@ -180,7 +180,7 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.HasOne(pr=>pr.Subject)
                 .WithMany(pr=>pr.Tests)
                 .HasForeignKey(pr=>pr.SubjectID)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
 
@@ -193,20 +193,21 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.HasOne(pr => pr.Test)
                 .WithMany(pr => pr.Questions)
                 .HasForeignKey(pr => pr.TestId)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
+               
             });
 
             builder.Entity<Answers>(options =>
             {
                 options.ToTable("Test", "Answers");
 
-                options.HasKey(pr => pr.QuestionId);
+                options.HasKey(pr => pr.AnswerId);
 
                 options.HasOne(pr => pr.Questions)
                 .WithMany(pr => pr.Answers)
                 .HasForeignKey(pr => pr.QuestionId)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             });
             base.OnModelCreating(builder);

@@ -27,7 +27,7 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateL
         public async Task<bool> Handle(CreateLessonAsyncCommand request, CancellationToken cancellationToken)
         {
             var currentUser = _userContext.GetCurrentUser();
-            var subjectInfo = await _schoolRepository.FindSubjectByTeacherIDAsync(currentUser.UserID, cancellationToken);
+            var subjectInfo = await _schoolRepository.FindSubjectByIDAsync(request.SubjectID, cancellationToken);
 
             if (subjectInfo == null
                 || subjectInfo.TeacherID != currentUser.UserID
@@ -58,11 +58,13 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateL
                     $"Date: {request.LessonDate}",
                     EmailAddress = item.EmailAddress,
                     ReciverID = item.AccountID,
-                    SenderID = item.AccountID,
+                    SenderID = currentUser.UserID,
                 });
             }
 
-            await _notificaitonRepository.CreateMoreThanOneNotificationAsync(notifications, cancellationToken);
+            await _notificaitonRepository
+                 .CreateMoreThanOneNotificationAsync(
+                     currentUser: (currentUser.EmailAddress, currentUser.UserID), notifications, cancellationToken);
 
             return true;
 

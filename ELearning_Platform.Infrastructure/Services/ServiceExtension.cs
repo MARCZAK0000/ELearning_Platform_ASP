@@ -29,18 +29,24 @@ namespace ELearning_Platform.Infrastructure.Services
 
             if (isDevelopment)
             {
+
                 services.AddDbContext<PlatformDb>(options =>
-                    options.UseSqlServer(configuration.GetConnectionString("MyConnectionString")));
+                {
+
+                    options.UseSqlServer(configuration.GetConnectionString("MyConnectionString"));
+                    options.EnableSensitiveDataLogging();
+                });
 
                 services.AddSingleton(_ => new BlobServiceClient(connectionString: configuration.GetConnectionString("BlobStorageConnectionString"), 
                     new BlobClientOptions(version: BlobClientOptions.ServiceVersion.V2019_02_02)));
-
                 services.AddDevelopmentCorsPolicy();
             }
             else
             {
                 //TODO
             } 
+
+            
 
             var authSettings = new AuthenticationSettings();
             configuration.GetSection("AuthSetting").Bind(authSettings);

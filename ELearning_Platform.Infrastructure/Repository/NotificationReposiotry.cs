@@ -13,27 +13,26 @@ using Microsoft.EntityFrameworkCore;
 namespace ELearning_Platform.Infrastructure.Repository
 {
     public class NotificationReposiotry(PlatformDb platformDb, 
-        IUserContext userContext, INotificationGateway notificationHandler) : INotificaitonRepository
+        IUserContext userContext, INotificationGateway notificationGateway) : INotificaitonRepository
     {
         private readonly IUserContext _userContext = userContext;
         private readonly PlatformDb _platformDb = platformDb;
-        private readonly INotificationGateway _notificationHandler = notificationHandler;
+        private readonly INotificationGateway _notificationGateway = notificationGateway;
 
-        public async Task<bool> CreateMoreThanOneNotificationAsync(List<CreateNotificationDto> list, CancellationToken token)
+        public async Task<bool> CreateMoreThanOneNotificationAsync((string email, string userId) currentUser, List<CreateNotificationDto> list, CancellationToken token)
         {
-            var user = _userContext.GetCurrentUser();
             var notifications = list.Select(noti=>new Notification()
             {
                 Title = noti.Title,
                 Description = noti.Describtion,
                 RecipientID = noti.ReciverID,
-                SenderID = user.UserID,
+                SenderID = currentUser.userId,
             }).ToList();
 
             await _platformDb.Notifications.AddRangeAsync(notifications, token);
             await _platformDb.SaveChangesAsync(token);
 
-            await _notificationHandler.HandleNotifications(notifications, token);
+            await _notificationGateway.HandleNotifications(currentUser, notifications, token);
 
             return true;
             

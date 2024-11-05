@@ -40,10 +40,13 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
                     Describtion = "You have been add to class ",
                     ReciverID = item.AccountID,
                     EmailAddress = item.EmailAddress,
+                    SenderID = currentUser.UserID,
                 });
             }
 
-            await _notificaitonRepository.CreateMoreThanOneNotificationAsync(notifications, cancellationToken);
+            await _notificaitonRepository
+                .CreateMoreThanOneNotificationAsync(
+                    currentUser: (currentUser.EmailAddress, currentUser.UserID),notifications, cancellationToken);
 
             return true;
         }
