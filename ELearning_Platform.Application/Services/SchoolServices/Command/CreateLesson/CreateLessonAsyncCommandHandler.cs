@@ -30,17 +30,17 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateL
             var subjectInfo = await _schoolRepository.FindSubjectByIDAsync(request.SubjectID, cancellationToken);
 
             if (subjectInfo == null
-                || subjectInfo.TeacherID != currentUser.UserID
-                    || !currentUser.IsInRole(nameof(AuthorizationRole.moderator))) return false;
+                || (subjectInfo.TeacherID != currentUser.UserID
+                    && !currentUser.IsInRole(nameof(AuthorizationRole.moderator)))) return false;
 
             var result = await _schoolRepository.CreateLessonAsync(
                 userID: currentUser.IsInRole(nameof(AuthorizationRole.moderator))
                 ? subjectInfo.TeacherID : currentUser.UserID, subject: subjectInfo,
                 createLessonDto: request, token: cancellationToken);
 
-            if (result is { }) return false;
+            if (result is null) return false;
 
-            await _materialsRepository.AddLessonMaterialsAsync(request.Materials, result.LessonID.ToString(), cancellationToken);
+            await _materialsRepository.AddLessonMaterialsAsync(request.Materials, result.LessonID, cancellationToken);
 
             var currentClass = await _schoolRepository.
                 FindClassByIdAsync(id: subjectInfo.ClassID.ToString(),

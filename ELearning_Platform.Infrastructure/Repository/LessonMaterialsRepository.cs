@@ -1,22 +1,40 @@
 ﻿using ELearning_Platform.Domain.BackgroundTask;
+using ELearning_Platform.Domain.Enitities;
 using ELearning_Platform.Domain.Models.SchoolModel;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Infrastructure.BackgroundStrategy;
+using ELearning_Platform.Infrastructure.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Metadata;
 
 namespace ELearning_Platform.Infrastructure.Repository
 {
     public class LessonMaterialsRepository(BackgroundTask backgroundTask
-        , IAzureHandlerQueue azureHandlerQueue) : ILessonMaterialsRepository
+        , IAzureHandlerQueue azureHandlerQueue, PlatformDb platformDb) : ILessonMaterialsRepository
     {
         private readonly BackgroundTask _backgroundTask = backgroundTask;
         private readonly IAzureHandlerQueue _azureHandlerQueue = azureHandlerQueue;
-        public async Task<bool> AddLessonMaterialsAsync(List<IFormFile> files, string lessonID, CancellationToken token)
+        private readonly PlatformDb _platformDb = platformDb;
+        public async Task<bool> AddLessonMaterialsAsync(List<IFormFile> files, Guid lessonID, CancellationToken token)
         {
+            var lessonMaterials = new List<LessonMaterials>();
+
+            foreach (var item in files)
+            {
+                lessonMaterials.Add(new LessonMaterials()
+                {
+                    LessonID = lessonID,
+                    Name = $"{lessonID}_{item.FileName}_{lessonMaterials.Count}",
+                    Type = Path.GetExtension(item.FileName),
+                });
+            }
+
+            await _platformDb.LessonMaterials.AddRangeAsync(lessonMaterials, token);
+            await _platformDb.SaveChangesAsync(token);
+
             var insert = new InsertFilesToCloudDto
             {
-                LessonId = lessonID
+                LessonId = lessonID.ToString(),
             };
             insert.Materials ??= [];
             foreach (var item in files)

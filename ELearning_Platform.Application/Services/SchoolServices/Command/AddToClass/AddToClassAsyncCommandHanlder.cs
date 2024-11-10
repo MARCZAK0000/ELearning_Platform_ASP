@@ -3,6 +3,8 @@ using ELearning_Platform.Domain.Models.Notification;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Infrastructure.Authorization;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddToClass
 {
@@ -10,12 +12,12 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
         (ISchoolRepository schoolRepository,
         INotificaitonRepository notificaitonRepository,
         IUserContext userContext)
-        : IRequestHandler<AddToClassAsyncCommand, bool>
+        : IRequestHandler<AddToClassAsyncCommand, Results<Ok, ValidationProblem, UnauthorizedHttpResult, ForbidHttpResult>>
     {
         private readonly ISchoolRepository _schoolRepository = schoolRepository;
         private readonly INotificaitonRepository _notificaitonRepository = notificaitonRepository;
         private readonly IUserContext _userContext = userContext;
-        public async Task<bool> Handle(AddToClassAsyncCommand request, CancellationToken cancellationToken)
+        public async Task<Results<Ok, ValidationProblem, UnauthorizedHttpResult, ForbidHttpResult>> Handle(AddToClassAsyncCommand request, CancellationToken cancellationToken)
         {
 
             var currentUser = _userContext.GetCurrentUser();
@@ -24,11 +26,25 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
                 && !currentUser.IsInRole(nameof(AuthorizationRole.admin))
                     && !currentUser.IsInRole(nameof(AuthorizationRole.headTeacher)))
             {
-                return false;
+                return TypedResults.Forbid();
             }
 
             var result = await _schoolRepository.AddStudentToClassAsync(request, cancellationToken);
-            if (!result.IsSuccess) return false;
+            if (!result.IsSuccess) 
+                return TypedResults.ValidationProblem(new Dictionary<string, string[]>
+            {
+                {"error", ["problem with database"] }
+            });
+
+            var toClass = await _schoolRepository
+                .AddUsersToClassSubjectAsync(request.UsersToAdd, request.ClassID, cancellationToken);
+            
+            if(!toClass.IsSuccess) 
+                return TypedResults.ValidationProblem(new Dictionary<string, string[]>
+            {
+                {"error", ["problem with database"] }
+            });
+
 
             var notifications = new List<CreateNotificationDto>();
 
@@ -48,7 +64,7 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
                 .CreateMoreThanOneNotificationAsync(
                     currentUser: (currentUser.EmailAddress, currentUser.UserID),notifications, cancellationToken);
 
-            return true;
+            return TypedResults.Ok();
         }
     }
 }

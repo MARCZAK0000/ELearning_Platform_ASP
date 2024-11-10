@@ -34,7 +34,7 @@ namespace ELearning_Platform.API.Controller
 
         [Authorize(Policy = PolicyConstant.RequireTeacher)]
         [HttpPost("class/subject/lesson")]
-        public async Task<IActionResult> CreateLesson([FromForm] CreateLessonAsyncCommand command, List<IFormFile> materials, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateLesson([FromForm] CreateLessonAsyncCommand command, [FromForm] List<IFormFile> materials, CancellationToken cancellationToken)
         {
             command.Materials = materials;
             return Ok(await _mediator.Send(request: command, cancellationToken: cancellationToken));

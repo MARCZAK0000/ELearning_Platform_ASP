@@ -14,13 +14,13 @@ namespace ELearning_Platform.Domain.Enitities
 
         public string Description { get; set; }
 
-        public string RecipientID { get; set; }
+        public string? RecipientID { get; set; }
 
-        public UserInformations Recipient {  get; set; }
+        public UserInformations? Recipient {  get; set; }
 
-        public string SenderID { get; set; }
+        public string? SenderID { get; set; }
 
-        public UserInformations Sender { get; set; }
+        public UserInformations? Sender { get; set; }
 
         public DateTime TimeSent { get; set; } = DateTime.Now;   
 

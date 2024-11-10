@@ -1,8 +1,11 @@
 using ELearning_Platform.Domain.Enitities;
 using ELearning_Platform.Domain.Exceptions;
 using ELearning_Platform.Domain.Models.ELearningTestModel;
+using ELearning_Platform.Domain.Models.Pagination;
 using ELearning_Platform.Domain.Repository;
+using ELearning_Platform.Domain.Response.Pagination;
 using ELearning_Platform.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace ELearning_Platform.Infrastructure.Repository
 {
@@ -17,6 +20,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             using var transaction = await _platformDb.Database.BeginTransactionAsync(token);
             try
             {
+              
                 if (!Guid.TryParse(createTestModel.SubjectID, out var subjectID))
                 {
                     throw new BadRequestException("wrong subject ID");
@@ -28,6 +32,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                 test.StartTime = createTestModel.StartTime;
                 test.EndTime = createTestModel.EndTime;
                 test.Questions = [];
+                test.TeacherID = teacherID;
                 
                 await _platformDb.Tests.AddAsync(test, token);
 
@@ -37,7 +42,6 @@ namespace ELearning_Platform.Infrastructure.Repository
                     {
                         TestId = test.TestID,
                         QuestionText = item.QuestionText,
-                        CorrectAnswerIndex = item.CorrectAnswerIndex,
                         Answers = []
                     };
 
@@ -47,7 +51,8 @@ namespace ELearning_Platform.Infrastructure.Repository
                     {
                         AnswerId = Guid.NewGuid(),
                         AnswerText = answer.AnswerText,
-                        QuestionId = que.QuestionId
+                        QuestionId = que.QuestionId,
+                        IsCorrect = answer.IsCorrect,
                     }) ?? [];
 
                     await _platformDb.Answers.AddRangeAsync(answers, token);
@@ -64,9 +69,41 @@ namespace ELearning_Platform.Infrastructure.Repository
             
         }
 
-        public Task<Test> FindTestByIdAsync(string testId, CancellationToken token)
+        public async Task<Test> FindTestByIdAsync(string testId, CancellationToken token)
         {
-            throw new NotImplementedException();
+            if (!Guid.TryParse(testId, out var test)) throw new BadRequestException("Invalid TestID");
+
+            return await _platformDb.Tests
+                .Where(pr=>pr.TestID == test)
+                .FirstOrDefaultAsync(token)
+                ??
+                throw new NotFoundException("Test Not Found");
+        }
+
+        public async Task<Pagination<Test>> GetTestsByTeacherIdAsync(string teacherID, 
+            bool isComplited, PaginationModelDto paginationModelDto, 
+            CancellationToken token)
+        {
+            var pagination = new PaginationBuilder<Test>();
+            var findTestBase = _platformDb
+                .Tests
+                .Where(pr => pr.IsComplited == isComplited && pr.TeacherID.ToString() == teacherID);
+
+            var findCount = await findTestBase.CountAsync(token);
+
+            var result = await findTestBase
+                .Skip((paginationModelDto.PageSize*paginationModelDto.PageIndex)+1)
+                .Take(paginationModelDto.PageSize)
+                .ToListAsync(token);
+
+            return pagination
+                .SetPageSize(paginationModelDto.PageSize)
+                .SetPageIndex(paginationModelDto.PageIndex)
+                .SetLastIndex(paginationModelDto.PageSize, paginationModelDto.PageIndex)
+                .SetItems(result)
+                .SetTotalCount(findCount)
+                .Build();
+            
         }
     }
 }

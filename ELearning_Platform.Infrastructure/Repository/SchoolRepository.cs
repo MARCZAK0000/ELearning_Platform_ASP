@@ -1,6 +1,5 @@
 ﻿using ELearning_Platform.Domain.Enitities;
 using ELearning_Platform.Domain.Exceptions;
-using ELearning_Platform.Domain.Models.Notification;
 using ELearning_Platform.Domain.Models.SchoolModel;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Domain.Response.ClassResponse;
@@ -43,6 +42,8 @@ namespace ELearning_Platform.Infrastructure.Repository
         {
             var eClass = await _platformDb
                 .ELearningClasses
+                .Include(pr=>pr.Subjects)
+                .AsSplitQuery()
                 .Where(pr => pr.ELearningClassID == addToClass.ClassID)
                 .FirstOrDefaultAsync(cancellationToken: token)
                 ?? throw new NotFoundException("Class not found");
@@ -65,15 +66,54 @@ namespace ELearning_Platform.Infrastructure.Repository
                 throw new NotFoundException("One or more users not found");
             }
 
-            eClass.Students??=[];
+            eClass.Students ??= [];
 
             eClass.Students.AddRange(usersToAdd);
+
+            //await _platformDb.SaveChangesAsync(token);
+
+            return new AddStudentToClassResponse()
+            {
+                AddedUsers = usersToAdd,
+                IsSuccess = true,
+            };
+
+        }
+
+        public async Task<AddStudentToClassResponse> AddUsersToClassSubjectAsync(IList<string> usersToAdd, Guid ClassID, CancellationToken token)
+        {
+            var getSubject = await
+                _platformDb
+                .Subjects
+                .Where(pr => pr.ClassID == ClassID)
+                .ToListAsync(token);
+
+            if (getSubject.Count == 0)
+            {
+                return new AddStudentToClassResponse()
+                {
+                    IsSuccess = false,
+                };
+            }
+            var list = new List<StudentSubject>();
+            foreach (var subject in getSubject)
+            {
+                foreach (var user in usersToAdd)
+                {
+                    list.Add(new StudentSubject()
+                    {
+                        StudentID = user,
+                        SubjectID = subject.SubjectId,
+                    });
+                }
+            }
+
+            await _platformDb.StudentSubjects.AddRangeAsync(list, token);
 
             await _platformDb.SaveChangesAsync(token);
 
             return new AddStudentToClassResponse()
             {
-                AddedUsers = usersToAdd,
                 IsSuccess = true,
             };
 
@@ -99,29 +139,17 @@ namespace ELearning_Platform.Infrastructure.Repository
                 TeacherID = userId,
             };
 
-            var lessonMaterials = new List<LessonMaterials>();
-
-            foreach (var item in createLessonDto.Materials)
-            {
-                lessonMaterials.Add(new LessonMaterials()
-                {
-                    LessonID = lesson.LessonID,
-                    Name = $"{lesson.LessonID}_{item.FileName}_{lessonMaterials.Count}",
-                    Type = Path.GetExtension(item.FileName),
-                });
-            }
-            lesson.LessonMaterials = lessonMaterials;
             await _platformDb.Lessons.AddAsync(lesson, token);
             await _platformDb.SaveChangesAsync(token);
 
-           
+
 
             return lesson;
         }
 
         public async Task<bool> CreateSubjectAsync(string userID, CreateSubjectDto createSubjectDto, CancellationToken token)
         {
-            
+
             if (!Guid.TryParse(createSubjectDto.ClassID, out Guid classID))
             {
                 throw new BadRequestException("Invalid class name");
@@ -156,8 +184,6 @@ namespace ELearning_Platform.Infrastructure.Repository
                 Name = createSubjectDto.SubjectName,
                 Description = createSubjectDto.SubjectDescription,
                 TeacherID = createSubjectDto.TeacherID ?? userID,
-                TeacherName = teacherInfo.firstName,
-                TeacherSurname = teacherInfo.surname,
             };
             await _platformDb.Subjects.AddAsync(subject, token);
             await _platformDb.SaveChangesAsync(token);
@@ -166,6 +192,8 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         }
 
+
+       
         public async Task<Subject> FindSubjectByTeacherIDAsync(string TeacherID, CancellationToken token)
         {
             return await _platformDb.Subjects.Where(pr => pr.TeacherID == TeacherID).FirstOrDefaultAsync(token)
@@ -174,20 +202,20 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         public async Task<ELearningClass> FindClassByIdAsync(string id, CancellationToken token)
         {
-            if(!Guid.TryParse(id, out var classID))
+            if (!Guid.TryParse(id, out var classID))
             {
                 throw new BadRequestException("Invalid guid");
             }
             return await _platformDb.ELearningClasses.
-                Where(pr=>pr.ELearningClassID==classID)
-                .Include(pr=>pr.Students)
-                .FirstOrDefaultAsync(token)??
-                throw new NotFoundException("Invalid class id");    
+                Where(pr => pr.ELearningClassID == classID)
+                .Include(pr => pr.Students)
+                .FirstOrDefaultAsync(token) ??
+                throw new NotFoundException("Invalid class id");
         }
 
         public async Task<Subject> FindSubjectByIDAsync(string subjectID, CancellationToken cancellationToken)
         {
-            if(!Guid.TryParse(subjectID, out var id))
+            if (!Guid.TryParse(subjectID, out var id))
             {
                 throw new BadRequestException("Invalid Guid");
             }

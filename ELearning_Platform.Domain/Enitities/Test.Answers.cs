@@ -8,6 +8,10 @@
 
         public string AnswerText { get; set; }
 
+        public bool IsCorrect {  get; set; }
+
         public virtual Questions Questions { get; set; }
+
+        public UserAnswers UserAnswers { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using ELearning_Platform.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ELearning_Platform.Infrastructure.Migrations
 {
     [DbContext(typeof(PlatformDb))]
-    partial class PlatformDbModelSnapshot : ModelSnapshot
+    [Migration("20241109174235_ChangeBehaviors")]
+    partial class ChangeBehaviors
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -336,30 +339,6 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.StudentSubject", b =>
-                {
-                    b.Property<int>("StudentSubjectId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentSubjectId"));
-
-                    b.Property<string>("StudentID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid>("SubjectID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("StudentSubjectId");
-
-                    b.HasIndex("StudentID");
-
-                    b.HasIndex("SubjectID");
-
-                    b.ToTable("StudentSubject", "School");
-                });
-
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Subject", b =>
                 {
                     b.Property<Guid>("SubjectId")
@@ -377,6 +356,10 @@ namespace ELearning_Platform.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StudentId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -462,44 +445,6 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.ToTable("Address", "Person");
                 });
 
-            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.UserAnswers", b =>
-                {
-                    b.Property<int>("UserAnswerID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserAnswerID"));
-
-                    b.Property<Guid?>("AnswerID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("QuestionID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TestID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserAnswerID");
-
-                    b.HasIndex("AnswerID")
-                        .IsUnique()
-                        .HasFilter("[AnswerID] IS NOT NULL");
-
-                    b.HasIndex("QuestionID")
-                        .IsUnique()
-                        .HasFilter("[QuestionID] IS NOT NULL");
-
-                    b.HasIndex("TestID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Test", "UserAnswers");
-                });
-
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.UserInformations", b =>
                 {
                     b.Property<string>("AccountID")
@@ -526,6 +471,9 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.Property<string>("SecondName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("SubjectId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -536,6 +484,8 @@ namespace ELearning_Platform.Infrastructure.Migrations
 
                     b.HasIndex("EmailAddress")
                         .IsUnique();
+
+                    b.HasIndex("SubjectId");
 
                     b.HasIndex("Surname");
 
@@ -778,25 +728,6 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.Navigation("Test");
                 });
 
-            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.StudentSubject", b =>
-                {
-                    b.HasOne("ELearning_Platform.Domain.Enitities.UserInformations", "Student")
-                        .WithMany("Subjects")
-                        .HasForeignKey("StudentID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ELearning_Platform.Domain.Enitities.Subject", "Subject")
-                        .WithMany("Students")
-                        .HasForeignKey("SubjectID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-
-                    b.Navigation("Subject");
-                });
-
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Subject", b =>
                 {
                     b.HasOne("ELearning_Platform.Domain.Enitities.ELearningClass", "Class")
@@ -806,7 +737,7 @@ namespace ELearning_Platform.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("ELearning_Platform.Domain.Enitities.UserInformations", "Teacher")
-                        .WithMany("TeacherSubjects")
+                        .WithMany("Subjects")
                         .HasForeignKey("TeacherID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -833,39 +764,6 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.UserAnswers", b =>
-                {
-                    b.HasOne("ELearning_Platform.Domain.Enitities.Answers", "Answers")
-                        .WithOne("UserAnswers")
-                        .HasForeignKey("ELearning_Platform.Domain.Enitities.UserAnswers", "AnswerID")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("ELearning_Platform.Domain.Enitities.Questions", "Question")
-                        .WithOne("TestQuestion")
-                        .HasForeignKey("ELearning_Platform.Domain.Enitities.UserAnswers", "QuestionID")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("ELearning_Platform.Domain.Enitities.Test", "Test")
-                        .WithMany("TestAnswers")
-                        .HasForeignKey("TestID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ELearning_Platform.Domain.Enitities.UserInformations", "User")
-                        .WithMany("UserAnswers")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Answers");
-
-                    b.Navigation("Question");
-
-                    b.Navigation("Test");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.UserInformations", b =>
                 {
                     b.HasOne("ELearning_Platform.Domain.Enitities.UserAddress", "Address")
@@ -877,6 +775,10 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.HasOne("ELearning_Platform.Domain.Enitities.ELearningClass", "Class")
                         .WithMany("Students")
                         .HasForeignKey("ClassID");
+
+                    b.HasOne("ELearning_Platform.Domain.Enitities.Subject", null)
+                        .WithMany("Students")
+                        .HasForeignKey("SubjectId");
 
                     b.Navigation("Address");
 
@@ -934,12 +836,6 @@ namespace ELearning_Platform.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Answers", b =>
-                {
-                    b.Navigation("UserAnswers")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.ELearningClass", b =>
                 {
                     b.Navigation("Lessons");
@@ -957,9 +853,6 @@ namespace ELearning_Platform.Infrastructure.Migrations
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Questions", b =>
                 {
                     b.Navigation("Answers");
-
-                    b.Navigation("TestQuestion")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Subject", b =>
@@ -978,8 +871,6 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.Navigation("Grades");
 
                     b.Navigation("Questions");
-
-                    b.Navigation("TestAnswers");
                 });
 
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.UserAddress", b =>
@@ -1003,11 +894,7 @@ namespace ELearning_Platform.Infrastructure.Migrations
 
                     b.Navigation("Subjects");
 
-                    b.Navigation("TeacherSubjects");
-
                     b.Navigation("Tests");
-
-                    b.Navigation("UserAnswers");
                 });
 #pragma warning restore 612, 618
         }

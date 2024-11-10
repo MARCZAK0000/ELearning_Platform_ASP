@@ -15,6 +15,6 @@ namespace ELearning_Platform.Domain.Models.SchoolModel
 
         public DateOnly LessonDate {  get; set; }   
 
-        public List<IFormFile> Materials { get; set; }
+        public List<IFormFile>? Materials { get; set; }
     }
 }

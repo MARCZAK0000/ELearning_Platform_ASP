@@ -20,7 +20,9 @@
 
         public virtual UserAddress Address { get; set; }
 
-        public virtual List<Subject>? Subjects { get; set; }
+        public virtual List<StudentSubject>? Subjects { get; set; }
+
+        public virtual List<Subject>? TeacherSubjects { get; set; }
 
         public Guid? ClassID {  get; set; }
         
@@ -35,6 +37,10 @@
         public virtual List<Notification>? RecivedNotifications { get; set; }
 
         public virtual List<Grade>? Grades { get; set; }
+
+        public virtual List<Test>? Tests { get; set; }
+
+        public virtual List<UserAnswers>? UserAnswers { get; set; }
 
     }
 }

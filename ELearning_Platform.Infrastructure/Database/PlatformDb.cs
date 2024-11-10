@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Reflection.Emit;
 
 namespace ELearning_Platform.Infrastructure.Database
 {
@@ -19,6 +20,8 @@ namespace ELearning_Platform.Infrastructure.Database
 
         public DbSet<Grade> Grades { get; set; }    //!!!!
 
+        public DbSet<StudentSubject> StudentSubjects { get; set; } //Many to many - temporaty table to student in subjects
+
         //Lesson
         public DbSet<Lesson> Lessons { get; set; }
 
@@ -35,6 +38,9 @@ namespace ELearning_Platform.Infrastructure.Database
         public DbSet<Questions> Questions { get; set; } //!!!!
 
         public DbSet<Answers> Answers { get; set; } //!!!!
+
+        public DbSet<UserAnswers> UserAnswers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
@@ -58,7 +64,7 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.HasOne(pr => pr.Account)
                 .WithOne(pr => pr.User)
                 .HasForeignKey<Account>(pr => pr.Id)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<UserAddress>(options =>
@@ -69,21 +75,39 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.HasOne(pr => pr.User)
                 .WithOne(pr => pr.Address)
                 .HasForeignKey<UserInformations>(pr => pr.AccountID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
 
             builder.Entity<Subject>(options =>
             {
+
                 options.ToTable("Subject", "School");
                 options.HasOne(pr => pr.Teacher)
-                .WithMany(pr => pr.Subjects)
+                .WithMany(pr => pr.TeacherSubjects)
                 .HasForeignKey(pr => pr.TeacherID);
 
                 options.HasOne(pr => pr.Class)
                 .WithMany(pr => pr.Subjects)
                 .HasForeignKey(pr => pr.ClassID);
 
+   
+            });
+
+            builder.Entity<StudentSubject>(options =>
+            {
+                options.HasKey(pr=>pr.StudentSubjectId);
+
+                options.ToTable("StudentSubject", "School");
+                options.HasOne(pr => pr.Subject)
+                .WithMany(pr => pr.Students)
+                .HasForeignKey(pr => pr.SubjectID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                options.HasOne(pr => pr.Student)
+                .WithMany(pr => pr.Subjects)
+                .HasForeignKey(pr => pr.StudentID)
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
             builder.Entity<ELearningClass>(options =>
@@ -127,7 +151,9 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.HasKey(pr => pr.LessonMaterialID);
                 options.HasOne(pr => pr.Lesson)
                 .WithMany(pr => pr.LessonMaterials)
-                .HasForeignKey(pr => pr.LessonID);
+                .HasForeignKey(pr => pr.LessonID)
+                .OnDelete(DeleteBehavior.Cascade);
+                
             });
 
             builder.Entity<Notification>(options => 
@@ -135,6 +161,7 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.ToTable("Notification", "Account");
 
                 options.HasKey(pr=>pr.NotficaitonID);
+
                 options.HasOne(pr=>pr.Sender)
                 .WithMany(pr=>pr.SentNotfications)
                 .HasForeignKey(pr=>pr.SenderID)
@@ -152,22 +179,20 @@ namespace ELearning_Platform.Infrastructure.Database
 
                 options.HasKey(pr => pr.GradeID);
 
-                options.HasIndex(pr=>pr.GradeLevel);
-
                 options.HasOne(pr => pr.Subject)
                 .WithMany(pr => pr.Grades)
                 .HasForeignKey(pr => pr.SubjectID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-                options.HasOne(pr=>pr.Account)
+                options.HasOne(pr=>pr.Student)
                 .WithMany(pr=>pr.Grades)
-                .HasForeignKey(pr=>pr.AccountId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(pr=>pr.StudentID)
+                .OnDelete(DeleteBehavior.Cascade);
 
                 options.HasOne(pr=>pr.Test)
                 .WithMany(pr=>pr.Grades)
                 .HasForeignKey(pr=>pr.TestID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             });
 
@@ -181,6 +206,11 @@ namespace ELearning_Platform.Infrastructure.Database
                 .WithMany(pr=>pr.Tests)
                 .HasForeignKey(pr=>pr.SubjectID)
                 .OnDelete(DeleteBehavior.Restrict);
+
+                options.HasOne(pr=>pr.Teacher)
+                .WithMany(pr=>pr.Tests)
+                .HasForeignKey(pr=>pr.TeacherID)
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
 
@@ -193,7 +223,7 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.HasOne(pr => pr.Test)
                 .WithMany(pr => pr.Questions)
                 .HasForeignKey(pr => pr.TestId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
                
             });
@@ -207,8 +237,38 @@ namespace ELearning_Platform.Infrastructure.Database
                 options.HasOne(pr => pr.Questions)
                 .WithMany(pr => pr.Answers)
                 .HasForeignKey(pr => pr.QuestionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            });
+
+            builder.Entity<UserAnswers>(options => 
+            {
+                options.ToTable("Test", "UserAnswers");
+                
+                options.HasKey(pr=>pr.UserAnswerID);
+
+                options.HasOne(pr => pr.User)
+                .WithMany(pr => pr.UserAnswers)
+                .HasForeignKey(pr => pr.UserID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+                options.HasOne(pr=>pr.Test)
+                .WithMany(pr=>pr.TestAnswers)
+                .HasForeignKey(pr=>pr.TestID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                options.HasOne(pr=>pr.Question)
+                .WithOne(pr=>pr.TestQuestion)
+                .HasForeignKey<UserAnswers>(pr=>pr.QuestionID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                options.HasOne(pr => pr.Answers)
+                .WithOne(pr => pr.UserAnswers)
+                .HasForeignKey<UserAnswers>(pr => pr.AnswerID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+                
             });
             base.OnModelCreating(builder);
 

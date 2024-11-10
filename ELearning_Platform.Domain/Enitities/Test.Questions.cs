@@ -8,11 +8,11 @@
 
         public string QuestionText { get; set; }
 
-        public int CorrectAnswerIndex { get; set; }
-
         public virtual List<Answers> Answers { get; set; }
 
         public virtual Test Test { get; set; }
+
+        public virtual UserAnswers TestQuestion { get; set; } 
 
     }
 }
