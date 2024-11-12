@@ -43,7 +43,7 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateL
             await _materialsRepository.AddLessonMaterialsAsync(request.Materials, result.LessonID, cancellationToken);
 
             var currentClass = await _schoolRepository.
-                FindClassByIdAsync(id: subjectInfo.ClassID.ToString(),
+                FindClassWithStudentsByIdAsync(id: subjectInfo.ClassID.ToString(),
                     token: cancellationToken);
 
             if (currentClass is null || currentClass.Students == null) return true;

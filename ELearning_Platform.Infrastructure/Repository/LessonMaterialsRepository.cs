@@ -44,7 +44,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                 var data = memoryStrem.ToArray();
                 insert.Materials.Add(new MaterialFiles()
                 {
-                    Data = data, Name = $"{lessonID}_{item.FileName}_{insert.Materials.Count}", Type = item.ContentType
+                    Data = data, Name = $"{lessonID}_{item.FileName}_{insert.Materials.Count}", Type = item.ContentType ,
                 });
             }
             _azureHandlerQueue.QueueBackgroundWorkItem(async =>

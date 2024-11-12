@@ -8,9 +8,9 @@ namespace ELearning_Platform.Domain.Repository
     {
         Task<CreateClassResponse> CreateClassAsync(CreateClassDto createClass, CancellationToken token);
 
-        Task<AddStudentToClassResponse> AddStudentToClassAsync(AddStudentToClassDto addToClass, CancellationToken token);
+        Task<AddStudentToClassResponse> AddStudentToClassAsync(ELearningClass eClass, AddStudentToClassDto addToClass, CancellationToken token);
 
-        Task<AddStudentToClassResponse> AddUsersToClassSubjectAsync(IList<string> usersToAdd, Guid ClassID, CancellationToken token);
+        Task<AddStudentToClassResponse> AddUsersToClassSubjectAsync(List<Subject> subjects, IList<string> usersToAdd, CancellationToken token);
 
         Task<bool> CreateSubjectAsync(string teacherID, CreateSubjectDto createSubjectDto, CancellationToken token);
 
@@ -18,8 +18,14 @@ namespace ELearning_Platform.Domain.Repository
 
         Task<Subject> FindSubjectByTeacherIDAsync(string TeacherID, CancellationToken token);
 
-        Task<ELearningClass> FindClassByIdAsync(string id, CancellationToken token);
+        Task<ELearningClass?> FindClassWithStudentsByIdAsync(string id, CancellationToken token);
 
         Task<Subject> FindSubjectByIDAsync(string id, CancellationToken token);
+
+        Task<Lesson> GetLessonByIDAsync(string lessonID, string subjectID, CancellationToken token);
+
+        Task<List<Subject>> FindSubjectByClassIDAsync(Guid classId,  CancellationToken token);  
+        
+        Task<ELearningClass?> FindClassByClassIDAsync(Guid classId, CancellationToken token);
     }
 }

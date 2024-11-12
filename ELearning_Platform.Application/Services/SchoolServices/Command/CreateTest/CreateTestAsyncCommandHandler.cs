@@ -37,7 +37,7 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateT
                 .CreateTestAsync(request.TeacherID??currentUser.UserID, request, cancellationToken);
 
 
-            var findClass = await _schoolRepository.FindClassByIdAsync(getSubject.ClassID.ToString(), cancellationToken);
+            var findClass = await _schoolRepository.FindClassWithStudentsByIdAsync(getSubject.ClassID.ToString(), cancellationToken);
 
             var notifications = new List<CreateNotificationDto>();
 

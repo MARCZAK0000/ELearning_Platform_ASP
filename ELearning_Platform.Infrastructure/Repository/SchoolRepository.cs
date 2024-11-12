@@ -1,8 +1,10 @@
 ﻿using ELearning_Platform.Domain.Enitities;
 using ELearning_Platform.Domain.Exceptions;
+using ELearning_Platform.Domain.Models.Pagination;
 using ELearning_Platform.Domain.Models.SchoolModel;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Domain.Response.ClassResponse;
+using ELearning_Platform.Domain.Response.Pagination;
 using ELearning_Platform.Infrastructure.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -38,16 +40,8 @@ namespace ELearning_Platform.Infrastructure.Repository
             };
         }
 
-        public async Task<AddStudentToClassResponse> AddStudentToClassAsync(AddStudentToClassDto addToClass, CancellationToken token)
+        public async Task<AddStudentToClassResponse> AddStudentToClassAsync(ELearningClass eClass, AddStudentToClassDto addToClass, CancellationToken token)
         {
-            var eClass = await _platformDb
-                .ELearningClasses
-                .Include(pr=>pr.Subjects)
-                .AsSplitQuery()
-                .Where(pr => pr.ELearningClassID == addToClass.ClassID)
-                .FirstOrDefaultAsync(cancellationToken: token)
-                ?? throw new NotFoundException("Class not found");
-
             var usersToAdd = await _platformDb.UserInformations
                 .Include(pr => pr.Account)
                 .Where(u => addToClass.UsersToAdd.Contains(u.AccountID))
@@ -70,8 +64,6 @@ namespace ELearning_Platform.Infrastructure.Repository
 
             eClass.Students.AddRange(usersToAdd);
 
-            //await _platformDb.SaveChangesAsync(token);
-
             return new AddStudentToClassResponse()
             {
                 AddedUsers = usersToAdd,
@@ -80,23 +72,11 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         }
 
-        public async Task<AddStudentToClassResponse> AddUsersToClassSubjectAsync(IList<string> usersToAdd, Guid ClassID, CancellationToken token)
+        public async Task<AddStudentToClassResponse> AddUsersToClassSubjectAsync(List<Subject> subjects, IList<string> usersToAdd, CancellationToken token)
         {
-            var getSubject = await
-                _platformDb
-                .Subjects
-                .Where(pr => pr.ClassID == ClassID)
-                .ToListAsync(token);
 
-            if (getSubject.Count == 0)
-            {
-                return new AddStudentToClassResponse()
-                {
-                    IsSuccess = false,
-                };
-            }
             var list = new List<StudentSubject>();
-            foreach (var subject in getSubject)
+            foreach (var subject in subjects)
             {
                 foreach (var user in usersToAdd)
                 {
@@ -177,7 +157,6 @@ namespace ELearning_Platform.Infrastructure.Repository
                 teacherInfo = (teacherData.FirstName, teacherData.Surname);
             }
 
-
             var subject = new Subject()
             {
                 ClassID = classID,
@@ -192,15 +171,31 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         }
 
+        public async Task<Pagination<Lesson>> GetLessonsBySubjectAsync(string subjectID, PaginationModelDto paginationModelDto, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
 
-       
+        public async Task<Lesson> GetLessonByIDAsync(string lessonID, string subjectID, CancellationToken token)
+        {
+            if (!Guid.TryParse(lessonID, out var id) || !Guid.TryParse(subjectID, out var subjectId))
+            {
+                throw new NotFoundException("Invalid LessonID or Subject");
+            }
+            return await _platformDb
+                .Lessons
+                .Include(x => x.LessonMaterials)
+                .Where(pr => pr.LessonID == id && pr.SubjectID == subjectId)
+                .FirstOrDefaultAsync(token) ?? throw new NotFoundException("Not Found Lesson");
+        }
+
         public async Task<Subject> FindSubjectByTeacherIDAsync(string TeacherID, CancellationToken token)
         {
             return await _platformDb.Subjects.Where(pr => pr.TeacherID == TeacherID).FirstOrDefaultAsync(token)
                 ?? throw new NotFoundException("Invalid Teacher ID");
         }
 
-        public async Task<ELearningClass> FindClassByIdAsync(string id, CancellationToken token)
+        public async Task<ELearningClass?> FindClassWithStudentsByIdAsync(string id, CancellationToken token)
         {
             if (!Guid.TryParse(id, out var classID))
             {
@@ -209,8 +204,8 @@ namespace ELearning_Platform.Infrastructure.Repository
             return await _platformDb.ELearningClasses.
                 Where(pr => pr.ELearningClassID == classID)
                 .Include(pr => pr.Students)
-                .FirstOrDefaultAsync(token) ??
-                throw new NotFoundException("Invalid class id");
+                .FirstOrDefaultAsync(token);
+                
         }
 
         public async Task<Subject> FindSubjectByIDAsync(string subjectID, CancellationToken cancellationToken)
@@ -224,6 +219,22 @@ namespace ELearning_Platform.Infrastructure.Repository
                 .Where(pr => pr.SubjectId == id)
                 .FirstOrDefaultAsync(cancellationToken) ??
                 throw new NotFoundException("Subject Not Found");
+        }
+
+        public async Task<List<Subject>> FindSubjectByClassIDAsync(Guid classId, CancellationToken token)
+        {
+            return await _platformDb
+                .Subjects
+                .Where(pr => pr.ClassID == classId)
+                .ToListAsync(token);
+        }
+
+        public async Task<ELearningClass?> FindClassByClassIDAsync(Guid classId, CancellationToken token)
+        {
+            return await _platformDb
+                .ELearningClasses
+                .Where(pr => pr.ELearningClassID == classId)
+                .FirstOrDefaultAsync(token);
         }
     }
 }

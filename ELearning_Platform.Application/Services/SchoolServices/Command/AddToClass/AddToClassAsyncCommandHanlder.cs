@@ -29,17 +29,34 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
                 return TypedResults.Forbid();
             }
 
-            var result = await _schoolRepository.AddStudentToClassAsync(request, cancellationToken);
-            if (!result.IsSuccess) 
+            var getClass = await _schoolRepository.FindClassByClassIDAsync(request.ClassID, cancellationToken);
+            if (getClass == null)
+            {
+                return TypedResults.ValidationProblem(new Dictionary<string, string[]>
+                {
+                    {"error", ["problem with database"] }
+                });
+            }
+
+            var result = await _schoolRepository.AddStudentToClassAsync(getClass, request, cancellationToken);
+            if (!result.IsSuccess)
                 return TypedResults.ValidationProblem(new Dictionary<string, string[]>
             {
                 {"error", ["problem with database"] }
             });
 
+            var getSubject = await _schoolRepository.FindSubjectByClassIDAsync(request.ClassID, cancellationToken);
+            if (getSubject.Count <= 0)
+            {
+                return TypedResults.ValidationProblem(new Dictionary<string, string[]>
+                {
+                    {"error", ["Invalid Class ID"] }
+                });
+            }
             var toClass = await _schoolRepository
-                .AddUsersToClassSubjectAsync(request.UsersToAdd, request.ClassID, cancellationToken);
-            
-            if(!toClass.IsSuccess) 
+                .AddUsersToClassSubjectAsync(getSubject, request.UsersToAdd, cancellationToken);
+
+            if (!toClass.IsSuccess)
                 return TypedResults.ValidationProblem(new Dictionary<string, string[]>
             {
                 {"error", ["problem with database"] }
@@ -62,7 +79,7 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
 
             await _notificaitonRepository
                 .CreateMoreThanOneNotificationAsync(
-                    currentUser: (currentUser.EmailAddress, currentUser.UserID),notifications, cancellationToken);
+                    currentUser: (currentUser.EmailAddress, currentUser.UserID), notifications, cancellationToken);
 
             return TypedResults.Ok();
         }
