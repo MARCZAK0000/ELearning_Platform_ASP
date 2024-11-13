@@ -5,6 +5,8 @@ using ELearning_Platform.Infrastructure.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddToClass
 {
@@ -12,12 +14,12 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
         (ISchoolRepository schoolRepository,
         INotificaitonRepository notificaitonRepository,
         IUserContext userContext)
-        : IRequestHandler<AddToClassAsyncCommand, Results<Ok, ValidationProblem, UnauthorizedHttpResult, ForbidHttpResult>>
+        : IRequestHandler<AddToClassAsyncCommand, Results<Ok, ValidationProblem, NotFound<ProblemDetails>, ForbidHttpResult>>
     {
         private readonly ISchoolRepository _schoolRepository = schoolRepository;
         private readonly INotificaitonRepository _notificaitonRepository = notificaitonRepository;
         private readonly IUserContext _userContext = userContext;
-        public async Task<Results<Ok, ValidationProblem, UnauthorizedHttpResult, ForbidHttpResult>> Handle(AddToClassAsyncCommand request, CancellationToken cancellationToken)
+        public async Task<Results<Ok, ValidationProblem,NotFound<ProblemDetails>, ForbidHttpResult>> Handle(AddToClassAsyncCommand request, CancellationToken cancellationToken)
         {
 
             var currentUser = _userContext.GetCurrentUser();
@@ -32,36 +34,33 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
             var getClass = await _schoolRepository.FindClassByClassIDAsync(request.ClassID, cancellationToken);
             if (getClass == null)
             {
-                return TypedResults.ValidationProblem(new Dictionary<string, string[]>
+                return TypedResults.NotFound(new ProblemDetails
                 {
-                    {"error", ["problem with database"] }
+                    Title = "Cannot Found Class By Class ID",
+                    Status = (int)HttpStatusCode.NotFound,
                 });
+                
             }
 
             var result = await _schoolRepository.AddStudentToClassAsync(getClass, request, cancellationToken);
             if (!result.IsSuccess)
                 return TypedResults.ValidationProblem(new Dictionary<string, string[]>
             {
-                {"error", ["problem with database"] }
+                {"error", ["Cannot add students to database"] }
             });
 
             var getSubject = await _schoolRepository.FindSubjectByClassIDAsync(request.ClassID, cancellationToken);
-            if (getSubject.Count <= 0)
+            if (getSubject != null && getSubject.Count > 0)
             {
-                return TypedResults.ValidationProblem(new Dictionary<string, string[]>
+                var toClass = await _schoolRepository
+                    .AddUsersToClassSubjectAsync(getSubject, request.UsersToAdd, cancellationToken);
+
+                if (!toClass.IsSuccess)
+                    return TypedResults.ValidationProblem(new Dictionary<string, string[]>
                 {
-                    {"error", ["Invalid Class ID"] }
+                    {"error", ["problem with database"] }
                 });
             }
-            var toClass = await _schoolRepository
-                .AddUsersToClassSubjectAsync(getSubject, request.UsersToAdd, cancellationToken);
-
-            if (!toClass.IsSuccess)
-                return TypedResults.ValidationProblem(new Dictionary<string, string[]>
-            {
-                {"error", ["problem with database"] }
-            });
-
 
             var notifications = new List<CreateNotificationDto>();
 
