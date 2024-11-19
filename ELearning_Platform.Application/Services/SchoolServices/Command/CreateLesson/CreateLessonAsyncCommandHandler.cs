@@ -76,6 +76,8 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateL
                  .CreateMoreThanOneNotificationAsync(
                      currentUser: (currentUser.EmailAddress, currentUser.UserID), notifications, cancellationToken);
 
+
+
             return TypedResults.Ok(true);
 
         }
