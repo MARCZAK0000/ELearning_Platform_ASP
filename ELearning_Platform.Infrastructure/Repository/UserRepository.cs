@@ -127,6 +127,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                 .UserInformations
                 .Include(pr => pr.Account)
                 .Include(pr => pr.Address)
+                .AsSplitQuery()
                 .Where(pr => pr.AccountID == userID)
                 .FirstOrDefaultAsync(cancellationToken: token)
                 ?? throw new NotFoundException("Not Found");

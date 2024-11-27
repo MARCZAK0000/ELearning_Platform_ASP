@@ -19,5 +19,6 @@ namespace ELearning_Platform.API.Controller
         [HttpPost("create")]
         public async Task<IActionResult> CreatTest([FromBody] CreateTestAsyncCommand request, CancellationToken token)
             => Ok(await _mediator.Send(request, token));
+
     }
 } 

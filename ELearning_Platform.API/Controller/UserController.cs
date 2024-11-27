@@ -24,7 +24,7 @@ namespace ELearning_Platform.API.Controller
             return Ok(result);
         }
 
-        [HttpGet("informations/all")]
+        [HttpGet("all")]
         public async Task<IActionResult> GetInfromationsAboutAllUsers([FromQuery] GetInfromationsAboutAllUsersAsyncQuery request, CancellationToken token) => 
             Ok(await _mediator.Send(request: request, cancellationToken: token));
 
