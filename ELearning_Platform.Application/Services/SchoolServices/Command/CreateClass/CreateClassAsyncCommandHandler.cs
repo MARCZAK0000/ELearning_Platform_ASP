@@ -6,6 +6,8 @@ using ELearning_Platform.Domain.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Http;
 using ELearning_Platform.Infrastructure.Services.SchoolServices.Command.CreateClass;
+using ELearning_Platform.Domain.ErrorResponses;
+using System.Security.Claims;
 
 namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateClass
 {
@@ -22,16 +24,13 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateC
             if (!user.IsInRole(nameof(AuthorizationRole.moderator)) &&
                     !user.IsInRole(nameof(AuthorizationRole.admin)))
             {
-                return TypedResults.Forbid();
+                return TypedResults.Forbid(ErrorCodesResponse.ForbidError());
             }
 
             var result = await _schoolRepository.CreateClassAsync(request, cancellationToken);
 
             return result.IsCreated? TypedResults.Ok(result): 
-                TypedResults.ValidationProblem(new Dictionary<string, string[]> 
-                { 
-                    { "error", ["Cannot Add Class"] } 
-                });
+                TypedResults.ValidationProblem(ErrorCodesResponse.ValidationProblemResponse("Cannot Add Class"));
         }
     }
 }

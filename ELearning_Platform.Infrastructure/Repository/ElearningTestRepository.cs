@@ -3,6 +3,7 @@ using ELearning_Platform.Domain.Exceptions;
 using ELearning_Platform.Domain.Models.ELearningTestModel;
 using ELearning_Platform.Domain.Models.Pagination;
 using ELearning_Platform.Domain.Repository;
+using ELearning_Platform.Domain.Response.ElearningTest;
 using ELearning_Platform.Domain.Response.Pagination;
 using ELearning_Platform.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
@@ -69,15 +70,13 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         }
 
-        public async Task<Test> FindTestByIdAsync(string testId, CancellationToken token)
+        public async Task<Test?> FindTestByIdAsync(string testId, CancellationToken token)
         {
             if (!Guid.TryParse(testId, out var test)) throw new BadRequestException("Invalid TestID");
 
             return await _platformDb.Tests
                 .Where(pr => pr.TestID == test)
-                .FirstOrDefaultAsync(token)
-                ??
-                throw new NotFoundException("Test Not Found");
+                .FirstOrDefaultAsync(token);
         }
 
         public async Task<Pagination<Test>> FindTestsByTeacherIDAsync(string teacherID,
@@ -134,6 +133,11 @@ namespace ELearning_Platform.Infrastructure.Repository
                 .SetTotalCount(findTestBase.Count)
                 .Build();
 
+        }
+
+        public async Task<TestScoreResponse> DoTestAsync(string userID,Test test, DoTestModelDto testModelDto, CancellationToken token)
+        {
+            throw new NotImplementedException();
         }
     }
 }

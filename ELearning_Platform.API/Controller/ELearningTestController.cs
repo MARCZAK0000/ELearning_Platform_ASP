@@ -1,3 +1,6 @@
+using Azure.Storage.Sas;
+using ELearning_Platform.Application.Services.ELearningTestServices.Query.GetTest;
+using ELearning_Platform.Application.Services.ELearningTestServices.Query.GetTestsBySubjectID;
 using ELearning_Platform.Application.Services.SchoolServices.Command.CreateTest;
 using ELearning_Platform.Domain.Enitities;
 using ELearning_Platform.Infrastructure.AuthPolicy;
@@ -20,5 +23,13 @@ namespace ELearning_Platform.API.Controller
         public async Task<IActionResult> CreatTest([FromBody] CreateTestAsyncCommand request, CancellationToken token)
             => Ok(await _mediator.Send(request, token));
 
+        [Authorize(Policy = PolicyConstant.RequireStudent)]
+        [HttpGet("find/test/byid")]
+        public async Task<IActionResult> FindTestByID([FromQuery] GetTestByIDAsyncQuery request, CancellationToken token)
+            => Ok(await _mediator.Send(request,token));
+
+        [Authorize(Policy=PolicyConstant.RequireStudent)]
+        public async Task<IActionResult> FindTestsBySubjectID([FromQuery] FindTestsBySubjectIDAsyncQuery request, CancellationToken token)
+            =>Ok(await _mediator.Send(request,token));
     }
 } 

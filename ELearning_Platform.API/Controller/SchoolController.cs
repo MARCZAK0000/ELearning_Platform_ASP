@@ -1,5 +1,6 @@
 ﻿using ELearning_Platform.Application.Services.SchoolServices.Command.AddSubject;
 using ELearning_Platform.Application.Services.SchoolServices.Command.CreateLesson;
+using ELearning_Platform.Application.Services.SchoolServices.Query.LessonByID;
 using ELearning_Platform.Infrastructure.AuthPolicy;
 using ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddToClass;
 using ELearning_Platform.Infrastructure.Services.SchoolServices.Command.CreateClass;
@@ -39,5 +40,10 @@ namespace ELearning_Platform.API.Controller
             command.Materials = materials;
             return Ok(await _mediator.Send(request: command, cancellationToken: cancellationToken));
         }
+
+        [Authorize(Policy =PolicyConstant.RequireStudent)]
+        [HttpGet("class/subject/lesson/find/id")]
+        public async Task<IActionResult> GetLessonByID([FromForm] GetLessonByIDAsyncQuery request, CancellationToken token)
+            => Ok(await _mediator.Send(request, cancellationToken: token));
     }
 }

@@ -15,12 +15,15 @@ namespace ELearning_Platform.Infrastructure.Repository
         (PlatformDb platformDb,
         UserManager<Account> userManager) : ISchoolRepository
     {
+
+        #region Dependecy Properties
         private readonly PlatformDb _platformDb = platformDb;
-
         private readonly UserManager<Account> _userManager = userManager;
+        #endregion
 
+        #region Commands Method
         public async Task<CreateClassResponse> CreateClassAsync
-            (CreateClassDto createClass, CancellationToken token)
+        (CreateClassDto createClass, CancellationToken token)
         {
 
             var newClass = new ELearningClass()
@@ -171,12 +174,16 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         }
 
+
+        #endregion
+
+        #region Query Method
         public async Task<Pagination<Lesson>> GetLessonsBySubjectAsync(string subjectID, PaginationModelDto paginationModelDto, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Lesson> GetLessonByIDAsync(string lessonID, string subjectID, CancellationToken token)
+        public async Task<Lesson?> FindLessonByIDAsync(string lessonID, string subjectID, CancellationToken token)
         {
             if (!Guid.TryParse(lessonID, out var id) || !Guid.TryParse(subjectID, out var subjectId))
             {
@@ -186,7 +193,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                 .Lessons
                 .Include(x => x.LessonMaterials)
                 .Where(pr => pr.LessonID == id && pr.SubjectID == subjectId)
-                .FirstOrDefaultAsync(token) ?? throw new NotFoundException("Not Found Lesson");
+                .FirstOrDefaultAsync(token);
         }
 
         public async Task<Subject> FindSubjectByTeacherIDAsync(string TeacherID, CancellationToken token)
@@ -205,7 +212,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                 Where(pr => pr.ELearningClassID == classID)
                 .Include(pr => pr.Students)
                 .FirstOrDefaultAsync(token);
-                
+
         }
 
         public async Task<Subject> FindSubjectByIDAsync(string subjectID, CancellationToken cancellationToken)
@@ -236,5 +243,8 @@ namespace ELearning_Platform.Infrastructure.Repository
                 .Where(pr => pr.ELearningClassID == classId)
                 .FirstOrDefaultAsync(token);
         }
+
+        #endregion
+
     }
 }

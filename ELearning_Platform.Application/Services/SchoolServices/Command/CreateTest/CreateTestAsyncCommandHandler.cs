@@ -1,4 +1,5 @@
 ﻿using ELearning_Platform.Domain.Authorization;
+using ELearning_Platform.Domain.ErrorResponses;
 using ELearning_Platform.Domain.Models.Notification;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Infrastructure.Authorization;
@@ -30,7 +31,7 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateT
                 (getSubject.TeacherID != currentUser.UserID && 
                     currentUser.IsInRole(nameof(AuthorizationRole.moderator))))
             {
-                return TypedResults.Forbid();
+                return TypedResults.Forbid(ErrorCodesResponse.ForbidError());
             }
 
             var result = await _testRepository
@@ -38,13 +39,11 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateT
 
 
             var findClass = await _schoolRepository.FindClassWithStudentsByIdAsync(getSubject.ClassID.ToString(), cancellationToken);
-
-            var notifications = new List<CreateNotificationDto>();
-
             if(findClass is null || findClass.Students is null)
             {
                 return TypedResults.Ok();
             }
+            var notifications = new List<CreateNotificationDto>();
 
             foreach (var item in findClass.Students)
             {

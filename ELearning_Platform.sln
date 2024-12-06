@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ELearning_Platform.Infrastr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E_LearningPlatform.UnitTest", "E_LearningPlatform.UnitTest\E_LearningPlatform.UnitTest.csproj", "{3B2577F4-24BC-4C37-82B7-64A7CE01B626}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ELearningPlatformDb", "ELearningPlatformDb\ELearningPlatformDb.sqlproj", "{C3FCFD8B-6F32-41C6-930F-B79621A2DCC6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,12 @@ Global
 		{3B2577F4-24BC-4C37-82B7-64A7CE01B626}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B2577F4-24BC-4C37-82B7-64A7CE01B626}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B2577F4-24BC-4C37-82B7-64A7CE01B626}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3FCFD8B-6F32-41C6-930F-B79621A2DCC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3FCFD8B-6F32-41C6-930F-B79621A2DCC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3FCFD8B-6F32-41C6-930F-B79621A2DCC6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C3FCFD8B-6F32-41C6-930F-B79621A2DCC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3FCFD8B-6F32-41C6-930F-B79621A2DCC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3FCFD8B-6F32-41C6-930F-B79621A2DCC6}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

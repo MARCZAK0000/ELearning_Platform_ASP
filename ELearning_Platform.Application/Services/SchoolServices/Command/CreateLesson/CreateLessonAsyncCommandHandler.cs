@@ -1,4 +1,5 @@
 ﻿using ELearning_Platform.Domain.Authorization;
+using ELearning_Platform.Domain.ErrorResponses;
 using ELearning_Platform.Domain.Models.Notification;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Infrastructure.Authorization;
@@ -42,10 +43,9 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateL
                 ? subjectInfo.TeacherID : currentUser.UserID, subject: subjectInfo,
                 createLessonDto: request, token: cancellationToken);
 
-            if (result is null) return TypedResults.ValidationProblem(new Dictionary<string, string[]>
-            {
-                {"error", ["Cannot create Lesson"] }
-            });
+            if (result is null) 
+                return TypedResults.ValidationProblem(
+                    ErrorCodesResponse.ValidationProblemResponse("Cannot create Lesson"));
 
             if(request.Materials != null)
             {
@@ -75,8 +75,6 @@ namespace ELearning_Platform.Application.Services.SchoolServices.Command.CreateL
             await _notificaitonRepository
                  .CreateMoreThanOneNotificationAsync(
                      currentUser: (currentUser.EmailAddress, currentUser.UserID), notifications, cancellationToken);
-
-
 
             return TypedResults.Ok(true);
 

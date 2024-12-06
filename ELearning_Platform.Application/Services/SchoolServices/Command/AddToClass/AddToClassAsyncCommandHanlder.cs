@@ -1,4 +1,5 @@
 ﻿using ELearning_Platform.Domain.Authorization;
+using ELearning_Platform.Domain.ErrorResponses;
 using ELearning_Platform.Domain.Models.Notification;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Infrastructure.Authorization;
@@ -19,7 +20,7 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
         private readonly ISchoolRepository _schoolRepository = schoolRepository;
         private readonly INotificaitonRepository _notificaitonRepository = notificaitonRepository;
         private readonly IUserContext _userContext = userContext;
-        public async Task<Results<Ok, ValidationProblem,NotFound<ProblemDetails>, ForbidHttpResult>> Handle(AddToClassAsyncCommand request, CancellationToken cancellationToken)
+        public async Task<Results<Ok, ValidationProblem, NotFound<ProblemDetails>, ForbidHttpResult>> Handle(AddToClassAsyncCommand request, CancellationToken cancellationToken)
         {
 
             var currentUser = _userContext.GetCurrentUser();
@@ -28,26 +29,22 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
                 && !currentUser.IsInRole(nameof(AuthorizationRole.admin))
                     && !currentUser.IsInRole(nameof(AuthorizationRole.headTeacher)))
             {
-                return TypedResults.Forbid();
+                return TypedResults.Forbid(ErrorCodesResponse.ForbidError());
             }
 
             var getClass = await _schoolRepository.FindClassByClassIDAsync(request.ClassID, cancellationToken);
             if (getClass == null)
             {
-                return TypedResults.NotFound(new ProblemDetails
-                {
-                    Title = "Cannot Found Class By Class ID",
-                    Status = (int)HttpStatusCode.NotFound,
-                });
+                return TypedResults.NotFound(
+                    ErrorCodesResponse.GenerateErrorResponse(ErrorCode.NotFound, 
+                    "Cannot Found Class By Class ID"));
                 
             }
 
             var result = await _schoolRepository.AddStudentToClassAsync(getClass, request, cancellationToken);
             if (!result.IsSuccess)
-                return TypedResults.ValidationProblem(new Dictionary<string, string[]>
-            {
-                {"error", ["Cannot add students to database"] }
-            });
+                return TypedResults.ValidationProblem(ErrorCodesResponse
+                        .ValidationProblemResponse("Cannot add students to database"));
 
             var getSubject = await _schoolRepository.FindSubjectByClassIDAsync(request.ClassID, cancellationToken);
             if (getSubject != null && getSubject.Count > 0)
@@ -56,10 +53,8 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
                     .AddUsersToClassSubjectAsync(getSubject, request.UsersToAdd, cancellationToken);
 
                 if (!toClass.IsSuccess)
-                    return TypedResults.ValidationProblem(new Dictionary<string, string[]>
-                {
-                    {"error", ["problem with database"] }
-                });
+                    return TypedResults.ValidationProblem(ErrorCodesResponse
+                        .ValidationProblemResponse("problem with database"));
             }
 
             var notifications = new List<CreateNotificationDto>();

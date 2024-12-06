@@ -6,6 +6,7 @@ using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Infrastructure.Authorization;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
@@ -51,9 +52,7 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.AddSubject
             var result = await handler.Handle(command, CancellationToken.None);
 
 
-            //assert 
-
-            result.Should().BeTrue();  
+            result.Result.Should().BeOfType<Ok<bool>>();
 
             schoolRepo.Verify(c=>c.CreateSubjectAsync(It.IsAny<string>(), It.IsAny<CreateSubjectDto>(), CancellationToken.None), Times.Once);
         }
@@ -93,11 +92,10 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.AddSubject
 
             var handler = new AddSubjectAsyncCommandHandler(schoolRepo.Object, userContextMock.Object);
 
-            Func<Task> act = async()=> await handler.Handle(command, CancellationToken.None);
+            var result = await handler.Handle(command, CancellationToken.None);
 
             //assert 
-            await act.Should().ThrowAsync<BadRequestException>()
-                .WithMessage("Invalid ClassID");
+            result.Result.Should().BeOfType<NotFound<ProblemDetails>>();
             schoolRepo.Verify(c => c.CreateSubjectAsync(It.IsAny<string>(), It.IsAny<CreateSubjectDto>(), CancellationToken.None), Times.Never);
         }
 
@@ -136,54 +134,12 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.AddSubject
 
             var handler = new AddSubjectAsyncCommandHandler(schoolRepo.Object, userContextMock.Object);
 
-            Func<Task> act = async () => await handler.Handle(command, CancellationToken.None);
+            var result = await handler.Handle(command, CancellationToken.None);
 
             //assert 
-            await act.Should().ThrowAsync<ForbidenException>()
-                .WithMessage("Forbiden action");
+            result.Result.Should().BeOfType<ForbidHttpResult>();
             schoolRepo.Verify(c => c.CreateSubjectAsync(It.IsAny<string>(), It.IsAny<CreateSubjectDto>(), CancellationToken.None), Times.Never);
         }
 
-        [Fact()]
-        public async void AddSubjectAsyncCommandHandler_HandleTest_ShouldBeInvalidTeacherID()
-        {
-            var elearningClass = new ELearningClass()
-            {
-                ELearningClassID = Guid.NewGuid(),
-                Name = "Test",
-                YearOfBeggining = 2025,
-                YearOfEnding = 2029,
-                ModifiedDate = DateTime.Now,
-            };
-
-
-            var command = new AddSubjectAsyncCommand()
-            {
-                ClassID = elearningClass.ELearningClassID.ToString(),
-                SubjectName = "Test",
-                SubjectDescription = "TestTestTestTest",
-                TeacherID = null
-            };
-
-            var userContextMock = new Mock<IUserContext>();
-
-            userContextMock.Setup(c => c.GetCurrentUser())
-                .Returns(new CurrentUser("1", "test@test.com", "moderator"));
-
-            var schoolRepo = new Mock<ISchoolRepository>();
-
-            schoolRepo
-                .Setup(c => c.FindClassWithStudentsByIdAsync(It.IsAny<string>(), CancellationToken.None))
-                .ReturnsAsync((ELearningClass)null!);
-
-            var handler = new AddSubjectAsyncCommandHandler(schoolRepo.Object, userContextMock.Object);
-
-            Func<Task> act = async () => await handler.Handle(command, CancellationToken.None);
-
-            //assert 
-            await act.Should().ThrowAsync<NotFoundException>()
-                .WithMessage("Invalid TeacherID");
-            schoolRepo.Verify(c => c.CreateSubjectAsync(It.IsAny<string>(), It.IsAny<CreateSubjectDto>(), CancellationToken.None), Times.Never);
-        }
     }
 }

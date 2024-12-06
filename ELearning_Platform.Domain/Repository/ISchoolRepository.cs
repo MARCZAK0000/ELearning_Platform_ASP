@@ -22,7 +22,7 @@ namespace ELearning_Platform.Domain.Repository
 
         Task<Subject> FindSubjectByIDAsync(string id, CancellationToken token);
 
-        Task<Lesson> GetLessonByIDAsync(string lessonID, string subjectID, CancellationToken token);
+        Task<Lesson?> FindLessonByIDAsync(string lessonID, string subjectID, CancellationToken token);
 
         Task<List<Subject>> FindSubjectByClassIDAsync(Guid classId,  CancellationToken token);  
         
