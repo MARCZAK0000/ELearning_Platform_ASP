@@ -29,6 +29,7 @@ namespace ELearning_Platform.API.Controller
             => Ok(await _mediator.Send(request,token));
 
         [Authorize(Policy=PolicyConstant.RequireStudent)]
+        [HttpGet("find/test/bysubject")]
         public async Task<IActionResult> FindTestsBySubjectID([FromQuery] FindTestsBySubjectIDAsyncQuery request, CancellationToken token)
             =>Ok(await _mediator.Send(request,token));
     }

@@ -1,5 +1,6 @@
 ﻿using ELearning_Platform.Application.Services.AccountServices.Command.RefreshToken;
 using ELearning_Platform.Application.Services.AccountServices.Command.SignIn;
+using ELearning_Platform.Application.Services.AccountServices.Command.SignOut;
 using ELearning_Platform.Domain.Response.AccountResponse;
 using ELearning_Platform.Infrastructure.Services.AccountServices.Command.Register;
 using MediatR;
@@ -45,6 +46,12 @@ namespace ELearning_Platform.API.Controller
                 Role = user!.FindFirst(pr => pr.Type == ClaimTypes.Role)!.Value
             }));
             
-        } 
+        }
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost("signout")]
+        public async Task<IActionResult> SignOut(CancellationToken token)
+        {
+            return Ok(await _mediator.Send(new SignOutAccountAsyncCommand(), token));
+        }
     }
 }

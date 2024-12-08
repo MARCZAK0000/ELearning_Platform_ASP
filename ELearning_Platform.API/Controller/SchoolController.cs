@@ -31,7 +31,8 @@ namespace ELearning_Platform.API.Controller
         [Authorize(Policy = PolicyConstant.RequireTeacher)]
         [HttpPost("class/subject")]
         public async Task<IActionResult> CreateSubject([FromBody] AddSubjectAsyncCommand command, CancellationToken cancellationToken)
-            => Ok(await _mediator.Send(request: command, cancellationToken: cancellationToken)); [Authorize(Policy = PolicyConstant.RequireTeacher)]
+            => Ok(await _mediator.Send(request: command, cancellationToken: cancellationToken));
+
 
         [Authorize(Policy = PolicyConstant.RequireTeacher)]
         [HttpPost("class/subject/lesson")]
@@ -41,7 +42,7 @@ namespace ELearning_Platform.API.Controller
             return Ok(await _mediator.Send(request: command, cancellationToken: cancellationToken));
         }
 
-        [Authorize(Policy =PolicyConstant.RequireStudent)]
+        [Authorize(Policy = PolicyConstant.RequireStudent)]
         [HttpGet("class/subject/lesson/find/id")]
         public async Task<IActionResult> GetLessonByID([FromForm] GetLessonByIDAsyncQuery request, CancellationToken token)
             => Ok(await _mediator.Send(request, cancellationToken: token));

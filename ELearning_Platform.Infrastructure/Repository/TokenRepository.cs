@@ -15,42 +15,49 @@ namespace ELearning_Platform.Infrastructure.Repository
 {
     public class TokenRepository(IHttpContextAccessor httpContext, AuthenticationSettings authenticationSettings, Action<HttpOnlyCookieOptions> cookieOptions = null) : ITokenRepository
     {
-        private readonly IHttpContextAccessor _httpContext = httpContext;
-        private readonly AuthenticationSettings _authenticationSettings = authenticationSettings;
+        #region Properties
+            private readonly IHttpContextAccessor _httpContext = httpContext;
+            private readonly AuthenticationSettings _authenticationSettings = authenticationSettings;
+        #endregion
 
-        public Task<string> GenerateTokenAsync(ClaimsInformations tokenInformations, IList<string> roles)
-        {
-            var claims = new List<Claim>()
-            {
-                new(type: ClaimTypes.NameIdentifier, value: tokenInformations.AccountId),
-                new(type: ClaimTypes.Email, value: tokenInformations.Email),
-                new(type: ClaimTypes.HomePhone, value: tokenInformations.PhoneNumber),
-                new(type: ClaimTypes.Surname, value: tokenInformations.Surname),
-                new(type: ClaimTypes.Country, value: tokenInformations.Country),
-                new(type: "City", value: tokenInformations.City),
-            };
+        #region Token Generation
 
-            foreach (var item in roles)
+            public Task<string> GenerateTokenAsync(ClaimsInformations tokenInformations, IList<string> roles)
             {
-                claims.Add(
-                    new Claim(type: ClaimTypes.Role, value: item));
+                var claims = new List<Claim>()
+                {
+                    new(type: ClaimTypes.NameIdentifier, value: tokenInformations.AccountId),
+                    new(type: ClaimTypes.Email, value: tokenInformations.Email),
+                    new(type: ClaimTypes.HomePhone, value: tokenInformations.PhoneNumber),
+                    new(type: ClaimTypes.Surname, value: tokenInformations.Surname),
+                    new(type: ClaimTypes.Country, value: tokenInformations.Country),
+                    new(type: "City", value: tokenInformations.City),
+                };
+
+                foreach (var item in roles)
+                {
+                    claims.Add(
+                        new Claim(type: ClaimTypes.Role, value: item));
+                }
+
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.Key));
+                var credentails = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var expireDays = DateTime.UtcNow.AddHours(_authenticationSettings.ExpireMinutes);
+
+                var token = new JwtSecurityToken(
+                    issuer: _authenticationSettings.Issure,
+                    audience: _authenticationSettings.Audience,
+                    claims: claims,
+                    notBefore: null,
+                    expires: expireDays,
+                    credentails);
+
+                return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
             }
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.Key));
-            var credentails = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expireDays = DateTime.UtcNow.AddHours(_authenticationSettings.ExpireMinutes);
+        #endregion
 
-            var token = new JwtSecurityToken(
-                issuer: _authenticationSettings.Issure,
-                audience: _authenticationSettings.Audience,
-                claims: claims,
-                notBefore: null,
-                expires: expireDays,
-                credentails);
-
-            return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
-        }
-
+        #region Token operations
         public string GetRefreshTokenFromContext()
         {
             var context = _httpContext.HttpContext;
@@ -89,5 +96,15 @@ namespace ELearning_Platform.Infrastructure.Repository
                 SameSite = SameSiteMode.Lax
             });
         }
+        public void RemoveCookies()
+        {
+            var context = _httpContext.HttpContext!;
+            var cfg = new HttpOnlyCookieOptions();
+            cookieOptions?.Invoke(cfg);
+
+            context.Response.Cookies.Delete(cfg.AccessTokenName);
+            context.Response.Cookies.Delete(cfg.RefreshTokenName);
+        }
+        #endregion
     }
 }

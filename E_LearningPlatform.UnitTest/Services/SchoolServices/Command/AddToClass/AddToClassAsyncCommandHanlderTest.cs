@@ -4,7 +4,6 @@ using ELearning_Platform.Domain.Models.SchoolModel;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Infrastructure.Authorization;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -61,11 +60,11 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
                     ClassName = elearningClass.Name
                 });
 
-            schoolRepository.Setup(c=>c.FindSubjectByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None)) 
+            schoolRepository.Setup(c => c.FindSubjectByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None))
                 .ReturnsAsync(subject);
 
 
-            schoolRepository.Setup(c => c.AddUsersToClassSubjectAsync(It.IsAny<List<Subject>>(), command.UsersToAdd,CancellationToken.None))
+            schoolRepository.Setup(c => c.AddUsersToClassSubjectAsync(It.IsAny<List<Subject>>(), command.UsersToAdd, CancellationToken.None))
                 .ReturnsAsync(new Domain.Response.ClassResponse.AddStudentToClassResponse
                 {
                     IsSuccess = true
@@ -73,15 +72,15 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
 
             var notificationMock = new Mock<INotificaitonRepository>();
 
-            (string email, string userName) currentUser = ("test@test.com", "test"); 
+            (string email, string userName) currentUser = ("test@test.com", "test");
 
             notificationMock.Setup(pr => pr.CreateMoreThanOneNotificationAsync(
                 currentUser,
-                It.IsAny<List<CreateNotificationDto>>(), 
+                It.IsAny<List<CreateNotificationDto>>(),
                 CancellationToken.None));
 
             var handler = new AddToClassAsyncCommandHanlder
-                (schoolRepository.Object, notificationMock.Object,userContextMock.Object);
+                (schoolRepository.Object, notificationMock.Object, userContextMock.Object);
 
 
             var result = await handler.Handle(command, CancellationToken.None);
@@ -165,7 +164,7 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
             schoolRepository.Verify(c => c.AddUsersToClassSubjectAsync(It.IsAny<List<Subject>>(), It.IsAny<IList<string>>(), CancellationToken.None), Times.Once);
 
             notificationMock
-                .Verify(c=>c.CreateMoreThanOneNotificationAsync
+                .Verify(c => c.CreateMoreThanOneNotificationAsync
                     (It.IsAny<(string, string)>(), It.IsAny<List<CreateNotificationDto>>(), CancellationToken.None), Times.Never);
         }
 
@@ -319,7 +318,7 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
             var notificationMock = new Mock<INotificaitonRepository>();
 
             var handler = new AddToClassAsyncCommandHanlder
-                (schoolRepository.Object, notificationMock.Object,userContextMock.Object);
+                (schoolRepository.Object, notificationMock.Object, userContextMock.Object);
 
 
             var result = await handler.Handle(command, CancellationToken.None);
@@ -333,11 +332,11 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
                 }, options => options.ExcludingMissingMembers());
 
             schoolRepository
-                .Verify(c=>c.FindClassByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None), Times.Once());  
+                .Verify(c => c.FindClassByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None), Times.Once());
             schoolRepository
-                .Verify(c=>c.AddStudentToClassAsync(It.IsAny<ELearningClass>(), It.IsAny<AddStudentToClassDto>(), CancellationToken.None), Times.Never());
+                .Verify(c => c.AddStudentToClassAsync(It.IsAny<ELearningClass>(), It.IsAny<AddStudentToClassDto>(), CancellationToken.None), Times.Never());
             schoolRepository
-                .Verify(c=>c.FindSubjectByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None), Times.Never());
+                .Verify(c => c.FindSubjectByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None), Times.Never());
             schoolRepository
                 .Verify(c => c.AddUsersToClassSubjectAsync(It.IsAny<List<Subject>>(), It.IsAny<IList<string>>(), CancellationToken.None), Times.Never);
             notificationMock
@@ -348,7 +347,7 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
         [Fact()]
         public async Task AddToClassAsyncCommandHanlder_HandleTest_Forbiden()
         {
-            
+
             var command = new AddToClassAsyncCommand()
             {
                 ClassID = Guid.NewGuid(),
@@ -362,10 +361,10 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
 
             var schoolRepository = new Mock<ISchoolRepository>();
 
-          
+
             var notificationMock = new Mock<INotificaitonRepository>();
 
-            
+
             var handler = new AddToClassAsyncCommandHanlder
                 (schoolRepository.Object, notificationMock.Object, userContextMock.Object);
 

@@ -1,3 +1,4 @@
+using ELearning_Platform.API.Azurite;
 using ELearning_Platform.API.MainHubs;
 using ELearning_Platform.API.Middleware;
 using ELearning_Platform.API.QueueService;
@@ -8,6 +9,7 @@ using ELearning_Platform.Infrastructure.Database;
 using ELearning_Platform.Infrastructure.Services;
 using ELearning_Platform.Infrastructure.StorageAccount;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 namespace ELearning_Platform.API
 {
@@ -33,12 +35,24 @@ namespace ELearning_Platform.API
             builder.Services.AddSwagger();
             builder.Services.AddHostedService<EmailNotificationBackgroundService>(); //Add BackGroundService 
             builder.Services.AddHostedService<ImageHandlerBackgroundService>();
+            builder.Services.AddSingleton<RunAzurite>();
+            builder.Services.AddOptions<AzuriteOptions>()
+               .BindConfiguration(nameof(AzuriteOptions))
+               .ValidateDataAnnotations()
+               .ValidateOnStart();
+
+            builder.Services.AddSingleton(sp
+                => sp.GetRequiredService<IOptions<AzuriteOptions>>().Value);
+
             var app = builder.Build();
             var scope = app.Services.CreateScope();
             var seeder = scope.ServiceProvider.GetRequiredService<SeederDb>();
             await seeder.GenerateRolesAsync();
 
+
+
             //create test enviromet for seeder
+
             if (app.Environment.IsEnvironment("Test"))
             {
                 var testScope = app.Services.CreateScope();
@@ -48,16 +62,17 @@ namespace ELearning_Platform.API
             //Remove blob storage from test enviroment 
             else
             {
+                if (app.Environment.IsDevelopment())
+                {
+                    var emulator = app.Services.GetRequiredService<RunAzurite>();
+                    await emulator.RunEmulator();
+
+                    app.UseSwagger();
+                    app.UseSwaggerUI();
+                }
                 var blobStorage = app.Services.GetRequiredService<BlobStorageTable>();
                 await blobStorage.CreateTable();
             }
-
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
             //app.UseHttpsRedirection();
