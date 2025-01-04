@@ -20,7 +20,6 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.CreateLess
         {
             var simpleClass = new ELearningClass()
             {
-                ELearningClassID = Guid.NewGuid(),
                 Name = "Test",
                 ModifiedDate = DateTime.Now,
                 YearOfBeggining = 2024,
@@ -36,7 +35,6 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.CreateLess
             {
                 ClassID = simpleClass.ELearningClassID,
                 Name = "TestSubject",
-                SubjectId = Guid.NewGuid(),
                 TeacherID = "1",
                 ModifiedDate = DateTime.Now
             };
@@ -69,7 +67,6 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.CreateLess
                 .ReturnsAsync(new Lesson
                 {
                     LessonDate = command.LessonDate,
-                    LessonID = Guid.NewGuid(),
                     LessonTopic = command.LessonName,
                     LessonDescription = command.LessonDescription,
                     TeacherID = "1",
@@ -103,7 +100,7 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.CreateLess
                         (It.IsAny<string>(), It.IsAny<Subject>(), It.IsAny<CreateLessonDto>(), CancellationToken.None), Times.Once);
 
             lessonMaterialsMock.Verify(c
-                => c.AddLessonMaterialsAsync(It.IsAny<List<IFormFile>>(), It.IsAny<Guid>(), CancellationToken.None), Times.Never);
+                => c.AddLessonMaterialsAsync(It.IsAny<List<IFormFile>>(), It.IsAny<string>(), CancellationToken.None), Times.Never);
 
             schoolRepositoryMock.Verify(c
                => c.FindClassWithStudentsByIdAsync(It.IsAny<string>(), CancellationToken.None), Times.Once);
@@ -119,7 +116,6 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.CreateLess
         {
             var simpleClass = new ELearningClass()
             {
-                ELearningClassID = Guid.NewGuid(),
                 Name = "Test",
                 ModifiedDate = DateTime.Now,
                 YearOfBeggining = 2024,
@@ -130,7 +126,6 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.CreateLess
             {
                 ClassID = simpleClass.ELearningClassID,
                 Name = "TestSubject",
-                SubjectId = Guid.NewGuid(),
                 TeacherID = "1",
                 ModifiedDate = DateTime.Now
             };
@@ -163,7 +158,6 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.CreateLess
                 .ReturnsAsync(new Lesson
                 {
                     LessonDate = command.LessonDate,
-                    LessonID = Guid.NewGuid(),
                     LessonTopic = command.LessonName,
                     LessonDescription = command.LessonDescription,
                     TeacherID = "1",
@@ -196,7 +190,7 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.CreateLess
                     c.CreateLessonAsync
                         (It.IsAny<string>(), It.IsAny<Subject>(), It.IsAny<CreateLessonDto>(), CancellationToken.None), Times.Once);
             lessonMaterialsMock.Verify(c
-                => c.AddLessonMaterialsAsync(It.IsAny<List<IFormFile>>(), It.IsAny<Guid>(), CancellationToken.None), Times.Never);
+                => c.AddLessonMaterialsAsync(It.IsAny<List<IFormFile>>(), It.IsAny<string>(), CancellationToken.None), Times.Never);
 
             schoolRepositoryMock.Verify(c
                => c.FindClassWithStudentsByIdAsync(It.IsAny<string>(), CancellationToken.None), Times.Once);
@@ -212,7 +206,6 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.CreateLess
         {
             var simpleClass = new ELearningClass()
             {
-                ELearningClassID = Guid.NewGuid(),
                 Name = "Test",
                 ModifiedDate = DateTime.Now,
                 YearOfBeggining = 2024,
@@ -223,7 +216,6 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.CreateLess
             {
                 ClassID = simpleClass.ELearningClassID,
                 Name = "TestSubject",
-                SubjectId = Guid.NewGuid(),
                 TeacherID = "2",
                 ModifiedDate = DateTime.Now
             };
@@ -265,7 +257,7 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.CreateLess
                         (It.IsAny<string>(), It.IsAny<Subject>(), It.IsAny<CreateLessonDto>(), CancellationToken.None), Times.Never);
 
             lessonMaterialsMock.Verify(c
-                => c.AddLessonMaterialsAsync(It.IsAny<List<IFormFile>>(), It.IsAny<Guid>(), CancellationToken.None), Times.Never);
+                => c.AddLessonMaterialsAsync(It.IsAny<List<IFormFile>>(), It.IsAny<string>(), CancellationToken.None), Times.Never);
 
             schoolRepositoryMock.Verify(c
                => c.FindClassWithStudentsByIdAsync(It.IsAny<string>(), CancellationToken.None), Times.Never);
@@ -281,7 +273,6 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.CreateLess
         {
             var simpleClass = new ELearningClass()
             {
-                ELearningClassID = Guid.NewGuid(),
                 Name = "Test",
                 ModifiedDate = DateTime.Now,
                 YearOfBeggining = 2024,
@@ -292,7 +283,6 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.CreateLess
             {
                 ClassID = simpleClass.ELearningClassID,
                 Name = "TestSubject",
-                SubjectId = Guid.NewGuid(),
                 TeacherID = "1",
                 ModifiedDate = DateTime.Now
             };
@@ -350,7 +340,7 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.CreateLess
                         (It.IsAny<string>(), It.IsAny<Subject>(), It.IsAny<CreateLessonDto>(), CancellationToken.None), Times.Once);
 
             lessonMaterialsMock.Verify(c
-                => c.AddLessonMaterialsAsync(It.IsAny<List<IFormFile>>(), It.IsAny<Guid>(), CancellationToken.None), Times.Never);
+                => c.AddLessonMaterialsAsync(It.IsAny<List<IFormFile>>(), It.IsAny<string>(), CancellationToken.None), Times.Never);
 
             schoolRepositoryMock.Verify(c
                => c.FindClassWithStudentsByIdAsync(It.IsAny<string>(), CancellationToken.None), Times.Never);

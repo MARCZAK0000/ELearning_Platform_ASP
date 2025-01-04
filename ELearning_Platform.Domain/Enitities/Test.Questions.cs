@@ -2,9 +2,9 @@
 {
     public class Questions
     {
-        public Guid QuestionId { get; set; }
+        public string QuestionId { get; set; } = Guid.NewGuid().ToString();
 
-        public Guid TestId { get; set; }
+        public string TestId { get; set; } = Guid.NewGuid().ToString();
 
         public string QuestionText { get; set; }
 

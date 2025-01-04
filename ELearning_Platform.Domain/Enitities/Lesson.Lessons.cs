@@ -2,7 +2,7 @@
 {
     public class Lesson
     {
-        public Guid LessonID { get; set; }
+        public string LessonID { get; set; } = Guid.NewGuid().ToString();
 
         public string LessonTopic { get; set; }
 
@@ -14,13 +14,13 @@
 
         public virtual List<LessonMaterials>? LessonMaterials { get; set; }
 
-        public Guid ClassID { get; set; }
+        public string ClassID { get; set; }
 
         public virtual ELearningClass Class { get; set; }
 
         public virtual Subject Subject { get; set; } 
 
-        public Guid SubjectID { get; set; } 
+        public string SubjectID { get; set; } 
 
         public DateOnly LessonDate { get; set; }
     }

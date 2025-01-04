@@ -16,6 +16,12 @@ namespace ELearning_Platform.Domain.Repository
 
         Task<Pagination<Test>> FindTestsBySubjectIDAsync(string subjectID, PaginationModelDto paginationModelDto, CancellationToken token);
 
-        Task<TestScoreResponse> DoTestAsync(string userID, Test test, DoTestModelDto testModelDto, CancellationToken token);
+        Task<bool> CommitTestAsync(string userID, Test test, DoTestModelDto testModelDto, CancellationToken token);
+
+        Task<int> CheckTestAnswersAsync();
+
+        Task<TestScoreResponse> CalculateTestScoreAsync();
+
+        //Task<>
     }
 }

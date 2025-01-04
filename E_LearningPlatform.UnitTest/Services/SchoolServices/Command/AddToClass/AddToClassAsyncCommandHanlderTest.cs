@@ -19,7 +19,7 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
         {
             var elearningClass = new ELearningClass()
             {
-                ELearningClassID = Guid.NewGuid(),
+                ELearningClassID = Guid.NewGuid().ToString(),
                 Name = "Test",
                 YearOfBeggining = 2025,
                 YearOfEnding = 2029,
@@ -39,7 +39,6 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
                 Name = "Test",
                 Description = "TestTest",
                 TeacherID = "1",
-                SubjectId = Guid.NewGuid(),
             } };
 
             var userContextMock = new Mock<IUserContext>();
@@ -49,7 +48,7 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
 
             var schoolRepository = new Mock<ISchoolRepository>();
 
-            schoolRepository.Setup(c => c.FindClassByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None))
+            schoolRepository.Setup(c => c.FindClassByClassIDAsync(It.IsAny<string>(), CancellationToken.None))
                 .ReturnsAsync(elearningClass);
 
             schoolRepository.Setup(c => c.AddStudentToClassAsync(elearningClass, command, CancellationToken.None))
@@ -60,7 +59,7 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
                     ClassName = elearningClass.Name
                 });
 
-            schoolRepository.Setup(c => c.FindSubjectByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None))
+            schoolRepository.Setup(c => c.FindSubjectByClassIDAsync(It.IsAny<string>(), CancellationToken.None))
                 .ReturnsAsync(subject);
 
 
@@ -95,7 +94,6 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
         {
             var elearningClass = new ELearningClass()
             {
-                ELearningClassID = Guid.NewGuid(),
                 Name = "Test",
                 YearOfBeggining = 2025,
                 YearOfEnding = 2029,
@@ -115,7 +113,6 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
                 Name = "Test",
                 Description = "TestTest",
                 TeacherID = "1",
-                SubjectId = Guid.NewGuid(),
             } };
 
             var userContextMock = new Mock<IUserContext>();
@@ -125,7 +122,7 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
 
             var schoolRepository = new Mock<ISchoolRepository>();
 
-            schoolRepository.Setup(c => c.FindClassByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None))
+            schoolRepository.Setup(c => c.FindClassByClassIDAsync(It.IsAny<string>(), CancellationToken.None))
                 .ReturnsAsync(elearningClass);
 
             schoolRepository.Setup(c => c.AddStudentToClassAsync(elearningClass, command, CancellationToken.None))
@@ -136,7 +133,7 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
                     ClassName = elearningClass.Name
                 });
 
-            schoolRepository.Setup(c => c.FindSubjectByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None))
+            schoolRepository.Setup(c => c.FindSubjectByClassIDAsync(It.IsAny<string>(), CancellationToken.None))
                 .ReturnsAsync(subject);
 
 
@@ -173,7 +170,6 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
         {
             var elearningClass = new ELearningClass()
             {
-                ELearningClassID = Guid.NewGuid(),
                 Name = "Test",
                 YearOfBeggining = 2025,
                 YearOfEnding = 2029,
@@ -194,7 +190,7 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
 
             var schoolRepository = new Mock<ISchoolRepository>();
 
-            schoolRepository.Setup(c => c.FindClassByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None))
+            schoolRepository.Setup(c => c.FindClassByClassIDAsync(It.IsAny<string>(), CancellationToken.None))
                 .ReturnsAsync(elearningClass);
 
             schoolRepository.Setup(c => c.AddStudentToClassAsync(elearningClass, command, CancellationToken.None))
@@ -205,7 +201,7 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
                     ClassName = elearningClass.Name
                 });
 
-            schoolRepository.Setup(c => c.FindSubjectByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None))
+            schoolRepository.Setup(c => c.FindSubjectByClassIDAsync(It.IsAny<string>(), CancellationToken.None))
                 .ReturnsAsync((List<Subject>)null!);
 
             var notificationMock = new Mock<INotificaitonRepository>();
@@ -232,7 +228,6 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
         {
             var elearningClass = new ELearningClass()
             {
-                ELearningClassID = Guid.NewGuid(),
                 Name = "Test",
                 YearOfBeggining = 2025,
                 YearOfEnding = 2029,
@@ -252,7 +247,7 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
 
             var schoolRepository = new Mock<ISchoolRepository>();
 
-            schoolRepository.Setup(c => c.FindClassByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None))
+            schoolRepository.Setup(c => c.FindClassByClassIDAsync(It.IsAny<string>(), CancellationToken.None))
                 .ReturnsAsync(elearningClass);
 
             schoolRepository.Setup(c => c.AddStudentToClassAsync(elearningClass, command, CancellationToken.None))
@@ -287,7 +282,7 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
                     (It.IsAny<List<Subject>>(), It.IsAny<IList<string>>(), CancellationToken.None), Times.Never);
 
             schoolRepository
-               .Verify(c => c.FindSubjectByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None), Times.Never());
+               .Verify(c => c.FindSubjectByClassIDAsync(It.IsAny<string>(), CancellationToken.None), Times.Never());
 
             notificationMock
                .Verify(c => c.CreateMoreThanOneNotificationAsync
@@ -300,7 +295,6 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
 
             var command = new AddToClassAsyncCommand()
             {
-                ClassID = Guid.NewGuid(),
                 UsersToAdd = ["1", "2"]
             };
 
@@ -312,7 +306,7 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
 
             var schoolRepository = new Mock<ISchoolRepository>();
 
-            schoolRepository.Setup(c => c.FindClassByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None))
+            schoolRepository.Setup(c => c.FindClassByClassIDAsync(It.IsAny<string>(), CancellationToken.None))
                 .ReturnsAsync((ELearningClass)null!);
 
             var notificationMock = new Mock<INotificaitonRepository>();
@@ -332,11 +326,11 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
                 }, options => options.ExcludingMissingMembers());
 
             schoolRepository
-                .Verify(c => c.FindClassByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None), Times.Once());
+                .Verify(c => c.FindClassByClassIDAsync(It.IsAny<string>(), CancellationToken.None), Times.Once());
             schoolRepository
                 .Verify(c => c.AddStudentToClassAsync(It.IsAny<ELearningClass>(), It.IsAny<AddStudentToClassDto>(), CancellationToken.None), Times.Never());
             schoolRepository
-                .Verify(c => c.FindSubjectByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None), Times.Never());
+                .Verify(c => c.FindSubjectByClassIDAsync(It.IsAny<string>(), CancellationToken.None), Times.Never());
             schoolRepository
                 .Verify(c => c.AddUsersToClassSubjectAsync(It.IsAny<List<Subject>>(), It.IsAny<IList<string>>(), CancellationToken.None), Times.Never);
             notificationMock
@@ -350,7 +344,6 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
 
             var command = new AddToClassAsyncCommand()
             {
-                ClassID = Guid.NewGuid(),
                 UsersToAdd = ["1", "2"]
             };
 
@@ -374,11 +367,11 @@ namespace ELearning_Platform.Infrastructure.Services.SchoolServices.Command.AddT
             result.Result.Should().BeOfType<ForbidHttpResult>();
 
             schoolRepository
-                .Verify(c => c.FindClassByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None), Times.Never());
+                .Verify(c => c.FindClassByClassIDAsync(It.IsAny<string>(), CancellationToken.None), Times.Never());
             schoolRepository
                 .Verify(c => c.AddStudentToClassAsync(It.IsAny<ELearningClass>(), It.IsAny<AddStudentToClassDto>(), CancellationToken.None), Times.Never());
             schoolRepository
-                .Verify(c => c.FindSubjectByClassIDAsync(It.IsAny<Guid>(), CancellationToken.None), Times.Never());
+                .Verify(c => c.FindSubjectByClassIDAsync(It.IsAny<string>(), CancellationToken.None), Times.Never());
             schoolRepository
                 .Verify(c => c.AddUsersToClassSubjectAsync(It.IsAny<List<Subject>>(), It.IsAny<IList<string>>(), CancellationToken.None), Times.Never);
             notificationMock

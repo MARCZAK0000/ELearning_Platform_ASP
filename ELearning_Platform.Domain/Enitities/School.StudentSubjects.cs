@@ -6,7 +6,7 @@
 
         public string StudentID { get; set; }   
 
-        public Guid SubjectID { get; set; }
+        public string SubjectID { get; set; }
 
         public Subject Subject { get; set; }
 

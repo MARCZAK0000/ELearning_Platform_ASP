@@ -13,20 +13,22 @@ using Microsoft.EntityFrameworkCore;
 namespace ELearning_Platform.Infrastructure.Repository
 {
     public class NotificationReposiotry(PlatformDb platformDb, 
-        IUserContext userContext, INotificationGateway notificationGateway) : INotificaitonRepository
+        IUserContext userContext, INotificationGateway notificationGateway, IUserRepository userRepository): INotificaitonRepository
     {
         private readonly IUserContext _userContext = userContext;
         private readonly PlatformDb _platformDb = platformDb;
         private readonly INotificationGateway _notificationGateway = notificationGateway;
+        private readonly IUserRepository userRepository = userRepository;
 
         public async Task<bool> CreateMoreThanOneNotificationAsync((string email, string userId) currentUser, List<CreateNotificationDto> list, CancellationToken token)
         {
+            var sender = await userRepository.GetOnlyUserInformationsAsync(currentUser.userId, token);
             var notifications = list.Select(noti=>new Notification()
             {
                 Title = noti.Title,
                 Description = noti.Describtion,
                 RecipientID = noti.ReciverID,
-                SenderID = currentUser.userId,
+                Sender = sender,
             }).ToList();
 
             await _platformDb.Notifications.AddRangeAsync(notifications, token);
@@ -59,14 +61,11 @@ namespace ELearning_Platform.Infrastructure.Repository
         public async Task<bool> ReadNotificationAsync(ReadNotificationDto readNotification, CancellationToken token)
         {
             var user = _userContext.GetCurrentUser();
-            if (!Guid.TryParse(readNotification.NotificationID, out var id))
-            {
-                return false;
-            }
+          
             var findNotification = await
                 _platformDb
                 .Notifications
-                .Where(pr => pr.NotficaitonID == id && pr.RecipientID == user.UserID)
+                .Where(pr => pr.NotficaitonID == readNotification.NotificationID && pr.RecipientID == user.UserID)
                 .ExecuteUpdateAsync((s => s.SetProperty(pr => pr.IsUnread, false)),token);
 
             return findNotification > 0;
@@ -74,13 +73,10 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         public async Task<GetNotificationModelDto> ShowNotification(string notificationID, CancellationToken token)
         {
-            if(!Guid.TryParse(notificationID, out var id))
-            {
-                return new GetNotificationModelDto { };
-            }
+          
 
             return await _platformDb.Notifications
-                .Where(pr => pr.NotficaitonID == id)
+                .Where(pr => pr.NotficaitonID == notificationID)
                 .Select(pr => new GetNotificationModelDto
                 {
                     NotificationID = pr.NotficaitonID,

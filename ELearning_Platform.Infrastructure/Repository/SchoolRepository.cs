@@ -104,18 +104,12 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         public async Task<Lesson> CreateLessonAsync(string userId, Subject findSubject, CreateLessonDto createLessonDto, CancellationToken token)
         {
-
-            if (!Guid.TryParse(createLessonDto.SubjectID, out var subjectID))
-            {
-                throw new BadRequestException("Invalid ClassID");
-            }
-
             findSubject.Lessons ??= [];
 
             var lesson = new Lesson
             {
                 ClassID = findSubject.ClassID,
-                SubjectID = subjectID,
+                SubjectID = createLessonDto.SubjectID,
                 LessonDate = createLessonDto.LessonDate,
                 LessonTopic = createLessonDto.LessonDescription,
                 LessonDescription = createLessonDto.LessonDescription,
@@ -125,19 +119,11 @@ namespace ELearning_Platform.Infrastructure.Repository
             await _platformDb.Lessons.AddAsync(lesson, token);
             await _platformDb.SaveChangesAsync(token);
 
-
-
             return lesson;
         }
 
         public async Task<bool> CreateSubjectAsync(string userID, CreateSubjectDto createSubjectDto, CancellationToken token)
         {
-
-            if (!Guid.TryParse(createSubjectDto.ClassID, out Guid classID))
-            {
-                throw new BadRequestException("Invalid class name");
-            }
-
             (string firstName, string surname) teacherInfo;
 
             if (string.IsNullOrEmpty(createSubjectDto.TeacherID))
@@ -162,7 +148,7 @@ namespace ELearning_Platform.Infrastructure.Repository
 
             var subject = new Subject()
             {
-                ClassID = classID,
+                ClassID = createSubjectDto.ClassID,
                 Name = createSubjectDto.SubjectName,
                 Description = createSubjectDto.SubjectDescription,
                 TeacherID = createSubjectDto.TeacherID ?? userID,
@@ -185,14 +171,11 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         public async Task<Lesson?> FindLessonByIDAsync(string lessonID, string subjectID, CancellationToken token)
         {
-            if (!Guid.TryParse(lessonID, out var id) || !Guid.TryParse(subjectID, out var subjectId))
-            {
-                throw new NotFoundException("Invalid LessonID or Subject");
-            }
+            
             return await _platformDb
                 .Lessons
                 .Include(x => x.LessonMaterials)
-                .Where(pr => pr.LessonID == id && pr.SubjectID == subjectId)
+                .Where(pr => pr.LessonID == lessonID && pr.SubjectID == subjectID)
                 .FirstOrDefaultAsync(token);
         }
 
@@ -204,12 +187,9 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         public async Task<ELearningClass?> FindClassWithStudentsByIdAsync(string id, CancellationToken token)
         {
-            if (!Guid.TryParse(id, out var classID))
-            {
-                throw new BadRequestException("Invalid guid");
-            }
+            
             return await _platformDb.ELearningClasses.
-                Where(pr => pr.ELearningClassID == classID)
+                Where(pr => pr.ELearningClassID == id)
                 .Include(pr => pr.Students)
                 .FirstOrDefaultAsync(token);
 
@@ -217,18 +197,15 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         public async Task<Subject> FindSubjectByIDAsync(string subjectID, CancellationToken cancellationToken)
         {
-            if (!Guid.TryParse(subjectID, out var id))
-            {
-                throw new BadRequestException("Invalid Guid");
-            }
+          
             return await _platformDb
                 .Subjects
-                .Where(pr => pr.SubjectId == id)
+                .Where(pr => pr.SubjectId == subjectID)
                 .FirstOrDefaultAsync(cancellationToken) ??
                 throw new NotFoundException("Subject Not Found");
         }
 
-        public async Task<List<Subject>> FindSubjectByClassIDAsync(Guid classId, CancellationToken token)
+        public async Task<List<Subject>> FindSubjectByClassIDAsync(string classId, CancellationToken token)
         {
             return await _platformDb
                 .Subjects
@@ -236,7 +213,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                 .ToListAsync(token);
         }
 
-        public async Task<ELearningClass?> FindClassByClassIDAsync(Guid classId, CancellationToken token)
+        public async Task<ELearningClass?> FindClassByClassIDAsync(string classId, CancellationToken token)
         {
             return await _platformDb
                 .ELearningClasses

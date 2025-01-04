@@ -24,7 +24,7 @@
 
         public virtual List<Subject>? TeacherSubjects { get; set; }
 
-        public Guid? ClassID {  get; set; }
+        public string? ClassID {  get; set; }
         
         public virtual ELearningClass? Class { get; set; }
 

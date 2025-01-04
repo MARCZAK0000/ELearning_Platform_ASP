@@ -8,7 +8,7 @@ namespace ELearning_Platform.Domain.Enitities
 {
     public class Notification
     {
-        public Guid NotficaitonID { get; set; }
+        public string NotficaitonID { get; set; } = Guid.NewGuid().ToString();
 
         public string Title { get; set; }   
 

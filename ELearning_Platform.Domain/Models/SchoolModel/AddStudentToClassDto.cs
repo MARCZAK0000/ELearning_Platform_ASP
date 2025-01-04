@@ -2,7 +2,7 @@
 {
     public class AddStudentToClassDto
     {
-        public Guid ClassID { get; set; }
+        public string ClassID { get; set; }
 
         public List<string> UsersToAdd { get; set; }
     }

@@ -6,7 +6,7 @@ namespace ELearning_Platform.Infrastructure.Hubs
     {
         public async Task SendNotification(List<string> users, string userID)
         {
-
+            
         }
     }
 }

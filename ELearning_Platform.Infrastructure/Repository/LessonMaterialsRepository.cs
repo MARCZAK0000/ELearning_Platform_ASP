@@ -15,7 +15,7 @@ namespace ELearning_Platform.Infrastructure.Repository
         private readonly BackgroundTask _backgroundTask = backgroundTask;
         private readonly IAzureHandlerQueue _azureHandlerQueue = azureHandlerQueue;
         private readonly PlatformDb _platformDb = platformDb;
-        public async Task<bool> AddLessonMaterialsAsync(List<IFormFile> files, Guid lessonID, CancellationToken token)
+        public async Task<bool> AddLessonMaterialsAsync(List<IFormFile> files, string lessonID, CancellationToken token)
         {
             var lessonMaterials = new List<LessonMaterials>();
 

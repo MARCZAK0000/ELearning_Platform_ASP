@@ -2,13 +2,13 @@
 {
     public class Grade
     {
-        public Guid GradeID { get; set; }
+        public string GradeID { get; set; } = Guid.NewGuid().ToString();
 
-        public Guid SubjectID { get; set; }
+        public string SubjectID { get; set; }
 
         public string StudentID { get; set; }
 
-        public Guid TestID { get; set; }
+        public string TestID { get; set; }
 
         public string GradeValue { get; set; }
 

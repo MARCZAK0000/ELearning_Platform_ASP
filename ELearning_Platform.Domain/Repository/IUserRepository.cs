@@ -11,6 +11,8 @@ namespace ELearning_Platform.Domain.Repository
     {
         Task<GetUserInformationsDto> GetUserInformationsAsync(string userID, CancellationToken token);
 
+        Task<UserInformations> GetOnlyUserInformationsAsync(string userID, CancellationToken token);
+
         Task<Pagination<GetUserInformationsDto>> GetAllUsersAsync(PaginationModelDto pagination, CancellationToken token);
 
         Task<bool> UpdateUserInfomrationsAsync(string userID, UpdateUserInformationsDto updateUserInformations, CancellationToken token);

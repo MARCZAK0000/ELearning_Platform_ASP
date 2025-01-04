@@ -1,5 +1,4 @@
 using ELearning_Platform.Domain.Enitities;
-using ELearning_Platform.Domain.Exceptions;
 using ELearning_Platform.Domain.Models.ELearningTestModel;
 using ELearning_Platform.Domain.Models.Pagination;
 using ELearning_Platform.Domain.Repository;
@@ -22,12 +21,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             try
             {
 
-                if (!Guid.TryParse(createTestModel.SubjectID, out var subjectID))
-                {
-                    throw new BadRequestException("wrong subject ID");
-                }
-
-                test.SubjectID = subjectID;
+                test.SubjectID = createTestModel.SubjectID;
                 test.TestName = createTestModel.TestName;
                 test.TestLevel = createTestModel.TestLevel;
                 test.StartTime = createTestModel.StartTime;
@@ -50,7 +44,6 @@ namespace ELearning_Platform.Infrastructure.Repository
 
                     var answers = item.Answers?.Select(answer => new Answers
                     {
-                        AnswerId = Guid.NewGuid(),
                         AnswerText = answer.AnswerText,
                         QuestionId = que.QuestionId,
                         IsCorrect = answer.IsCorrect,
@@ -72,10 +65,9 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         public async Task<Test?> FindTestByIdAsync(string testId, CancellationToken token)
         {
-            if (!Guid.TryParse(testId, out var test)) throw new BadRequestException("Invalid TestID");
 
             return await _platformDb.Tests
-                .Where(pr => pr.TestID == test)
+                .Where(pr => pr.TestID == testId)
                 .FirstOrDefaultAsync(token);
         }
 
@@ -108,20 +100,17 @@ namespace ELearning_Platform.Infrastructure.Repository
         public async Task<Pagination<Test>> FindTestsBySubjectIDAsync(string subjectID, PaginationModelDto paginationModelDto, CancellationToken token)
         {
             var pagination = new PaginationBuilder<Test>();
-            if (Guid.TryParse(subjectID, out var subject))
-            {
-                throw new BadRequestException("Invalid GUID");
-            }
+
 
             var findTestBase = await _platformDb
                 .Tests
-                .Include(pr=>pr.Questions!)
-                .ThenInclude(pr=>pr.Answers)
+                .Include(pr => pr.Questions!)
+                .ThenInclude(pr => pr.Answers)
                 .AsSplitQuery()
-                .Where(pr => pr.SubjectID == subject)
-                .Skip((paginationModelDto.PageSize*paginationModelDto.PageIndex)+1)
+                .Where(pr => pr.SubjectID == subjectID)
+                .Skip((paginationModelDto.PageSize * paginationModelDto.PageIndex) + 1)
                 .Take(paginationModelDto.PageSize)
-                .OrderBy(pr=>pr.StartTime)
+                .OrderBy(pr => pr.StartTime)
                 .ToListAsync(token);
 
             return pagination
@@ -135,7 +124,60 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         }
 
-        public async Task<TestScoreResponse> DoTestAsync(string userID,Test test, DoTestModelDto testModelDto, CancellationToken token)
+        public async Task<List<UserAnswers>> CommitTestAsync(string userID, string testID, DoTestModelDto testModelDto, CancellationToken token)
+        {
+            var userAnswers = new List<UserAnswers>();
+            foreach (var item in testModelDto.TestQuestions)
+            {
+                userAnswers.Add(new UserAnswers
+                {
+                    UserID = userID,
+                    TestID = testID,
+                    QuestionID = item.QuestionID,
+                    AnswerID = item.AnswerID,
+                });
+            }
+
+            await _platformDb.UserAnswers.AddRangeAsync(userAnswers, token);
+            return userAnswers;
+        }
+
+        public async Task<int> CheckTestAnswersAsync(string userID, string testID, List<UserAnswers> userAnswers, CancellationToken token)
+        {
+            var answers = await _platformDb
+                .Questions
+                .Where(pr => pr.TestId == testID)
+                .OrderBy(pr => pr.QuestionId)
+                .ToListAsync(token);
+
+
+
+            throw new NotImplementedException();
+        }
+        public async Task<IDictionary<Questions, Answers>> GetTestAsnwersAsync(string userID, string TestID, CancellationToken token)
+        {
+            var dictionary = new Dictionary<Questions, Answers>();
+
+            var getTest = await _platformDb
+                .Tests
+                .Where(pr => pr.TestID == TestID)
+                .Include(pr => pr.Questions)
+                .ToListAsync(token);
+
+            throw new NotImplementedException();
+
+        }
+        public Task<TestScoreResponse> CalculateTestScoreAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> CommitTestAsync(string userID, Test test, DoTestModelDto testModelDto, CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> CheckTestAnswersAsync()
         {
             throw new NotImplementedException();
         }

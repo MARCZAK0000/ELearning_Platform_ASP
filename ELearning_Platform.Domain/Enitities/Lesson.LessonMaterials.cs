@@ -2,7 +2,7 @@
 {
     public class LessonMaterials
     {
-        public Guid LessonMaterialID { get; set; }
+        public string LessonMaterialID { get; set; } = Guid.NewGuid().ToString();
 
         public string Name { get; set; }
 
@@ -10,6 +10,6 @@
 
         public virtual Lesson Lesson { get; set; }
 
-        public Guid LessonID { get; set; }
+        public string LessonID { get; set; }
     }
 }

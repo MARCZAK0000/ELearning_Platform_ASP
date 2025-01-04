@@ -2,9 +2,9 @@
 {
     public class Subject
     {
-        public Guid SubjectId { get; set; } 
+        public string SubjectId { get; set; } 
 
-        public Guid ClassID { get; set; }
+        public string ClassID { get; set; }
 
         public string Name { get; set; }
 

@@ -2,7 +2,7 @@
 {
     public class ELearningClass
     {
-        public Guid ELearningClassID { get; set; }
+        public string ELearningClassID { get; set; } = Guid.NewGuid().ToString();
 
         public string Name { get; set; }    
 

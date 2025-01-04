@@ -4,9 +4,9 @@ namespace ELearning_Platform.Domain.Enitities
 {
     public class Test
     {
-        public Guid TestID { get; set; }
+        public string TestID { get; set; } = Guid.NewGuid().ToString();
 
-        public Guid? SubjectID { get; set; }
+        public string? SubjectID { get; set; }
 
         public string TestName { get; set; }
 

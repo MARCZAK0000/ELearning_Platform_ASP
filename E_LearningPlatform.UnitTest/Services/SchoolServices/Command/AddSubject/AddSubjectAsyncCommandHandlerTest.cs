@@ -19,7 +19,6 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.AddSubject
         {
             var elearningClass = new ELearningClass()
             {
-                ELearningClassID = Guid.NewGuid(),
                 Name = "Test",
                 YearOfBeggining = 2025,
                 YearOfEnding = 2029,
@@ -63,7 +62,6 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.AddSubject
         {
             var elearningClass = new ELearningClass()
             {
-                ELearningClassID = Guid.NewGuid(),
                 Name = "Test",
                 YearOfBeggining = 2025,
                 YearOfEnding = 2029,
@@ -105,7 +103,6 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.AddSubject
         {
             var elearningClass = new ELearningClass()
             {
-                ELearningClassID = Guid.NewGuid(),
                 Name = "Test",
                 YearOfBeggining = 2025,
                 YearOfEnding = 2029,

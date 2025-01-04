@@ -1,10 +1,10 @@
 ﻿namespace ELearning_Platform.Domain.Enitities
 {
     public class Answers
-    {
-        public Guid AnswerId {  get; set; }
+    { 
+        public string AnswerId {  get; set; } = Guid.NewGuid().ToString();
 
-        public Guid QuestionId { get; set; }
+        public string QuestionId { get; set; } 
 
         public string AnswerText { get; set; }
 
