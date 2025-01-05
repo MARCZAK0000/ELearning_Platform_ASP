@@ -10,17 +10,17 @@ namespace ELearning_Platform.Domain.Repository
     {
         Task<Test> CreateTestAsync(string teacherID, CreateTestModel createTestModel, CancellationToken token);
 
-        Task<Test?> FindTestByIdAsync(string testId, CancellationToken token);
+        Task<Test> FindTestByIdAsync(string testId, CancellationToken token);
 
         Task<Pagination<Test>> FindTestsByTeacherIDAsync(string teacherID,bool isComplited, PaginationModelDto paginationModelDto, CancellationToken token);
 
         Task<Pagination<Test>> FindTestsBySubjectIDAsync(string subjectID, PaginationModelDto paginationModelDto, CancellationToken token);
 
-        Task<bool> CommitTestAsync(string userID, Test test, DoTestModelDto testModelDto, CancellationToken token);
+        Task<List<UserAnswers>> CommitTestAsync(string userID, string testID, DoTestModelDto testModelDto, CancellationToken token);
 
-        Task<int> CheckTestAnswersAsync();
+        Task<IDictionary<int, int>> CheckTestAnswersAsync(string testID, List<UserAnswers> userAnswers, CancellationToken token);
 
-        Task<TestScoreResponse> CalculateTestScoreAsync();
+        Task<TestScoreResponse> CalculateTestGradeAsync(IDictionary<int, int> score);
 
         //Task<>
     }

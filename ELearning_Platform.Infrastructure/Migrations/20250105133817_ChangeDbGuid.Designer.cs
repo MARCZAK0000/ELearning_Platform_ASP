@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ELearning_Platform.Infrastructure.Migrations
 {
     [DbContext(typeof(PlatformDb))]
-    [Migration("20241110122623_userAnswers")]
-    partial class userAnswers
+    [Migration("20250105133817_ChangeDbGuid")]
+    partial class ChangeDbGuid
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,8 +27,8 @@ namespace ELearning_Platform.Infrastructure.Migrations
 
             modelBuilder.Entity("ELearningClassUserInformations", b =>
                 {
-                    b.Property<Guid>("ListOfTeachingClassesELearningClassID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ListOfTeachingClassesELearningClassID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("TeachersAccountID")
                         .HasColumnType("nvarchar(450)");
@@ -113,9 +113,8 @@ namespace ELearning_Platform.Infrastructure.Migrations
 
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Answers", b =>
                 {
-                    b.Property<Guid>("AnswerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("AnswerId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AnswerText")
                         .IsRequired()
@@ -124,8 +123,9 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("QuestionId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("QuestionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("AnswerId");
 
@@ -136,9 +136,8 @@ namespace ELearning_Platform.Infrastructure.Migrations
 
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.ELearningClass", b =>
                 {
-                    b.Property<Guid>("ELearningClassID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ELearningClassID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
@@ -163,9 +162,8 @@ namespace ELearning_Platform.Infrastructure.Migrations
 
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Grade", b =>
                 {
-                    b.Property<Guid>("GradeID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("GradeID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("GradeValue")
                         .IsRequired()
@@ -178,11 +176,13 @@ namespace ELearning_Platform.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("SubjectID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("SubjectID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("TestID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("TestID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("GradeID");
 
@@ -195,14 +195,30 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.ToTable("Grade", "School");
                 });
 
+            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.GradeDetails", b =>
+                {
+                    b.Property<string>("GradeID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("GradePointsScore")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TestQuestionsCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("GradeID");
+
+                    b.ToTable("School", "GradeDetails");
+                });
+
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Lesson", b =>
                 {
-                    b.Property<Guid>("LessonID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("LessonID")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("ClassID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ClassID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateOnly>("LessonDate")
                         .HasColumnType("date");
@@ -215,8 +231,9 @@ namespace ELearning_Platform.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("SubjectID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("SubjectID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("TeacherID")
                         .IsRequired()
@@ -235,12 +252,12 @@ namespace ELearning_Platform.Infrastructure.Migrations
 
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.LessonMaterials", b =>
                 {
-                    b.Property<Guid>("LessonMaterialID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("LessonMaterialID")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("LessonID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("LessonID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -259,9 +276,8 @@ namespace ELearning_Platform.Infrastructure.Migrations
 
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Notification", b =>
                 {
-                    b.Property<Guid>("NotficaitonID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("NotficaitonID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -294,16 +310,16 @@ namespace ELearning_Platform.Infrastructure.Migrations
 
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Questions", b =>
                 {
-                    b.Property<Guid>("QuestionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("QuestionId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("QuestionText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TestId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("TestId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("QuestionId");
 
@@ -351,8 +367,9 @@ namespace ELearning_Platform.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("SubjectID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("SubjectID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("StudentSubjectId");
 
@@ -365,12 +382,12 @@ namespace ELearning_Platform.Infrastructure.Migrations
 
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Subject", b =>
                 {
-                    b.Property<Guid>("SubjectId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("SubjectId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("ClassID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ClassID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -398,9 +415,8 @@ namespace ELearning_Platform.Infrastructure.Migrations
 
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Test", b =>
                 {
-                    b.Property<Guid>("TestID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("TestID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
@@ -414,8 +430,8 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("SubjectID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("SubjectID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("TeacherID")
                         .HasColumnType("nvarchar(450)");
@@ -473,14 +489,18 @@ namespace ELearning_Platform.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserAnswerID"));
 
-                    b.Property<Guid?>("AnswerID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("AnswerID")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid?>("QuestionID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("GradeID")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TestID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("QuestionID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TestID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserID")
                         .IsRequired()
@@ -508,8 +528,8 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.Property<string>("AccountID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid?>("ClassID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ClassID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("EmailAddress")
                         .IsRequired()
@@ -690,6 +710,12 @@ namespace ELearning_Platform.Infrastructure.Migrations
 
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Grade", b =>
                 {
+                    b.HasOne("ELearning_Platform.Domain.Enitities.GradeDetails", "GradeDetails")
+                        .WithOne("Grade")
+                        .HasForeignKey("ELearning_Platform.Domain.Enitities.Grade", "GradeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ELearning_Platform.Domain.Enitities.UserInformations", "Student")
                         .WithMany("Grades")
                         .HasForeignKey("StudentID")
@@ -707,6 +733,8 @@ namespace ELearning_Platform.Infrastructure.Migrations
                         .HasForeignKey("TestID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("GradeDetails");
 
                     b.Navigation("Student");
 
@@ -950,6 +978,12 @@ namespace ELearning_Platform.Infrastructure.Migrations
                     b.Navigation("Students");
 
                     b.Navigation("Subjects");
+                });
+
+            modelBuilder.Entity("ELearning_Platform.Domain.Enitities.GradeDetails", b =>
+                {
+                    b.Navigation("Grade")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ELearning_Platform.Domain.Enitities.Lesson", b =>

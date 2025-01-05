@@ -13,6 +13,7 @@ namespace ELearning_Platform.Infrastructure.Database
 
         public DbSet<UserInformations> UserInformations { get; set; }
 
+
         //School
         public DbSet<Subject> Subjects { get; set; }
 
@@ -22,6 +23,7 @@ namespace ELearning_Platform.Infrastructure.Database
 
         public DbSet<StudentSubject> StudentSubjects { get; set; } //Many to many - temporaty table to student in subjects
 
+        public DbSet<GradeDetails> GradeDetails { get; set; }
         //Lesson
         public DbSet<Lesson> Lessons { get; set; }
 
@@ -269,6 +271,17 @@ namespace ELearning_Platform.Infrastructure.Database
 
 
                 
+            });
+
+            builder.Entity<GradeDetails>(options =>
+            {
+                options.ToTable("School", "GradeDetails");
+                options.HasKey(pr => pr.GradeID);
+
+                options.HasOne(pr => pr.Grade)
+                .WithOne(pr => pr.GradeDetails)
+                .HasForeignKey<Grade>(pr => pr.GradeID)
+                .OnDelete(DeleteBehavior.Cascade);
             });
             base.OnModelCreating(builder);
 

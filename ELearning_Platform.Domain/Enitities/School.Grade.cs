@@ -19,5 +19,7 @@
         public UserInformations Student { get; set; }
 
         public Test Test { get; set; }
+
+        public GradeDetails GradeDetails { get; set; }
     }
 }

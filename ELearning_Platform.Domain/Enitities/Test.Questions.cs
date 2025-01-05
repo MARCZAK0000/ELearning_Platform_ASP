@@ -4,7 +4,7 @@
     {
         public string QuestionId { get; set; } = Guid.NewGuid().ToString();
 
-        public string TestId { get; set; } = Guid.NewGuid().ToString();
+        public string TestId { get; set; }
 
         public string QuestionText { get; set; }
 

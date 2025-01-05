@@ -1,4 +1,5 @@
 using Azure.Storage.Sas;
+using ELearning_Platform.Application.CustomAttributes;
 using ELearning_Platform.Application.Services.ELearningTestServices.Query.GetTest;
 using ELearning_Platform.Application.Services.ELearningTestServices.Query.GetTestsBySubjectID;
 using ELearning_Platform.Application.Services.SchoolServices.Command.CreateTest;
@@ -19,6 +20,7 @@ namespace ELearning_Platform.API.Controller
         private readonly IMediator _mediator = mediator;
 
         [Authorize(Policy = PolicyConstant.RequireStudent)]
+        [Transaction]
         [HttpPost("create")]
         public async Task<IActionResult> CreatTest([FromBody] CreateTestAsyncCommand request, CancellationToken token)
             => Ok(await _mediator.Send(request, token));

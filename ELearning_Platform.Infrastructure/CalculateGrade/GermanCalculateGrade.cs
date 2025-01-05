@@ -4,7 +4,8 @@ namespace ELearning_Platform.Infrastructure.CalculateGrade
 {
     public class GermanCalculateGrade : ICalculateGradeBase
     {
-        public string CalculateGrade()
+        
+        public string CalculateGrade(IDictionary<int, int> score)
         {
             throw new NotImplementedException();
         }

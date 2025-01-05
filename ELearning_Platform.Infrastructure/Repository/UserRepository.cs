@@ -7,7 +7,6 @@ using ELearning_Platform.Domain.Order;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Domain.Response.Pagination;
 using ELearning_Platform.Domain.Response.UserReponse;
-using ELearning_Platform.Infrastructure.Authorization;
 using ELearning_Platform.Infrastructure.BackgroundStrategy;
 using ELearning_Platform.Infrastructure.Database;
 using Microsoft.AspNetCore.Http;
@@ -149,7 +148,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             return true;
         }
 
-        public async Task<bool> UpdateOrCreateImageProfile(string userID,IFormFile file, CancellationToken cancellationToken)
+        public async Task<bool> UpdateOrCreateImageProfile(string userID, IFormFile file, CancellationToken cancellationToken)
         {
             if (!_extension.Contains(Path.GetExtension(file.FileName)))
             {

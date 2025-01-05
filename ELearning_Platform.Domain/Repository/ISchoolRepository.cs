@@ -1,6 +1,7 @@
 ﻿using ELearning_Platform.Domain.Enitities;
 using ELearning_Platform.Domain.Models.SchoolModel;
 using ELearning_Platform.Domain.Response.ClassResponse;
+using ELearning_Platform.Domain.Response.SchoolResponse;
 
 namespace ELearning_Platform.Domain.Repository
 {
@@ -16,16 +17,19 @@ namespace ELearning_Platform.Domain.Repository
 
         Task<Lesson> CreateLessonAsync(string userID, Subject subject, CreateLessonDto createLessonDto, CancellationToken token);
 
-        Task<Subject> FindSubjectByTeacherIDAsync(string TeacherID, CancellationToken token);
+        Task<Subject?> FindSubjectByTeacherIDAsync(string TeacherID, CancellationToken token);
 
         Task<ELearningClass?> FindClassWithStudentsByIdAsync(string id, CancellationToken token);
 
-        Task<Subject> FindSubjectByIDAsync(string id, CancellationToken token);
+        Task<Subject?> FindSubjectByIDAsync(string id, CancellationToken token);
 
         Task<Lesson?> FindLessonByIDAsync(string lessonID, string subjectID, CancellationToken token);
 
         Task<List<Subject>> FindSubjectByClassIDAsync(string classId,  CancellationToken token);  
         
         Task<ELearningClass?> FindClassByClassIDAsync(string classId, CancellationToken token);
+
+        Task<ELearingClassDto?> FindInformationsAboutClassByClassIDAsync
+            (string classID, bool withStudents, bool withSubjecs, bool withTeachers, CancellationToken cancellationToken);
     }
 }

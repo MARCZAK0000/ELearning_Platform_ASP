@@ -1,4 +1,6 @@
+using ELearning_Platform.Domain.CalculateGrade;
 using ELearning_Platform.Domain.Enitities;
+using ELearning_Platform.Domain.Exceptions;
 using ELearning_Platform.Domain.Models.ELearningTestModel;
 using ELearning_Platform.Domain.Models.Pagination;
 using ELearning_Platform.Domain.Repository;
@@ -6,69 +8,126 @@ using ELearning_Platform.Domain.Response.ElearningTest;
 using ELearning_Platform.Domain.Response.Pagination;
 using ELearning_Platform.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace ELearning_Platform.Infrastructure.Repository
 {
     public class ELearningTestRepository
-        (PlatformDb platformDb) : IElearningTestRepository
+        (PlatformDb platformDb, ICalculateGradeFactory calculateGradeFactory) : IElearningTestRepository
     {
+        #region DI Properties
+
         private readonly PlatformDb _platformDb = platformDb;
+
+        private readonly ICalculateGradeFactory _calculateGradeFactory = calculateGradeFactory;
+        #endregion
+
+        #region Commit Methods
 
         public async Task<Test> CreateTestAsync(string teacherID, CreateTestModel createTestModel, CancellationToken token)
         {
-            Test test = new();
-            using var transaction = await _platformDb.Database.BeginTransactionAsync(token);
-            try
+            Test test = new()
             {
+                SubjectID = createTestModel.SubjectID,
+                TestName = createTestModel.TestName,
+                TestLevel = createTestModel.TestLevel,
+                StartTime = createTestModel.StartTime,
+                EndTime = createTestModel.EndTime,
+                Questions = [],
+                TeacherID = teacherID
+            };
 
-                test.SubjectID = createTestModel.SubjectID;
-                test.TestName = createTestModel.TestName;
-                test.TestLevel = createTestModel.TestLevel;
-                test.StartTime = createTestModel.StartTime;
-                test.EndTime = createTestModel.EndTime;
-                test.Questions = [];
-                test.TeacherID = teacherID;
+            await _platformDb.Tests.AddAsync(test, token);
 
-                await _platformDb.Tests.AddAsync(test, token);
-
-                foreach (var item in createTestModel.Questions)
+            foreach (var item in createTestModel.Questions)
+            {
+                var que = new Questions
                 {
-                    var que = new Questions
-                    {
-                        TestId = test.TestID,
-                        QuestionText = item.QuestionText,
-                        Answers = []
-                    };
+                    TestId = test.TestID,
+                    QuestionText = item.QuestionText,
+                    Answers = []
+                };
 
-                    await _platformDb.Questions.AddAsync(que, token);
+                await _platformDb.Questions.AddAsync(que, token);
 
-                    var answers = item.Answers?.Select(answer => new Answers
-                    {
-                        AnswerText = answer.AnswerText,
-                        QuestionId = que.QuestionId,
-                        IsCorrect = answer.IsCorrect,
-                    }) ?? [];
+                var answers = item.Answers?.Select(answer => new Answers
+                {
+                    AnswerText = answer.AnswerText,
+                    QuestionId = que.QuestionId,
+                    IsCorrect = answer.IsCorrect,
+                }) ?? [];
 
-                    await _platformDb.Answers.AddRangeAsync(answers, token);
-                }
-
-                await transaction.CommitAsync(token);
+                await _platformDb.Answers.AddRangeAsync(answers, token);
             }
-            catch (Exception err)
-            {
-                await transaction.RollbackAsync(token);
-                throw new Exception(err.Message);
-            }
+
             return test;
 
         }
 
-        public async Task<Test?> FindTestByIdAsync(string testId, CancellationToken token)
+        public async Task<List<UserAnswers>> CommitTestAsync(string userID, string testID, DoTestModelDto testModelDto, CancellationToken token)
+        {
+            var userAnswers = new List<UserAnswers>();
+            foreach (var item in testModelDto.TestQuestions)
+            {
+                userAnswers.Add(new UserAnswers
+                {
+                    UserID = userID,
+                    TestID = testID,
+                    QuestionID = item.QuestionID,
+                    AnswerID = item.AnswerID,
+                });
+            }
+
+            await _platformDb.UserAnswers.AddRangeAsync(userAnswers, token);
+            return userAnswers;
+        }
+
+        public async Task<IDictionary<int, int>> CheckTestAnswersAsync(string testID, List<UserAnswers> userAnswers, CancellationToken token)
+        {
+            //Correct answer for each question
+            IDictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+
+            //Find correct Questions and Answers
+            var questions = await _platformDb
+                .Questions
+                .Include(pr => pr.Answers)
+                .Where(pr => pr.TestId == testID)
+                .ToListAsync(token);
+
+            foreach (var question in questions)
+            {
+                foreach (var answers in question.Answers)
+                {
+                    if (answers.IsCorrect)
+                    {
+                        keyValuePairs.Add(question.QuestionId, answers.AnswerId);
+                    }
+                }
+            }
+            IList<bool> correctAnswer = [];
+            foreach (var item in userAnswers)
+            {
+
+                if (keyValuePairs.Where(pr => pr.Key == item.QuestionID && pr.Value == item.AnswerID).Any())
+                    correctAnswer.Add(true);
+                else
+                    correctAnswer.Add(false);
+            }
+
+            return new Dictionary<int, int>() 
+            { 
+                { correctAnswer.Count(pr => pr == true) / correctAnswer.Count * 100, correctAnswer.Count } 
+            };
+        }
+
+        #endregion
+        public async Task<Test> FindTestByIdAsync(string testId, CancellationToken token)
         {
 
             return await _platformDb.Tests
                 .Where(pr => pr.TestID == testId)
-                .FirstOrDefaultAsync(token);
+                .FirstOrDefaultAsync(token)
+                ?? throw new NotFoundException("Invalid Test Id");
         }
 
         public async Task<Pagination<Test>> FindTestsByTeacherIDAsync(string teacherID,
@@ -78,7 +137,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             var pagination = new PaginationBuilder<Test>();
             var findTestBase = _platformDb
                 .Tests
-                .Where(pr => pr.IsComplited == isComplited && pr.TeacherID.ToString() == teacherID);
+                .Where(pr => pr.IsComplited == isComplited && pr.TeacherID == teacherID);
 
             var findCount = await findTestBase.CountAsync(token);
 
@@ -124,62 +183,50 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         }
 
-        public async Task<List<UserAnswers>> CommitTestAsync(string userID, string testID, DoTestModelDto testModelDto, CancellationToken token)
-        {
-            var userAnswers = new List<UserAnswers>();
-            foreach (var item in testModelDto.TestQuestions)
-            {
-                userAnswers.Add(new UserAnswers
-                {
-                    UserID = userID,
-                    TestID = testID,
-                    QuestionID = item.QuestionID,
-                    AnswerID = item.AnswerID,
-                });
-            }
 
-            await _platformDb.UserAnswers.AddRangeAsync(userAnswers, token);
-            return userAnswers;
-        }
-
-        public async Task<int> CheckTestAnswersAsync(string userID, string testID, List<UserAnswers> userAnswers, CancellationToken token)
-        {
-            var answers = await _platformDb
-                .Questions
-                .Where(pr => pr.TestId == testID)
-                .OrderBy(pr => pr.QuestionId)
-                .ToListAsync(token);
-
-
-
-            throw new NotImplementedException();
-        }
         public async Task<IDictionary<Questions, Answers>> GetTestAsnwersAsync(string userID, string TestID, CancellationToken token)
         {
-            var dictionary = new Dictionary<Questions, Answers>();
+            IDictionary<Questions, Answers> dictionary = new Dictionary<Questions, Answers>();
 
-            var getTest = await _platformDb
-                .Tests
-                .Where(pr => pr.TestID == TestID)
-                .Include(pr => pr.Questions)
+           var questions = await _platformDb
+                .Questions
+                .Where(pr=>pr.TestId == TestID)
+                .ToListAsync(token);
+
+           var answers = await _platformDb
+                .UserAnswers
+                .Where(pr=>pr.TestID  == TestID && pr.UserID == userID)
                 .ToListAsync(token);
 
             throw new NotImplementedException();
 
         }
-        public Task<TestScoreResponse> CalculateTestScoreAsync()
+
+        public async Task<string> CalculateTestGradeAsync(IDictionary<int, int> score)
         {
-            throw new NotImplementedException();
+            var grade = _calculateGradeFactory.CreateGradeBase().CalculateGrade(score);
+            return await Task.FromResult(grade);
         }
 
-        public Task<bool> CommitTestAsync(string userID, Test test, DoTestModelDto testModelDto, CancellationToken token)
+        public async Task<bool> UpdateTestGradeAsync(string grade, IDictionary<int, int> score, string userID, string testID, string subjectID, CancellationToken token)
         {
-            throw new NotImplementedException();
-        }
+            var grades = new Grade()
+            {
+                GradeValue = grade,
+                TestID = testID,
+                SubjectID = subjectID,
+                StudentID = userID,
+                GradeDetails = new GradeDetails
+                {
+                    GradePointsScore = score.Keys.FirstOrDefault(),
+                    TestQuestionsCount = score.Values.FirstOrDefault(),
+                }
+            };
 
-        public Task<int> CheckTestAnswersAsync()
-        {
-            throw new NotImplementedException();
+            await _platformDb.Grades.AddAsync(grades, token);
+            await _platformDb.SaveChangesAsync(token);
+
+            return true;
         }
     }
 }

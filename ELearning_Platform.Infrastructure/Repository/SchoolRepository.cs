@@ -1,13 +1,16 @@
-﻿using ELearning_Platform.Domain.Enitities;
+﻿using ELearning_Platform.Application.CustomAttributes;
+using ELearning_Platform.Domain.Enitities;
 using ELearning_Platform.Domain.Exceptions;
 using ELearning_Platform.Domain.Models.Pagination;
 using ELearning_Platform.Domain.Models.SchoolModel;
 using ELearning_Platform.Domain.Repository;
 using ELearning_Platform.Domain.Response.ClassResponse;
 using ELearning_Platform.Domain.Response.Pagination;
+using ELearning_Platform.Domain.Response.SchoolResponse;
 using ELearning_Platform.Infrastructure.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Transactions;
 
 namespace ELearning_Platform.Infrastructure.Repository
 {
@@ -22,6 +25,7 @@ namespace ELearning_Platform.Infrastructure.Repository
         #endregion
 
         #region Commands Method
+        
         public async Task<CreateClassResponse> CreateClassAsync
         (CreateClassDto createClass, CancellationToken token)
         {
@@ -42,7 +46,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                 Name = createClass.Name,
             };
         }
-
+     
         public async Task<AddStudentToClassResponse> AddStudentToClassAsync(ELearningClass eClass, AddStudentToClassDto addToClass, CancellationToken token)
         {
             var usersToAdd = await _platformDb.UserInformations
@@ -66,7 +70,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             eClass.Students ??= [];
 
             eClass.Students.AddRange(usersToAdd);
-
+            await _platformDb.SaveChangesAsync(token);
             return new AddStudentToClassResponse()
             {
                 AddedUsers = usersToAdd,
@@ -74,7 +78,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             };
 
         }
-
+       
         public async Task<AddStudentToClassResponse> AddUsersToClassSubjectAsync(List<Subject> subjects, IList<string> usersToAdd, CancellationToken token)
         {
 
@@ -101,10 +105,9 @@ namespace ELearning_Platform.Infrastructure.Repository
             };
 
         }
-
+        
         public async Task<Lesson> CreateLessonAsync(string userId, Subject findSubject, CreateLessonDto createLessonDto, CancellationToken token)
         {
-            findSubject.Lessons ??= [];
 
             var lesson = new Lesson
             {
@@ -121,10 +124,9 @@ namespace ELearning_Platform.Infrastructure.Repository
 
             return lesson;
         }
-
+        
         public async Task<bool> CreateSubjectAsync(string userID, CreateSubjectDto createSubjectDto, CancellationToken token)
         {
-            (string firstName, string surname) teacherInfo;
 
             if (string.IsNullOrEmpty(createSubjectDto.TeacherID))
             {
@@ -133,7 +135,6 @@ namespace ELearning_Platform.Infrastructure.Repository
                     .Select(pr => new { pr.FirstName, pr.Surname })
                     .FirstOrDefaultAsync(token) ??
                     throw new NotFoundException("Invalid Teacher");
-                teacherInfo = (teacherData.FirstName, teacherData.Surname);
             }
             else
             {
@@ -143,7 +144,6 @@ namespace ELearning_Platform.Infrastructure.Repository
                     .FirstOrDefaultAsync(token) ??
                     throw new NotFoundException("Invalid Teacher");
 
-                teacherInfo = (teacherData.FirstName, teacherData.Surname);
             }
 
             var subject = new Subject()
@@ -179,10 +179,13 @@ namespace ELearning_Platform.Infrastructure.Repository
                 .FirstOrDefaultAsync(token);
         }
 
-        public async Task<Subject> FindSubjectByTeacherIDAsync(string TeacherID, CancellationToken token)
+        public async Task<Subject?> FindSubjectByTeacherIDAsync(string TeacherID, CancellationToken token)
         {
-            return await _platformDb.Subjects.Where(pr => pr.TeacherID == TeacherID).FirstOrDefaultAsync(token)
-                ?? throw new NotFoundException("Invalid Teacher ID");
+            return await _platformDb
+                .Subjects
+                .Where(pr => pr.TeacherID == TeacherID)
+                .FirstOrDefaultAsync(token);
+                
         }
 
         public async Task<ELearningClass?> FindClassWithStudentsByIdAsync(string id, CancellationToken token)
@@ -195,14 +198,13 @@ namespace ELearning_Platform.Infrastructure.Repository
 
         }
 
-        public async Task<Subject> FindSubjectByIDAsync(string subjectID, CancellationToken cancellationToken)
+        public async Task<Subject?> FindSubjectByIDAsync(string subjectID, CancellationToken cancellationToken)
         {
-          
+
             return await _platformDb
                 .Subjects
                 .Where(pr => pr.SubjectId == subjectID)
-                .FirstOrDefaultAsync(cancellationToken) ??
-                throw new NotFoundException("Subject Not Found");
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task<List<Subject>> FindSubjectByClassIDAsync(string classId, CancellationToken token)
@@ -221,6 +223,62 @@ namespace ELearning_Platform.Infrastructure.Repository
                 .FirstOrDefaultAsync(token);
         }
 
+        public async Task<ELearingClassDto?> FindInformationsAboutClassByClassIDAsync
+            (string classID, bool withStudents, bool withSubjecs, bool withTeachers, CancellationToken cancellationToken)
+        {
+            var baseQuery =
+                _platformDb
+                .ELearningClasses
+                .Where(pr => pr.ELearningClassID == classID);
+            if (withStudents)
+            {
+                baseQuery = baseQuery
+                    .Include(pr => pr.Students);
+            }
+            if (withSubjecs)
+            {
+                baseQuery = baseQuery
+                    .Include(pr=>pr.Subjects);
+            }
+            if (withTeachers)
+            {
+                baseQuery =
+                    baseQuery
+                    .Include(pr => pr.Teachers);
+            }
+
+            var result = await baseQuery.Select(pr => new ELearingClassDto
+            {
+                ELearningClassID = pr.ELearningClassID,
+                Name = pr.Name,
+                YearOfBeggining = pr.YearOfBeggining,
+                YearOfEnding = pr.YearOfEnding,
+                Students = pr.Students!.Select(pr => new StudentInformationsDto
+                {
+                    AccountID = pr.AccountID,
+                    FirstName = pr.FirstName,
+                    SecondName = pr.SecondName,
+                    Surname = pr.Surname,
+                }).ToList() ?? new List<StudentInformationsDto>(),
+                Subjects = pr.Subjects!.Select(pr => new SubjectInformationsDto
+                {
+                    Name = pr.Name,
+                    Description = pr.Description,
+                    TeacherID = pr.TeacherID,
+                }).ToList() ?? new List<SubjectInformationsDto>(),
+                Teachers = pr.Teachers!.Select(pr => new TeacherInfromationsDto
+                {
+                    AccountID = pr.AccountID,
+                    FirstName = pr.FirstName,
+                    SecondName = pr.SecondName,
+                    Surname = pr.Surname,
+                }).ToList() ?? new List<TeacherInfromationsDto>(),
+                ModifiedDate = pr.ModifiedDate
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+            return result;
+
+        } 
         #endregion
 
     }

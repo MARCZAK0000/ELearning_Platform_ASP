@@ -2,6 +2,6 @@
 {
     public interface ICalculateGradeBase
     {
-        string CalculateGrade();
+        string CalculateGrade(IDictionary<int, int> score);
     }
 }

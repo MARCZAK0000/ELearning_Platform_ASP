@@ -40,7 +40,7 @@ namespace ELearning_Platform.API
                .BindConfiguration(nameof(AzuriteOptions))
                .ValidateDataAnnotations()
                .ValidateOnStart();
-
+            builder.Services.AddScoped<TransactionMiddleware>();
             builder.Services.AddSingleton(sp
                 => sp.GetRequiredService<IOptions<AzuriteOptions>>().Value);
 
@@ -75,6 +75,7 @@ namespace ELearning_Platform.API
             }
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<TransactionMiddleware>();
             //app.UseHttpsRedirection();
             app.UseCors("corsPolicy");
             app.UseAuthentication();
