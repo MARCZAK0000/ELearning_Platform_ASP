@@ -12,7 +12,7 @@ namespace ELearning_Platform.Domain.Repository
 
         Task<Test> FindTestByIdAsync(string testId, CancellationToken token);
 
-        Task<Pagination<Test>> FindTestsByTeacherIDAsync(string teacherID,bool isComplited, PaginationModelDto paginationModelDto, CancellationToken token);
+        Task<Pagination<Test>> FindTestsByTeacherIDAsync(string teacherID, bool isComplited, PaginationModelDto paginationModelDto, CancellationToken token);
 
         Task<Pagination<Test>> FindTestsBySubjectIDAsync(string subjectID, PaginationModelDto paginationModelDto, CancellationToken token);
 
@@ -20,7 +20,9 @@ namespace ELearning_Platform.Domain.Repository
 
         Task<IDictionary<int, int>> CheckTestAnswersAsync(string testID, List<UserAnswers> userAnswers, CancellationToken token);
 
-        Task<TestScoreResponse> CalculateTestGradeAsync(IDictionary<int, int> score);
+        Task<string> CalculateTestGradeAsync(IDictionary<int, int> score);
+
+        Task<bool> UpdateTestGradeAsync(string grade, IDictionary<int, int> score, string userID, string testID, string subjectID,CancellationToken token);
 
         //Task<>
     }

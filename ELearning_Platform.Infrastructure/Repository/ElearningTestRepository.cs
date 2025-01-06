@@ -4,11 +4,9 @@ using ELearning_Platform.Domain.Exceptions;
 using ELearning_Platform.Domain.Models.ELearningTestModel;
 using ELearning_Platform.Domain.Models.Pagination;
 using ELearning_Platform.Domain.Repository;
-using ELearning_Platform.Domain.Response.ElearningTest;
 using ELearning_Platform.Domain.Response.Pagination;
 using ELearning_Platform.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
 
 namespace ELearning_Platform.Infrastructure.Repository
 {
@@ -92,11 +90,12 @@ namespace ELearning_Platform.Infrastructure.Repository
                 .Questions
                 .Include(pr => pr.Answers)
                 .Where(pr => pr.TestId == testID)
+                .OrderBy(pr => pr.QuestionId)
                 .ToListAsync(token);
 
             foreach (var question in questions)
             {
-                foreach (var answers in question.Answers)
+                foreach (var answers in question.Answers.OrderBy(pr => pr.QuestionId))
                 {
                     if (answers.IsCorrect)
                     {
@@ -114,9 +113,9 @@ namespace ELearning_Platform.Infrastructure.Repository
                     correctAnswer.Add(false);
             }
 
-            return new Dictionary<int, int>() 
-            { 
-                { correctAnswer.Count(pr => pr == true) / correctAnswer.Count * 100, correctAnswer.Count } 
+            return new Dictionary<int, int>()
+            {
+                { correctAnswer.Count(pr => pr == true) / correctAnswer.Count * 100, correctAnswer.Count }
             };
         }
 
@@ -184,29 +183,66 @@ namespace ELearning_Platform.Infrastructure.Repository
         }
 
 
-        public async Task<IDictionary<Questions, Answers>> GetTestAsnwersAsync(string userID, string TestID, CancellationToken token)
+        public async Task<IDictionary<Questions, Answers>> FindUserTestAsnwersAsync(string userID, string TestID, CancellationToken token)
         {
-            IDictionary<Questions, Answers> dictionary = new Dictionary<Questions, Answers>();
+            IDictionary<Questions, Answers> keyValuePairs = new Dictionary<Questions, Answers>();
 
-           var questions = await _platformDb
-                .Questions
-                .Where(pr=>pr.TestId == TestID)
-                .ToListAsync(token);
+            var questions = await _platformDb
+                 .Questions
+                 .Where(pr => pr.TestId == TestID)
+                 .OrderBy(pr => pr.QuestionId)
+                 .ToListAsync(token);
 
-           var answers = await _platformDb
-                .UserAnswers
-                .Where(pr=>pr.TestID  == TestID && pr.UserID == userID)
-                .ToListAsync(token);
+            var answers = await _platformDb
+                 .UserAnswers
+                 .Where(pr => pr.TestID == TestID && pr.UserID == userID)
+                 .Include(pr => pr.Answers)
+                 .OrderBy(pr => pr.QuestionID)
+                 .ToListAsync(token);
 
-            throw new NotImplementedException();
+            foreach (var question in questions)
+            {
+                foreach (var answer in answers)
+                {
+                    if (question.QuestionId == answer.QuestionID)
+                    {
+                        keyValuePairs.Add(question, answer.Answers);
+                    }
+                }
+            }
 
+            return keyValuePairs;
+
+        }
+
+        public async Task<IDictionary<Questions, Answers>> FindCorrectTestAnswersAsync(string testId, CancellationToken token)
+        {
+            IDictionary<Questions, Answers> keyValuePairs = new Dictionary<Questions, Answers>();
+
+            var questions = await _platformDb
+               .Questions
+               .Where(pr => pr.TestId == testId)
+               .Include(pr => pr.Answers)
+               .OrderBy(pr => pr.QuestionId)
+               .ToListAsync(token);
+
+            foreach (var question in questions)
+            {
+                foreach (var answer in question.Answers.OrderBy(pr => pr.QuestionId))
+                {
+                    if (answer.IsCorrect && question.QuestionId == answer.QuestionId)
+                    {
+                        keyValuePairs.Add(question, answer);
+                    }
+                }
+            }
+
+            return keyValuePairs;
         }
 
         public async Task<string> CalculateTestGradeAsync(IDictionary<int, int> score)
-        {
-            var grade = _calculateGradeFactory.CreateGradeBase().CalculateGrade(score);
-            return await Task.FromResult(grade);
-        }
+            => await Task.FromResult(_calculateGradeFactory.CreateGradeBase().CalculateGrade(score));
+
 
         public async Task<bool> UpdateTestGradeAsync(string grade, IDictionary<int, int> score, string userID, string testID, string subjectID, CancellationToken token)
         {
