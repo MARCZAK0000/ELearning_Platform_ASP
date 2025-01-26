@@ -1,0 +1,758 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Tests\\ELearningPlatform.UnitTest\\E_LearningPlatform.UnitTest.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application.Authorization\\ELearning_Platform.Application.Authorization.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application.Authorization\\ELearning_Platform.Application.Authorization.csproj",
+        "projectName": "ELearning_Platform.Application.Authorization",
+        "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application.Authorization\\ELearning_Platform.Application.Authorization.csproj",
+        "packagesPath": "C:\\Users\\jjmar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application.Authorization\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\jjmar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Exceptions\\ELearning_Platform.Domain.Exceptions.csproj": {
+                "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Exceptions\\ELearning_Platform.Domain.Exceptions.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authorization": {
+              "target": "Package",
+              "version": "[8.0.12, )"
+            },
+            "Microsoft.AspNetCore.Http.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application.MediatR\\ELearning_Platform.Application.MediatR.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application.MediatR\\ELearning_Platform.Application.MediatR.csproj",
+        "projectName": "ELearning_Platform.Application.MediatR",
+        "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application.MediatR\\ELearning_Platform.Application.MediatR.csproj",
+        "packagesPath": "C:\\Users\\jjmar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application.MediatR\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\jjmar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application.Authorization\\ELearning_Platform.Application.Authorization.csproj": {
+                "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application.Authorization\\ELearning_Platform.Application.Authorization.csproj"
+              },
+              "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Core\\ELearning_Platform.Domain.Core.csproj": {
+                "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Core\\ELearning_Platform.Domain.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.4.1, )"
+            },
+            "Microsoft.AspNetCore.Authorization": {
+              "target": "Package",
+              "version": "[8.0.12, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application\\ELearning_Platform.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application\\ELearning_Platform.Application.csproj",
+        "projectName": "ELearning_Platform.Application",
+        "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application\\ELearning_Platform.Application.csproj",
+        "packagesPath": "C:\\Users\\jjmar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\jjmar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application.Authorization\\ELearning_Platform.Application.Authorization.csproj": {
+                "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application.Authorization\\ELearning_Platform.Application.Authorization.csproj"
+              },
+              "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application.MediatR\\ELearning_Platform.Application.MediatR.csproj": {
+                "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application.MediatR\\ELearning_Platform.Application.MediatR.csproj"
+              },
+              "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Core\\ELearning_Platform.Domain.Core.csproj": {
+                "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Core\\ELearning_Platform.Domain.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.12, )"
+            },
+            "Microsoft.AspNetCore.Authorization": {
+              "target": "Package",
+              "version": "[8.0.12, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Core\\ELearning_Platform.Domain.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Core\\ELearning_Platform.Domain.Core.csproj",
+        "projectName": "ELearning_Platform.Domain.Core",
+        "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Core\\ELearning_Platform.Domain.Core.csproj",
+        "packagesPath": "C:\\Users\\jjmar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Core\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\jjmar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Database\\ELearning_Platform.Domain.Database.csproj": {
+                "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Database\\ELearning_Platform.Domain.Database.csproj"
+              },
+              "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Exceptions\\ELearning_Platform.Domain.Exceptions.csproj": {
+                "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Exceptions\\ELearning_Platform.Domain.Exceptions.csproj"
+              },
+              "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Models\\ELearning_Platform.Domain.Models.csproj": {
+                "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Models\\ELearning_Platform.Domain.Models.csproj"
+              },
+              "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Setttings\\ELearning_Platform.Domain.Setttings.csproj": {
+                "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Setttings\\ELearning_Platform.Domain.Setttings.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authorization": {
+              "target": "Package",
+              "version": "[8.0.12, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Database\\ELearning_Platform.Domain.Database.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Database\\ELearning_Platform.Domain.Database.csproj",
+        "projectName": "ELearning_Platform.Domain.Database",
+        "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Database\\ELearning_Platform.Domain.Database.csproj",
+        "packagesPath": "C:\\Users\\jjmar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Database\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\jjmar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authorization": {
+              "target": "Package",
+              "version": "[8.0.12, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Exceptions\\ELearning_Platform.Domain.Exceptions.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Exceptions\\ELearning_Platform.Domain.Exceptions.csproj",
+        "projectName": "ELearning_Platform.Domain.Exceptions",
+        "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Exceptions\\ELearning_Platform.Domain.Exceptions.csproj",
+        "packagesPath": "C:\\Users\\jjmar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Exceptions\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\jjmar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authorization": {
+              "target": "Package",
+              "version": "[8.0.12, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Models\\ELearning_Platform.Domain.Models.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Models\\ELearning_Platform.Domain.Models.csproj",
+        "projectName": "ELearning_Platform.Domain.Models",
+        "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Models\\ELearning_Platform.Domain.Models.csproj",
+        "packagesPath": "C:\\Users\\jjmar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Models\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\jjmar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Database\\ELearning_Platform.Domain.Database.csproj": {
+                "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Database\\ELearning_Platform.Domain.Database.csproj"
+              },
+              "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Exceptions\\ELearning_Platform.Domain.Exceptions.csproj": {
+                "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Exceptions\\ELearning_Platform.Domain.Exceptions.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authorization": {
+              "target": "Package",
+              "version": "[8.0.12, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Core": {
+              "target": "Package",
+              "version": "[2.2.5, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Setttings\\ELearning_Platform.Domain.Setttings.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Setttings\\ELearning_Platform.Domain.Setttings.csproj",
+        "projectName": "ELearning_Platform.Domain.Setttings",
+        "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Setttings\\ELearning_Platform.Domain.Setttings.csproj",
+        "packagesPath": "C:\\Users\\jjmar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Setttings\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\jjmar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authorization": {
+              "target": "Package",
+              "version": "[8.0.12, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Tests\\ELearningPlatform.UnitTest\\E_LearningPlatform.UnitTest.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Tests\\ELearningPlatform.UnitTest\\E_LearningPlatform.UnitTest.csproj",
+        "projectName": "E_LearningPlatform.UnitTest",
+        "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Tests\\ELearningPlatform.UnitTest\\E_LearningPlatform.UnitTest.csproj",
+        "packagesPath": "C:\\Users\\jjmar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Tests\\ELearningPlatform.UnitTest\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\jjmar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application\\ELearning_Platform.Application.csproj": {
+                "projectPath": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application\\ELearning_Platform.Application.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "FluentAssertions": {
+              "target": "Package",
+              "version": "[6.12.1, )"
+            },
+            "MSTest.TestAdapter": {
+              "target": "Package",
+              "version": "[3.1.1, )"
+            },
+            "MSTest.TestFramework": {
+              "target": "Package",
+              "version": "[3.1.1, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.12, )"
+            },
+            "Microsoft.AspNetCore.Authorization": {
+              "target": "Package",
+              "version": "[8.0.12, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.8.0, )"
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.20.72, )"
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.6.6, )"
+            },
+            "xunit.runner.visualstudio": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.8.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

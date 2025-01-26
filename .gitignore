@@ -1,21 +1,52 @@
-ELearning_Platform.API/*.json
-ELearning_Platform.API/Properties
-ELearning_Platform.API/bin
-ELearning_Platform.API/obj
+Core/ELearning_Platform.API/*.json
+Core/ELearning_Platform.API/Properties
+Core/ELearning_Platform.API/bin
+Core/ELearning_Platform.API/obj
 
-ELearning_Platform.Infrastructure/bin
-ELearning_Platform.Infrastructure/obj
-ELearning_Platform.Application/bin
-ELearning_Platform.Application/obj
+Extensions/Infrastructure/ELearning_Platform.Infrastructure/bin
+Extensions/Infrastructure/ELearning_Platform.Infrastructure/obj
+Extensions/Infrastructure/ELearning_Platform.Infrastructure.Cloud/bin
+Extensions/Infrastructure/ELearning_Platform.Infrastructure.Cloud/obj
+Extensions/Infrastructure/ELearning_Platform.Infrastructure.Database/bin
+Extensions/Infrastructure/ELearning_Platform.Infrastructure.Database/obj
+Extensions/Infrastructure/ELearning_Platform.Infrastructure.Email/bin
+Extensions/Infrastructure/ELearning_Platform.Infrastructure.Email/obj
+Extensions/Infrastructure/ELearning_Platform.Infrastructure.GradeFactory/bin
+Extensions/Infrastructure/ELearning_Platform.Infrastructure.GradeFactory/obj
+Extensions/Infrastructure/ELearning_Platform.Infrastructure.Identity/bin
+Extensions/Infrastructure/ELearning_Platform.Infrastructure.Identity/obj
+Extensions/Infrastructure/ELearning_Platform.Infrastructure.Notifications/bin
+Extensions/Infrastructure/ELearning_Platform.Infrastructure.Notifications/obj
 
-ELearning_Platform.Domain/bin
-ELearning_Platform.Domain/obj
 
-ELearning_Platform.IntegrationTest/bin
-ELearning_Platform.IntegrationTest/obj
 
-E_LearningPlatform.UnitTest/obj
-E_LearningPlatform.UnitTest/bin
+
+Extensions/Application/ELearning_Platform.Application/bin
+Extensions/Application/ELearning_Platform.Application/obj
+Extensions/Application/ELearning_Platform.Application.Authorization/bin
+Extensions/Application/ELearning_Platform.Application.Authorization/obj
+Extensions/Application/ELearning_Platform.Application.MediatR/bin
+Extensions/Application/ELearning_Platform.Application.MediatR/obj
+
+
+Extensions/Domain/ELearning_Platform.Domain.Core/bin
+Extensions/Domain/ELearning_Platform.Domain.Core/obj
+Extensions/Domain/ELearning_Platform.Domain.Database/bin
+Extensions/Domain/ELearning_Platform.Domain.Database/obj
+Extensions/Domain/ELearning_Platform.Domain.Exceptions/bin
+Extensions/Domain/ELearning_Platform.Domain.Exceptions/obj
+Extensions/Domain/ELearning_Platform.Domain.Models/bin
+Extensions/Domain/ELearning_Platform.Domain.Models/obj
+Extensions/Domain/ELearning_Platform.Domain.Repository/bin
+Extensions/Domain/ELearning_Platform.Domain.Repository/obj
+Extensions/Domain/ELearning_Platform.Domain.Setttings/bin
+Extensions/Domain/ELearning_Platform.Domain.Setttings/obj
+
+Test/ELearningPlatform.IntegrationTest/bin
+Test/ELearningPlatform.IntegrationTest/obj
+
+Test/ELearningPlatform.UnitTest/obj
+Test/ELearningPlatform.UnitTest/bin
 
 
 ELearningPlatformDb

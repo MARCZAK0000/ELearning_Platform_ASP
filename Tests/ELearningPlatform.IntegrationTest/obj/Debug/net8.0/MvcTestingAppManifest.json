@@ -1,0 +1,18 @@
+{
+  "ELearning_Platform.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Core\\ELearning_Platform.API",
+  "ELearning_Platform.Application.Authorization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application.Authorization",
+  "ELearning_Platform.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application",
+  "ELearning_Platform.Application.MediatR, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Application\\ELearning_Platform.Application.MediatR",
+  "ELearning_Platform.Domain.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Core",
+  "ELearning_Platform.Domain.Database, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Database",
+  "ELearning_Platform.Domain.Exceptions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Exceptions",
+  "ELearning_Platform.Domain.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Models",
+  "ELearning_Platform.Domain.Setttings, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Domain\\ELearning_Platform.Domain.Setttings",
+  "ELearning_Platform.Infrastructure.Cloud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Infrastructure\\ELearning_Platform.Infrastructure.Cloud",
+  "ELearning_Platform.Infrastructure.Database, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Infrastructure\\ELearning_Platform.Infrastructure.Database",
+  "ELearning_Platform.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Infrastructure\\ELearning_Platform.Infrastructure",
+  "ELearning_Platform.Infrastructure.Email, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Infrastructure\\ELearning_Platform.Infrastructure.Email",
+  "ELearning_Platform.Infrastructure.GradeFactory, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Infrastructure\\ELearning_Platform.Infrastructure.GradeFactory",
+  "ELearning_Platform.Infrastructure.Identity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Infrastructure\\ELearning_Platform.Infrastructure.Identity",
+  "ELearning_Platform.Infrastructure.Notifications, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\jjmar\\Desktop\\Projects\\E-Learning_Platform\\Backend\\Extensions\\Infrastructure\\ELearning_Platform.Infrastructure.Notifications"
+}

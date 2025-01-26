@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.23.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.12" />
+
+ </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Application\ELearning_Platform.Application\ELearning_Platform.Application.csproj" />
+    <ProjectReference Include="..\..\Domain\ELearning_Platform.Domain.Core\ELearning_Platform.Domain.Core.csproj" />
+    <ProjectReference Include="..\ELearning_Platform.Infrastructure.Cloud\ELearning_Platform.Infrastructure.Cloud.csproj" />
+    <ProjectReference Include="..\ELearning_Platform.Infrastructure.Database\ELearning_Platform.Infrastructure.Database.csproj" />
+    <ProjectReference Include="..\ELearning_Platform.Infrastructure.Email\ELearning_Platform.Infrastructure.Email.csproj" />
+    <ProjectReference Include="..\ELearning_Platform.Infrastructure.GradeFactory\ELearning_Platform.Infrastructure.GradeFactory.csproj" />
+    <ProjectReference Include="..\ELearning_Platform.Infrastructure.Identity\ELearning_Platform.Infrastructure.Identity.csproj" />
+    <ProjectReference Include="..\ELearning_Platform.Infrastructure.Notifications\ELearning_Platform.Infrastructure.Notifications.csproj" />
+  </ItemGroup>
+
+</Project>

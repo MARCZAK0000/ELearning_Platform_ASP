@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\ELearning_Platform.Domain.Core\ELearning_Platform.Domain.Core.csproj" />
+    <ProjectReference Include="..\ELearning_Platform.Application.Authorization\ELearning_Platform.Application.Authorization.csproj" />
+    <ProjectReference Include="..\ELearning_Platform.Application.MediatR\ELearning_Platform.Application.MediatR.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.12" />
+  </ItemGroup>
+
+</Project>

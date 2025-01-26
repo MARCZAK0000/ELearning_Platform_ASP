@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ELearning_Platform.Domain.Database\ELearning_Platform.Domain.Database.csproj" />
+    <ProjectReference Include="..\ELearning_Platform.Domain.Exceptions\ELearning_Platform.Domain.Exceptions.csproj" />
+    <ProjectReference Include="..\ELearning_Platform.Domain.Models\ELearning_Platform.Domain.Models.csproj" />
+    <ProjectReference Include="..\ELearning_Platform.Domain.Setttings\ELearning_Platform.Domain.Setttings.csproj" />
+  </ItemGroup>
+
+</Project>
