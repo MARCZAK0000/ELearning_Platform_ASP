@@ -10,6 +10,6 @@
 
         public Subject Subject { get; set; }
 
-        public UserInformations Student { get; set; }
+        public User Student { get; set; }
     }
 }

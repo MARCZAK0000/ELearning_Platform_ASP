@@ -8,7 +8,7 @@
 
         public string LessonDescription { get; set; }
 
-        public virtual UserInformations Teacher { get; set; }
+        public virtual Teachers Teacher { get; set; }
 
         public string TeacherID { get; set; }
 

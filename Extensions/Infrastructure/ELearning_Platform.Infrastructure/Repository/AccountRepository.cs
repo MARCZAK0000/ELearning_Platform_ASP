@@ -40,7 +40,7 @@ namespace ELearning_Platform.Infrastructure.Repository
                 Email = registerModelDto.AddressEmail,
                 UserName = registerModelDto.AddressEmail,
                 PhoneNumber = registerModelDto.PhoneNumber,
-                User = new UserInformations()
+                User = new User()
                 {
                     FirstName = registerModelDto.FirstName,
                     SecondName = registerModelDto.SecondName ?? string.Empty,

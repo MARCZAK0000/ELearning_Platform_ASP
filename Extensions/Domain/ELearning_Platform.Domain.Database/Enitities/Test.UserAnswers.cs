@@ -14,7 +14,7 @@
 
         public string? GradeID { get; set; }
 
-        public UserInformations User { get; set; }
+        public User User { get; set; }
 
         public Test Test { get; set; }
 

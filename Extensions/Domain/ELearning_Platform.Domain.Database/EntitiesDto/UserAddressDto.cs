@@ -1,4 +1,4 @@
-﻿namespace ELearning_Platform.Domain.Models.Models.UserAddress
+﻿namespace ELearning_Platform.Domain.Database.EntitiesDto
 {
     public class UserAddressDto
     {

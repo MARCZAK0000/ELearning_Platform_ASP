@@ -9,7 +9,7 @@ namespace ELearning_Platform.Infrastructure.Database.Database
         //Person
         public DbSet<UserAddress> UserAddresses { get; set; }
 
-        public DbSet<UserInformations> UserInformations { get; set; }
+        public DbSet<User> UserInformations { get; set; }
 
 
         //School
@@ -50,7 +50,7 @@ namespace ELearning_Platform.Infrastructure.Database.Database
             builder.Entity<Roles>()
                 .ToTable("Roles", "Person");
 
-            builder.Entity<UserInformations>(options =>
+            builder.Entity<User>(options =>
             {
                 options.ToTable("Person", "Person");
                 //Key
@@ -74,7 +74,7 @@ namespace ELearning_Platform.Infrastructure.Database.Database
                 options.ToTable("Address", "Person");
                 options.HasOne(pr => pr.User)
                 .WithOne(pr => pr.Address)
-                .HasForeignKey<UserInformations>(pr => pr.AccountID)
+                .HasForeignKey<User>(pr => pr.AccountID)
                 .OnDelete(DeleteBehavior.Cascade);
             });
 

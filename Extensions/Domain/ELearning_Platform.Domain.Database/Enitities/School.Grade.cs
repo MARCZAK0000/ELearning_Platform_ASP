@@ -16,7 +16,7 @@
 
         public Subject Subject { get; set; }
 
-        public UserInformations Student { get; set; }
+        public User Student { get; set; }
 
         public Test Test { get; set; }
 

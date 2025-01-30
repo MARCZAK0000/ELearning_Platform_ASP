@@ -10,11 +10,11 @@
 
         public string? RecipientID { get; set; }
 
-        public UserInformations? Recipient { get; set; }
+        public User? Recipient { get; set; }
 
         public string? SenderID { get; set; }
 
-        public UserInformations? Sender { get; set; }
+        public User? Sender { get; set; }
 
         public DateTime TimeSent { get; set; } = DateTime.Now;
 

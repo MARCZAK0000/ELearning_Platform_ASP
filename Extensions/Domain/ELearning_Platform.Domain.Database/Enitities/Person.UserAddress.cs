@@ -20,6 +20,6 @@ namespace ELearning_Platform.Domain.Database.Enitities
 
         public DateTime ModifiedDate { get; set; } = DateTime.Now;
 
-        public virtual UserInformations User { get; set; }
+        public virtual User User { get; set; }
     }
 }

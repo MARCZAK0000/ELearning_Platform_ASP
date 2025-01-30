@@ -1,6 +1,6 @@
 ﻿namespace ELearning_Platform.Domain.Database.Enitities
 {
-    public class UserInformations
+    public partial class User
     {
         public string AccountID { get; set; }
 
@@ -20,27 +20,12 @@
 
         public virtual UserAddress Address { get; set; }
 
-        public virtual List<StudentSubject>? Subjects { get; set; }
+        public List<Students> Students { get; set; }
 
-        public virtual List<Subject>? TeacherSubjects { get; set; }
-
-        public string? ClassID { get; set; }
-
-        public virtual ELearningClass? Class { get; set; }
-
-        public virtual List<Lesson>? Lessons { get; set; }
-
-        public virtual List<ELearningClass>? ListOfTeachingClasses { get; set; }
+        public List<Teachers> Teachers { get; set; }
 
         public virtual List<Notification>? SentNotfications { get; set; }
 
         public virtual List<Notification>? RecivedNotifications { get; set; }
-
-        public virtual List<Grade>? Grades { get; set; }
-
-        public virtual List<Test>? Tests { get; set; }
-
-        public virtual List<UserAnswers>? UserAnswers { get; set; }
-
     }
 }

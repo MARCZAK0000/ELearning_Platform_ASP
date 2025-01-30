@@ -1,4 +1,5 @@
 ﻿using ELearning_Platform.Application.Authorization.Authorization;
+using ELearning_Platform.Application.Mapper;
 using ELearning_Platform.Application.MediatR.Services.AccountServices.Command.Register;
 using ELearning_Platform.Application.MediatR.Services.AccountServices.Command.SignIn;
 using ELearning_Platform.Application.MediatR.Services.NotificationServices.Command.CreateNotification;
@@ -10,7 +11,6 @@ using ELearning_Platform.Application.MediatR.Services.UserServices.Command.Updat
 using ELearning_Platform.Application.MediatR.Validation;
 using ELearning_Platform.Domain.Models.Models.Pagination;
 using ELearning_Platform.Infrastructure.Authorization;
-using ELearning_Platform.Infrastructure.Mapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;

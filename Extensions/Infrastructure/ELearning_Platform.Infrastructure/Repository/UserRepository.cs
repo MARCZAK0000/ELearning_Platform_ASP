@@ -169,7 +169,7 @@ namespace ELearning_Platform.Infrastructure.Repository
             return await Task.FromResult(true);
         }
 
-        public async Task<UserInformations> GetOnlyUserInformationsAsync(string userID, CancellationToken token)
+        public async Task<User> GetOnlyUserInformationsAsync(string userID, CancellationToken token)
         {
             return await _platformDb.UserInformations.Where(pr => pr.AccountID == userID)
                 .FirstOrDefaultAsync(token) ?? throw new NotFoundException("Not FOund");

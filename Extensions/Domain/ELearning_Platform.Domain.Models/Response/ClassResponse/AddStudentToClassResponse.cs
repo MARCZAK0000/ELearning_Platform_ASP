@@ -9,6 +9,6 @@ namespace ELearning_Platform.Domain.Models.Response.ClassResponse
 
         public string ClassName { get; set; }
 
-        public List<UserInformations> AddedUsers { get; set; }
+        public List<User> AddedUsers { get; set; }
     }
 }

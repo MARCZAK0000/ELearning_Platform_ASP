@@ -16,7 +16,7 @@ namespace ELearning_Platform.Infrastructure.Database.Database
                     Email = "test@test.com",
                     UserName = "test@test.com",
                     PhoneNumber = "111222333",
-                    User = new UserInformations()
+                    User = new User()
                     {
                         FirstName = "Joe",
                         Surname = "Doe",
@@ -36,7 +36,7 @@ namespace ELearning_Platform.Infrastructure.Database.Database
                     Email = "test1@test.com",
                     UserName = "test1@test.com",
                     PhoneNumber = "222222333",
-                    User = new UserInformations()
+                    User = new User()
                     {
                         FirstName = "Joe",
                         Surname = "Doe",

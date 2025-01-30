@@ -10,13 +10,13 @@
 
         public int YearOfEnding { get; set; }
 
-        public virtual List<Subject>? Subjects { get; set; }
+        public List<Subject>? Subjects { get; set; }
 
-        public virtual List<UserInformations>? Students { get; set; }
+        public List<Students>? Students { get; set; }
 
-        public virtual List<Lesson>? Lessons { get; set; }
+        public List<Lesson>? Lessons { get; set; }
 
-        public virtual List<UserInformations>? Teachers { get; set; }
+        public List<Teachers>? Teachers { get; set; }
 
         public DateTime ModifiedDate { get; set; } = DateTime.Now;
     }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("E_LearningPlatform.IntegrationTest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+61330c05284f1ee669b1beb4be73bb62d6d0ca39")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7c84f1f077e0da97f3e6699d36ea68ae1f0c7ed9")]
 [assembly: System.Reflection.AssemblyProductAttribute("E_LearningPlatform.IntegrationTest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("E_LearningPlatform.IntegrationTest")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

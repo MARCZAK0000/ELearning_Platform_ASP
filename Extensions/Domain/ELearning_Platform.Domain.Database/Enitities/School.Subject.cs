@@ -16,7 +16,7 @@
 
         public List<StudentSubject>? Students { get; set; }
 
-        public UserInformations Teacher { get; set; }
+        public Teachers Teacher { get; set; }
 
         public ELearningClass Class { get; set; }
 

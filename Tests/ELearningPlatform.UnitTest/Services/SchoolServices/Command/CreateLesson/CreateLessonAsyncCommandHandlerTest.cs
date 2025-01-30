@@ -24,7 +24,7 @@ namespace E_LearningPlatform.UnitTest.Services.SchoolServices.Command.CreateLess
                 ModifiedDate = DateTime.Now,
                 YearOfBeggining = 2024,
                 YearOfEnding = 2028,
-                Students = [new UserInformations {
+                Students = [new User {
                     AccountID = "1",
                     FirstName = "John",
                     Surname = "Doe"

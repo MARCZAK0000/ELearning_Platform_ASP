@@ -12,7 +12,7 @@ namespace ELearning_Platform.Domain.Core.Repository
     {
         Task<GetUserInformationsDto> GetUserInformationsAsync(string userID, CancellationToken token);
 
-        Task<UserInformations> GetOnlyUserInformationsAsync(string userID, CancellationToken token);
+        Task<User> GetOnlyUserInformationsAsync(string userID, CancellationToken token);
 
         Task<Pagination<GetUserInformationsDto>> GetAllUsersAsync(PaginationOrderModelDto<OrderByEnum> pagination, CancellationToken token);
 

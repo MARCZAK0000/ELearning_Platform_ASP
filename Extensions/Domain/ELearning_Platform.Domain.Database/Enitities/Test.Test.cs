@@ -30,7 +30,7 @@ namespace ELearning_Platform.Domain.Database.Enitities
 
         public Subject Subject { get; set; }
 
-        public UserInformations Teacher { get; set; }
+        public User Teacher { get; set; }
 
         public List<UserAnswers> TestAnswers { get; set; }
 

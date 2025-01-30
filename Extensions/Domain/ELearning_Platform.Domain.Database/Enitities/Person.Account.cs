@@ -4,7 +4,7 @@ namespace ELearning_Platform.Domain.Database.Enitities
 {
     public class Account : IdentityUser
     {
-        public UserInformations User { get; set; }
+        public User User { get; set; }
 
         public string? RefreshToken { get; set; }
 

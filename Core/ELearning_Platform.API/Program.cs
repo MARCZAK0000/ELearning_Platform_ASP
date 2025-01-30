@@ -4,6 +4,7 @@ using ELearning_Platform.API.Middleware;
 using ELearning_Platform.API.QueueService;
 using ELearning_Platform.API.Swagger;
 using ELearning_Platform.Application.Extensions;
+using ELearning_Platform.Application.Mapper;
 using ELearning_Platform.Domain.Database.Enitities;
 using ELearning_Platform.Infrastructure.Cloud.StorageAccount;
 using ELearning_Platform.Infrastructure.Database.Database;
